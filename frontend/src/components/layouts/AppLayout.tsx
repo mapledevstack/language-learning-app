@@ -4,13 +4,13 @@ const AppLayout = () => {
   return (
     <div className="flex flex-col h-screen bg-background text-foreground">
       
-      <nav className='flex gap-4 h-(--navbar-height) cursor-pointer justify-around items-center bg-sidebar'>
+      <nav className='flex gap-4 h-(--navbar-height) cursor-pointer justify-evenly items-center bg-sidebar'>
         <Link to='/dashboard'>Dashboard</Link>
         <Link to='/dictionary'>Dictionary</Link>
         <Link to='/profile'>Profile</Link>
       </nav>
 
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1">
         <Outlet />
       </main>
     
