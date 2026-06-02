@@ -6,6 +6,7 @@ type Props = {
 }
 
 const DeckCard = ({ deck } : Props) => {
+
   const progress = deck.learnedCount / deck.cardCount
 
   return (

@@ -1,18 +1,37 @@
 import type { Deck } from "@/schemas/DeckSchema"
 import DeckCard from "../cards/DeckCard"
+import { useState } from "react"
+import CreateDeckCard from "../cards/CreateDeckCard"
 
 const FlashcardsPage = () => {
+  const [decks, setDecks] = useState<Deck[]>(samepleDecks)
+
+  const handleCreateDeck = (title: string) => {
+    const newDeck:Deck = {
+      id: Date.now(),
+      title,
+      description: "",
+      dueCount: 0,
+      cardCount: 0,
+      learnedCount: 0
+    }
+
+    setDecks(prev => [...prev, newDeck])
+  }
+
   return (
     <div className="h-full flex flex-wrap p-10 gap-8 items-center w-full justify-evenly overflow-y-auto">
-      <DeckCard deck={decks[0]} />
-      <DeckCard deck={decks[1]} />
-      <DeckCard deck={decks[2]} />
+      {decks.map(deck => (
+        <DeckCard key={deck.id} deck={deck} />
+      ))}
+      
+      <CreateDeckCard handleCreateDeck={handleCreateDeck} />
     </div>
   )
 }
 export default FlashcardsPage
 
-const decks: Deck[] = [
+const samepleDecks: Deck[] = [
   {
     id: 1,
     title: "N5 Core Vocabulary",
