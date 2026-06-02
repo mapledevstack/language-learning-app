@@ -8,7 +8,7 @@ type Props = {
 
 const ResultCard = ({ word, setWord } : Props) => {
   return (
-    <div onClick={() => setWord(word)}>
+    <div onClick={() => setWord(word)} className="hover:scale-102 transition-transform">
       <Card className="bg-muted flex justify-between items-center">
         
         <div className="flex flex-col gap-2">

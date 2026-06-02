@@ -35,7 +35,7 @@ const DictionaryPage = () => {
   return (
     <div className="h-full flex flex-col p-10">
       
-      <section className="flex pl-10 pr-10 pb-10 justify-center">
+      <section className="flex md:pl-10 md:pr-10 pb-10 justify-center">
         <InputGroup className="size-14 w-full max-w-5xl">
           <InputGroupInput placeholder="Search for a Word, Kanji, or Sentence..." value={query} onChange={handleQuery} />
           <InputGroupAddon>

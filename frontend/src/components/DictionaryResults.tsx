@@ -15,7 +15,7 @@ const DictionaryResults = ({ results, setWord } : Props) => {
   )
 
   return (
-    <Card className="flex flex-col gap-4 md:h-full md:overflow-y-auto">
+    <Card className="flex flex-col gap-4 md:h-full md:overflow-y-auto overflow-x-hidden">
       {results.map((res) => {
         return (
           <ResultCard key={res.id} word={res} setWord={setWord} />

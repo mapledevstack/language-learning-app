@@ -18,7 +18,7 @@ const WordCard = ({ word } : Props) => {
         {word.jlpt}
       </div>
 
-      <button className="absolute right-4 top-4 bg-primary size-10 grid place-items-center rounded-full text-primary-foreground hover:scale-105 hover:cursor-pointer">
+      <button className="absolute right-4 top-4 bg-primary size-10 grid place-items-center rounded-full text-primary-foreground hover:scale-105 cursor-pointer transition-transform">
         <LucidePlus className="size-6" />
       </button>
 
