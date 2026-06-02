@@ -8,7 +8,7 @@ type Props = {
 
 const WordCard = ({ word } : Props) => {
   if(!word) return (
-    <Card>Empty</Card>
+    <Card>Search For A Word</Card>
   )
 
   return (

@@ -10,7 +10,7 @@ type Props = {
 const DictionaryResults = ({ results, setWord } : Props) => {
   if(results.length === 0) return (
     <Card>
-      Empty
+      No Results...
     </Card>
   )
 
