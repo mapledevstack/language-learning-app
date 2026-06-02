@@ -10,7 +10,7 @@ const AppLayout = () => {
         <Link to='/profile'>Profile</Link>
       </nav>
 
-      <main className="flex-1">
+      <main className="flex-1 md:overflow-hidden md:min-h-0">
         <Outlet />
       </main>
     

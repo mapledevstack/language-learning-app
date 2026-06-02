@@ -132,3 +132,12 @@
     @apply font-sans;
     }
 }
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--sidebar-primary);
+  border-radius: 9999px;
+}

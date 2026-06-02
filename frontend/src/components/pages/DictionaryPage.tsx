@@ -45,8 +45,10 @@ const DictionaryPage = () => {
         </InputGroup>
       </section>
 
-      <section className="grid md:grid-cols-[30%_70%] gap-4 items-start">
-        <WordCard word={word} />
+      <section className="flex-1 md:min-h-0 grid md:grid-cols-[30%_70%] gap-4 items-start">
+        <div className="h-full md:overflow-y-auto">
+          <WordCard word={word} />
+        </div>
         <DictionaryResults results={results} setWord={setWord} />
       </section>
     
@@ -91,6 +93,30 @@ const words = [
   },
   {
     id: 1000340,
+    spellings: ["勉強する"],
+    readings: ["べんきょうする"],
+    meanings: ["to study"],
+    partsOfSpeech: ["Suru verb"],
+    jlpt: "N5"
+  },
+  {
+    id: 1000350,
+    spellings: ["勉強する"],
+    readings: ["べんきょうする"],
+    meanings: ["to study"],
+    partsOfSpeech: ["Suru verb"],
+    jlpt: "N5"
+  },
+  {
+    id: 1000360,
+    spellings: ["勉強する"],
+    readings: ["べんきょうする"],
+    meanings: ["to study"],
+    partsOfSpeech: ["Suru verb"],
+    jlpt: "N5"
+  },
+  {
+    id: 1000370,
     spellings: ["勉強する"],
     readings: ["べんきょうする"],
     meanings: ["to study"],
