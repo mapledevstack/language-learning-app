@@ -1,4 +1,4 @@
-import { LucidePlusCircle } from "lucide-react"
+import { LucidePlus } from "lucide-react"
 import Card from "./Card"
 import { useEffect, useRef, useState } from "react"
 
@@ -49,12 +49,25 @@ const CreateDeckCard = ({ handleCreateDeck } : Props) => {
               }, 4000)
             }}
           />}
+        
+        {!isCreating && 
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-20">
 
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            {!isCreating && <LucidePlusCircle className="size-20 hover:scale-105 transition-transform" 
-              onClick={() => setIsCreating(true)}
-            />}
-        </div>
+            <div className="p-5 absolute size-20 rounded-full" style={{
+                background: `conic-gradient(
+                  white ${100}%,
+                  var(--color-primary) 0%
+                )`
+              }}></div>
+
+              <div className="absolute inset-1 rounded-full bg-card"></div>
+              
+              <div className="absolute inset-2 flex items-center justify-center hover:scale-115 hover:text-primary transition-all">
+                <LucidePlus className="size-18" onClick={() => setIsCreating(true)}/>
+              </div>
+
+          </div>
+        }
 
         {isCreating && <button className="bg-primary text-2xl p-3 rounded-4xl hover:scale-105 transition-transform text-shadow-md" onClick={() => createDeck()}>Create!</button>}
       </Card>

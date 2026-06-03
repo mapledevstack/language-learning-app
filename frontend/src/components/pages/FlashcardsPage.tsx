@@ -4,7 +4,7 @@ import { useState } from "react"
 import CreateDeckCard from "../cards/CreateDeckCard"
 
 const FlashcardsPage = () => {
-  const [decks, setDecks] = useState<Deck[]>(samepleDecks)
+  const [decks, setDecks] = useState<Deck[]>(basicDecks)
 
   const handleCreateDeck = (title: string) => {
     const newDeck:Deck = {
@@ -31,29 +31,21 @@ const FlashcardsPage = () => {
 }
 export default FlashcardsPage
 
-const samepleDecks: Deck[] = [
+const basicDecks: Deck[] = [
   {
     id: 1,
-    title: "N5 Core Vocabulary",
-    description: "Most common beginner Japanese words",
-    cardCount: 120,
-    dueCount: 18,
-    learnedCount: 40
+    title: "Hiragana",
+    description: "Basic Japanese syllabary",
+    cardCount: 46,
+    learnedCount: 23,
+    dueCount: 46,
   },
   {
     id: 2,
-    title: "Saved From Dictionary",
-    description: "Words you've saved while searching",
-    cardCount: 42,
-    dueCount: 5,
-    learnedCount: 40
-  },
-  {
-    id: 3,
-    title: "Anime: Frieren",
-    description: "Vocabulary extracted from Frieren",
-    cardCount: 87,
-    dueCount: 12,
-    learnedCount: 40
+    title: "Katakana",
+    description: "Foreign-word syllabary",
+    cardCount: 46,
+    learnedCount: 2,
+    dueCount: 46,
   },
 ]
