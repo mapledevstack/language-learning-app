@@ -3,7 +3,7 @@ import DeckCard from "../cards/DeckCard"
 import { useState } from "react"
 import CreateDeckCard from "../cards/CreateDeckCard"
 
-const FlashcardsPage = () => {
+const DecksPage = () => {
   const [decks, setDecks] = useState<Deck[]>(basicDecks)
 
   const handleCreateDeck = (title: string) => {
@@ -29,7 +29,7 @@ const FlashcardsPage = () => {
     </div>
   )
 }
-export default FlashcardsPage
+export default DecksPage
 
 const basicDecks: Deck[] = [
   {
