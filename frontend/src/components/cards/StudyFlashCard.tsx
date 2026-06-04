@@ -1,5 +1,6 @@
 import type { FlashCard } from "@/schemas-and-types/FlashCardSchema"
-import Card from "./Card"
+import StudyFlashCardFront from "./StudyFlashCardFront"
+import StudyFlashCardBack from "./StudyFlashCardBack"
 
 type Props = {
   currentCard: FlashCard | null,
@@ -12,9 +13,10 @@ const StudyFlashCard = ({currentCard : card, flip} : Props) => {
   }
 
   return (
-    <Card className="aspect-3/4 w-xs">
-      {card.front.expression}
-    </Card>
+      flip
+        ? <StudyFlashCardBack card={card} />
+        : <StudyFlashCardFront card={card} /> 
   )
 }
+
 export default StudyFlashCard

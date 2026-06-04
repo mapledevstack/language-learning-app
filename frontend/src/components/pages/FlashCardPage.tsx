@@ -2,7 +2,9 @@ import { Route } from "@/routes/_app/flashcards/$deckId"
 import StudyFlashCard from "../cards/StudyFlashCard"
 import { FlashCardSchema, type FlashCard } from "@/schemas-and-types/FlashCardSchema"
 import { DeckSchema, type Deck } from "@/schemas-and-types/DeckSchema"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { cn } from "@/lib/utils"
+import { handleAgain, handleGood } from "@/lib/srs"
 
 const FlashCardPage = () => {
   const { deckId: deckIdParam } = Route.useParams()
@@ -16,7 +18,7 @@ const FlashCardPage = () => {
 
   const learningCards = flashcards.filter(card => card.status === "learning")
 
-  const reviewCards = flashcards.filter(card => card.status === "mature")
+  const reviewCards = flashcards.filter(card => card.status === "review")
 
   const allStudyCards = [
     ...learningCards,
@@ -28,6 +30,28 @@ const FlashCardPage = () => {
   const [flip, setFlip] = useState<boolean>(false)
 
   const currentCard = allStudyCards[index]
+
+  useEffect(() => {
+    const handleKey = ({ key } : KeyboardEvent) => {
+      if(!flip && key === "ArrowUp") {
+        setFlip(true)
+        return
+      }
+
+    if(flip && key === "ArrowLeft") {
+        handleAgain(currentCard)      
+        setFlip(false)
+        setIndex(prev => prev + 1)
+    } else if(flip && key === "ArrowRight") {
+        handleGood(currentCard)
+        setFlip(false)
+        setIndex(prev => prev + 1)
+      }
+    }
+
+    window.addEventListener("keydown", handleKey)
+    return () => window.removeEventListener("keydown", handleKey)
+  }, [flip])
   
   return (
     <div className="h-full flex flex-col items-center justify-center p-10 relative gap-10">
@@ -35,9 +59,9 @@ const FlashCardPage = () => {
       <StudyFlashCard currentCard={currentCard} flip={flip} />
       
       <div className="text-muted-foreground whitespace-nowrap">
-        <span className="text-blue-500">{newCards.length}</span> {" - "}
-        <span className="text-red-500">{learningCards.length}</span> {" - "}
-        <span className="text-green-500">{reviewCards.length}</span>
+        <span className={cn("text-blue-500", currentCard.status === "new" ? "underline" : "")}>{newCards.length}</span> {" - "}
+        <span className={cn("text-red-500", currentCard.status === "learning" ? "underline" : "")}>{learningCards.length}</span> {" - "}
+        <span className={cn("text-green-500", currentCard.status === "review" ? "underline" : "")}>{reviewCards.length}</span>
       </div>
     </div>
   )
@@ -80,6 +104,7 @@ const flashcards: FlashCard[] = [
       meaning: "Cat",
     },
 
+    status: "learning",
     dueDate: new Date()
   }),
 

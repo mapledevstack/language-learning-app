@@ -14,7 +14,7 @@ export const FlashCardSchema = z.object({
     source: z.string().optional()
   }),
 
-  status: z.enum(["new", "learning", "mature"]).default("new"),
+  status: z.enum(["new", "learning", "review"]).default("new"),
   interval: z.number().default(0),
   learningStep: z.number().default(0),
   ease: z.number().default(2.5),

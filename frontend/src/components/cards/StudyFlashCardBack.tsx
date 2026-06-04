@@ -1,7 +1,16 @@
-type Props = {}
-const StudyFlashCardBack = (props: Props) => {
+import type { FlashCard } from "@/schemas-and-types/FlashCardSchema"
+import Card from "./Card"
+
+type Props = {
+  card: FlashCard
+}
+
+const StudyFlashCardBack = ({ card }: Props) => {
   return (
-    <div>StudyFlashCardBack</div>
+    <Card className="aspect-3/4 w-xs">
+      {card.back.reading}
+      {card.back.meaning}
+    </Card>
   )
 }
 export default StudyFlashCardBack
