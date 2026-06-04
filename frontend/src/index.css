@@ -141,3 +141,7 @@
   background: var(--sidebar-primary);
   border-radius: 9999px;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

@@ -23,4 +23,7 @@ src/routeTree.gen.ts
 *.njsproj
 *.sln
 *.sw?
+
+# Mine
 Notes.md
+screenshots

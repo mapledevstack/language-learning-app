@@ -1,6 +1,6 @@
 import type { Word } from "@/schemas/WordSchema"
-import Card from "./cards/Card"
-import ResultCard from "./cards/ResultCard"
+import Card from "../cards/Card"
+import ResultCard from "../cards/ResultCard"
 
 type Props = {
   results: Word[] | []
@@ -15,7 +15,7 @@ const DictionaryResults = ({ results, setWord } : Props) => {
   )
 
   return (
-    <Card className="flex flex-col gap-4 md:h-full md:overflow-y-auto overflow-x-hidden">
+    <Card className="h-full flex flex-wrap justify-center gap-5 overflow-y-auto overflow-x-hidden">
       {results.map((res) => {
         return (
           <ResultCard key={res.id} word={res} setWord={setWord} />

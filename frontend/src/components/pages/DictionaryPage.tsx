@@ -1,54 +1,39 @@
-import { Search } from "lucide-react"
-import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group"
-import WordCard from "../cards/WordCard"
-import DictionaryResults from "../DictionaryResults"
-import { useState, type ChangeEvent } from "react"
+import DictionaryResults from "../dictionary/DictionaryResults"
+import { useEffect, useState } from "react"
 import type { Word } from "@/schemas/WordSchema"
+import DictionaryDetails from "../dictionary/DictionaryDetails"
+import DictionarySearch from "../dictionary/DictionarySearch"
 
 const DictionaryPage = () => {
-  const [query, setQuery] = useState("")
+  const [query, setQuery] = useState<string>("")
   const [word, setWord] = useState<Word | null>(null)
-  const [results, setResults] = useState<Word[]>([])
+  const [isWriting, setIsWriting] = useState<boolean>(false)
 
-  const handleQuery = (e : ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
-    const query = e.target.value
-    
-    const results = filterWords(query)
+  const filterResults = (query: string, words: Word[]) => {
+    const newWords = words.filter(word => (
+      word.spellings.some(spelling => spelling.includes(query))
+      || word.readings.some(reading => reading.includes(query))
+      || word.meanings.some(meaning => meaning.toLowerCase().includes(query.toLowerCase()))
+    ))
 
-    setResults(results)
-    setWord(results[0] ?? null)
-    setQuery(query)
+    return newWords
   }
 
-  const filterWords = (query : string) => {
-    const results = words.filter(word => {
-      return (
-        word.spellings.some(spelling => spelling.includes(query))
-        || word.readings.some(reading => reading.includes(query))
-        || word.meanings.some(meaning => meaning.toLowerCase().includes(query.toLowerCase()))
-      )
-    })
+  const results = query ? filterResults(query, words) : []
 
-    return results
-  }
+  useEffect(() => {
+    query ? setWord(results[0] ?? null) : setWord(null)
+  }, [query])
 
   return (
-    <div className="h-full flex flex-col p-10">
+    <div className="h-full flex flex-col p-10 gap-10">
       
-      <section className="flex md:pl-10 md:pr-10 pb-10 justify-center">
-        <InputGroup className="size-14 w-full max-w-5xl">
-          <InputGroupInput placeholder="Search for a Word, Kanji, or Sentence..." value={query} onChange={handleQuery} />
-          <InputGroupAddon>
-            <Search className="text-primary" />
-          </InputGroupAddon>
-          <InputGroupAddon align="inline-end"><p className="text-primary">{results.length}</p> results</InputGroupAddon>
-        </InputGroup>
+      <section>
+        <DictionarySearch results={results} isWriting={isWriting} setIsWriting={setIsWriting} query={query} setQuery={setQuery} />
       </section>
 
       <section className="flex-1 md:min-h-0 grid md:grid-cols-[30%_70%] gap-4 items-start">
-        <div className="h-full md:overflow-y-auto">
-          <WordCard word={word} />
-        </div>
+        <DictionaryDetails isWriting={isWriting} word={word} />
         <DictionaryResults results={results} setWord={setWord} />
       </section>
     
@@ -117,6 +102,94 @@ const words = [
   },
   {
     id: 1000370,
+    spellings: ["勉強する"],
+    readings: ["べんきょうする"],
+    meanings: ["to study"],
+    partsOfSpeech: ["Suru verb"],
+    jlpt: "N5"
+  },
+  {
+    id: 2000310,
+    spellings: ["猫"],
+    readings: ["ねこ"],
+    meanings: ["cat"],
+    partsOfSpeech: ["Noun"],
+    jlpt: "N5"
+  },
+  {
+    id: 2000320,
+    spellings: ["学校"],
+    readings: ["がっこう"],
+    meanings: ["school"],
+    partsOfSpeech: ["Noun"],
+    jlpt: "N5"
+  },
+  {
+    id: 2000330,
+    spellings: ["面白い"],
+    readings: ["おもしろい"],
+    meanings: ["interesting", "funny"],
+    partsOfSpeech: ["I-adjective"],
+    jlpt: "N5"
+  },
+  {
+    id: 2000340,
+    spellings: ["勉強する"],
+    readings: ["べんきょうする"],
+    meanings: ["to study"],
+    partsOfSpeech: ["Suru verb"],
+    jlpt: "N5"
+  },
+  {
+    id: 3000350,
+    spellings: ["勉強する"],
+    readings: ["べんきょうする"],
+    meanings: ["to study"],
+    partsOfSpeech: ["Suru verb"],
+    jlpt: "N5"
+  },
+  {
+    id: 3000360,
+    spellings: ["勉強する"],
+    readings: ["べんきょうする"],
+    meanings: ["to study"],
+    partsOfSpeech: ["Suru verb"],
+    jlpt: "N5"
+  },
+  {
+    id: 3000370,
+    spellings: ["勉強する"],
+    readings: ["べんきょうする"],
+    meanings: ["to study"],
+    partsOfSpeech: ["Suru verb"],
+    jlpt: "N5"
+  },
+  {
+    id: 3000310,
+    spellings: ["猫"],
+    readings: ["ねこ"],
+    meanings: ["cat"],
+    partsOfSpeech: ["Noun"],
+    jlpt: "N5"
+  },
+  {
+    id: 3000320,
+    spellings: ["学校"],
+    readings: ["がっこう"],
+    meanings: ["school"],
+    partsOfSpeech: ["Noun"],
+    jlpt: "N5"
+  },
+  {
+    id: 3000330,
+    spellings: ["面白い"],
+    readings: ["おもしろい"],
+    meanings: ["interesting", "funny"],
+    partsOfSpeech: ["I-adjective"],
+    jlpt: "N5"
+  },
+  {
+    id: 3000340,
     spellings: ["勉強する"],
     readings: ["べんきょうする"],
     meanings: ["to study"],
