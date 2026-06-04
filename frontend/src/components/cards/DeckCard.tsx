@@ -1,7 +1,7 @@
-import type { Deck } from "@/schemas/DeckSchema"
+import type { Deck } from "@/schemas-and-types/DeckSchema"
 import Card from "./Card"
-import clsx from "clsx"
 import { LucideEdit } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 type Props = {
   deck: Deck
@@ -27,7 +27,7 @@ const DeckCard = ({ deck } : Props) => {
 
         <div className="absolute inset-1 rounded-full bg-card"></div>
 
-        <div className={clsx("inset-2 flex items-center justify-center absolute", deck.dueCount < 100 && "text-4xl", deck.dueCount >= 100 && "text-3xl", deck.dueCount >= 1000 && "text-2xl!")}>{deck.dueCount}</div>
+        <div className={cn("inset-2 flex items-center justify-center absolute", deck.dueCount < 100 && "text-4xl", deck.dueCount >= 100 && "text-3xl", deck.dueCount >= 1000 && "text-2xl!")}>{deck.dueCount}</div>
       </div>
 
       <button className="bg-primary text-2xl p-3 rounded-4xl hover:scale-105 transition-transform text-shadow-md whitespace-nowrap flex items-center justify-center gap-2">

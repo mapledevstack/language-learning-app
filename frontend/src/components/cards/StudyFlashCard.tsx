@@ -1,4 +1,4 @@
-import type { FlashCard } from "@/schemas/FlashCardSchema"
+import type { FlashCard } from "@/schemas-and-types/FlashCardSchema"
 import Card from "./Card"
 
 type Props = {

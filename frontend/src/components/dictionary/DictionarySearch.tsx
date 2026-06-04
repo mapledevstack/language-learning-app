@@ -1,8 +1,7 @@
-import clsx from "clsx"
 import { LucideLineSquiggle, Search } from "lucide-react"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group"
-import type { Word } from "@/schemas/WordSchema"
-import type { ChangeEvent } from "react"
+import type { Word } from "@/schemas-and-types/WordSchema"
+import { cn } from "@/lib/utils"
 
 type Props = {
   results: Word[],
@@ -18,7 +17,7 @@ const DictionarySearch = ({ isWriting, setIsWriting, query, setQuery, results }:
 
   return (
     <div className="flex gap-4">
-      <button className={clsx("border p-3 rounded-full size-14 flex justify-center items-center hover:scale-105 transition-all whitespace-nowrap text-xl", isWriting ? "bg-primary text-card-foreground" : "bg-card text-primary")} onClick={() => setIsWriting(!isWriting)} >
+      <button className={cn("border p-3 rounded-full size-14 flex justify-center items-center hover:scale-105 transition-all whitespace-nowrap text-xl", isWriting ? "bg-primary text-card-foreground" : "bg-card text-primary")} onClick={() => setIsWriting(!isWriting)} >
           <LucideLineSquiggle />
         </button>
         <InputGroup className="size-14 w-full max-w-5xl">

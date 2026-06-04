@@ -14,11 +14,11 @@ export const FlashCardSchema = z.object({
     source: z.string().optional()
   }),
 
-  dueDate: z.date().nullable(),
-  lastReviewed: z.date().nullable(),
+  status: z.enum(["new", "learning", "mature"]).default("new"),
   interval: z.number().default(0),
-
-  status: z.enum(["new", "learning", "mature"]).default("new")
+  learningStep: z.number().default(0),
+  ease: z.number().default(2.5),
+  dueDate: z.date()
 })
 
 export type FlashCard = z.infer<typeof FlashCardSchema>

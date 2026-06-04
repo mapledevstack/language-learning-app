@@ -1,4 +1,4 @@
-import clsx from "clsx"
+import { cn } from "@/lib/utils"
 import type { ReactNode } from "react"
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
 
 const Card = ({ children, className }: Props) => {
   return (
-    <div className={clsx("bg-card rounded-xl shadow-sm p-4 border", className)}>
+    <div className={cn("bg-card rounded-xl shadow-sm p-4 border", className)}>
       {children}
     </div>
   )

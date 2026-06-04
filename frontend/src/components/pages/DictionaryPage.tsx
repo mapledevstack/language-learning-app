@@ -1,6 +1,6 @@
 import DictionaryResults from "../dictionary/DictionaryResults"
 import { useEffect, useState } from "react"
-import type { Word } from "@/schemas/WordSchema"
+import type { Word } from "@/schemas-and-types/WordSchema"
 import DictionaryDetails from "../dictionary/DictionaryDetails"
 import DictionarySearch from "../dictionary/DictionarySearch"
 

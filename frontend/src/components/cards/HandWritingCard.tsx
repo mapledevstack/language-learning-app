@@ -1,5 +1,5 @@
-import clsx from "clsx"
 import Card from "./Card"
+import { cn } from "@/lib/utils"
 
 type Props = {
   isWriting: boolean
@@ -7,7 +7,7 @@ type Props = {
 
 const HandWritingCard = ({ isWriting } : Props) => {
   return (
-    <Card className={clsx("aspect-square", isWriting ? "mb-4" : "opacity-0 h-0 p-0! mb-0!")}>
+    <Card className={cn("aspect-square", isWriting ? "mb-4" : "opacity-0 h-0 p-0 mb-0")}>
       HandWriting
     </Card>
   )
