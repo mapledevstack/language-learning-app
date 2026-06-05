@@ -1,5 +1,4 @@
 import type { FlashCard } from "@/schemas-and-types/FlashCardSchema"
-import Card from "./Card"
 
 type Props = {
   card: FlashCard
@@ -7,10 +6,10 @@ type Props = {
 
 const StudyFlashCardBack = ({ card }: Props) => {
   return (
-    <Card className="aspect-3/4 w-xs">
+    <div className="text-2xl size-full grid place-items-center">
       {card.back.reading}
       {card.back.meaning}
-    </Card>
+    </div>
   )
 }
 export default StudyFlashCardBack

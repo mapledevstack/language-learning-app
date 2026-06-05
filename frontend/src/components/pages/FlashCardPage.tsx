@@ -5,6 +5,7 @@ import { DeckSchema, type Deck } from "@/schemas-and-types/DeckSchema"
 import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import { handleAgain, handleGood } from "@/lib/srs"
+import { AnimatePresence, motion } from "motion/react"
 
 const FlashCardPage = () => {
   const { deckId: deckIdParam } = Route.useParams()
@@ -36,13 +37,17 @@ const FlashCardPage = () => {
       }
 
     if(flip && key === "ArrowLeft") {
-        
-        handleAgain(currentCard)      
+        setStudyCards(prev => {
+          const updatedCard = handleAgain(currentCard)
+          return prev.map(card => card === currentCard ? updatedCard : card)
+        })
         setFlip(false)
         setIndex(prev => prev + 1)
     } else if(flip && key === "ArrowRight") {
-        
-        handleGood(currentCard)
+        setStudyCards(prev => {
+          const updatedCard = handleGood(currentCard)
+          return prev.map(card => card === currentCard ? updatedCard : card)
+        })
         setFlip(false)
         setIndex(prev => prev + 1)
       }
@@ -60,8 +65,14 @@ const FlashCardPage = () => {
 
   return (
     <div className="h-full flex flex-col items-center justify-center p-10 relative gap-10">
-      
+    
+    <motion.div
+      initial={{opacity: 0, y: 50, x:0}}
+      animate={{opacity: 1, y: 0}}
+      transition={{ease:"easeInOut"}}
+    >
       <StudyFlashCard currentCard={currentCard} flip={flip} />
+    </motion.div>
       
       <div className="text-muted-foreground whitespace-nowrap">
         <span className={cn("text-blue-500", currentCard.status === "new" ? "underline" : "")}>{remainingCount.new}</span> {" - "}
