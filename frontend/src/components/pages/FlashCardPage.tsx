@@ -14,22 +14,19 @@ const FlashCardPage = () => {
   const deck = decks.find(deck => deck.id === deckId)
   
   // Use actual Filtered Flashcards
-  const newCards = flashcards.filter(card => card.status === "new").slice(0, deck?.srsSettings.newCardsLimit ?? 20)
+  const allStudyCards = flashcards.filter(card => card.deckId === deck?.id)
 
-  const learningCards = flashcards.filter(card => card.status === "learning")
-
-  const reviewCards = flashcards.filter(card => card.status === "review")
-
-  const allStudyCards = [
-    ...learningCards,
-    ...newCards,
-    ...reviewCards
-  ]
-
+  const [studyCards, setStudyCards] = useState(allStudyCards)
   const [index, setIndex] = useState(0)
   const [flip, setFlip] = useState<boolean>(false)
 
-  const currentCard = allStudyCards[index]
+  const currentCard = studyCards[index]
+  const remainingCards = studyCards.slice(index)
+  const remainingCount = {
+    new: remainingCards.filter(card => card.status === "new").length,
+    learning: remainingCards.filter(card => card.status === "learning").length,
+    review: remainingCards.filter(card => card.status === "review").length
+  }
 
   useEffect(() => {
     const handleKey = ({ key } : KeyboardEvent) => {
@@ -39,10 +36,12 @@ const FlashCardPage = () => {
       }
 
     if(flip && key === "ArrowLeft") {
+        
         handleAgain(currentCard)      
         setFlip(false)
         setIndex(prev => prev + 1)
     } else if(flip && key === "ArrowRight") {
+        
         handleGood(currentCard)
         setFlip(false)
         setIndex(prev => prev + 1)
@@ -51,17 +50,23 @@ const FlashCardPage = () => {
 
     window.addEventListener("keydown", handleKey)
     return () => window.removeEventListener("keydown", handleKey)
-  }, [flip])
+  }, [flip, currentCard])
   
+  if(!currentCard) {
+    return (
+      <div>No Cards to Study</div>
+    )
+  }
+
   return (
     <div className="h-full flex flex-col items-center justify-center p-10 relative gap-10">
       
       <StudyFlashCard currentCard={currentCard} flip={flip} />
       
       <div className="text-muted-foreground whitespace-nowrap">
-        <span className={cn("text-blue-500", currentCard.status === "new" ? "underline" : "")}>{newCards.length}</span> {" - "}
-        <span className={cn("text-red-500", currentCard.status === "learning" ? "underline" : "")}>{learningCards.length}</span> {" - "}
-        <span className={cn("text-green-500", currentCard.status === "review" ? "underline" : "")}>{reviewCards.length}</span>
+        <span className={cn("text-blue-500", currentCard.status === "new" ? "underline" : "")}>{remainingCount.new}</span> {" - "}
+        <span className={cn("text-red-500", currentCard.status === "learning" ? "underline" : "")}>{remainingCount.learning}</span> {" - "}
+        <span className={cn("text-green-500", currentCard.status === "review" ? "underline" : "")}>{remainingCount.review}</span>
       </div>
     </div>
   )
