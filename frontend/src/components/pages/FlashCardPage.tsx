@@ -12,10 +12,10 @@ const FlashCardPage = () => {
   const deckId = Number(deckIdParam)
   
   // Find actual deck
-  const deck = decks.find(deck => deck.id === deckId)
+  // const deck = decks.find(deck => deck.id === deckId)
   
   // Use actual Filtered Flashcards
-  const allStudyCards = flashcards.filter(card => card.deckId === deck?.id)
+  const allStudyCards = flashcards.filter(card => card.deckId.includes(deckId))
 
   const [studyCards, setStudyCards] = useState(allStudyCards)
   const [index, setIndex] = useState(0)
@@ -112,7 +112,7 @@ const decks: Deck[] = [
 const flashcards: FlashCard[] = [
   FlashCardSchema.parse({
     id: 1,
-    deckId: 1,
+    deckId: [1],
 
     front: {
       expression: "猫",
@@ -129,7 +129,7 @@ const flashcards: FlashCard[] = [
 
   FlashCardSchema.parse({
     id: 2,
-    deckId: 1,
+    deckId: [1],
 
     front: {
       expression: "学校",
@@ -145,7 +145,7 @@ const flashcards: FlashCard[] = [
 
   FlashCardSchema.parse({
     id: 3,
-    deckId: 1,
+    deckId: [1],
 
     front: {
       expression: "食べる",
@@ -161,7 +161,7 @@ const flashcards: FlashCard[] = [
 
   FlashCardSchema.parse({
     id: 4,
-    deckId: 1,
+    deckId: [1],
 
     front: {
       expression: "飲む",
@@ -177,7 +177,7 @@ const flashcards: FlashCard[] = [
 
   FlashCardSchema.parse({
     id: 5,
-    deckId: 1,
+    deckId: [1],
 
     front: {
       expression: "面白い",
@@ -193,7 +193,7 @@ const flashcards: FlashCard[] = [
 
   FlashCardSchema.parse({
     id: 6,
-    deckId: 1,
+    deckId: [1],
 
     front: {
       expression: "昨日、猫を見た。",

@@ -3,11 +3,14 @@ import { useEffect, useState } from "react"
 import type { Word } from "@/schemas-and-types/WordSchema"
 import DictionaryDetails from "../dictionary/DictionaryDetails"
 import DictionarySearch from "../dictionary/DictionarySearch"
+import { DeckSchema, type Deck } from "@/schemas-and-types/DeckSchema"
 
 const DictionaryPage = () => {
   const [query, setQuery] = useState<string>("")
   const [word, setWord] = useState<Word | null>(null)
   const [isWriting, setIsWriting] = useState<boolean>(false)
+
+  const deckIds = [...new Set(decks.map(deck => deck.id))]
 
   const filterResults = (query: string, words: Word[]) => {
     const newWords = words.filter(word => (
@@ -25,6 +28,10 @@ const DictionaryPage = () => {
     query ? setWord(results[0] ?? null) : setWord(null)
   }, [query])
 
+  const handleAddToDeck = (deckId: number) => {
+    console.log(`Added ${word?.readings} to ${decks.find(deck => deck.id === deckId)?.title}`)
+  }
+
   return (
     <div className="h-full flex flex-col p-10 gap-10">
       
@@ -33,8 +40,8 @@ const DictionaryPage = () => {
       </section>
 
       <section className="flex-1 md:min-h-0 grid md:grid-cols-[30%_70%] gap-4 items-start">
-        <DictionaryDetails isWriting={isWriting} word={word} />
-        <DictionaryResults results={results} setWord={setWord} />
+        <DictionaryDetails isWriting={isWriting} word={word} deckIds={deckIds} decks={decks} handleAddToDeck={handleAddToDeck} />
+        <DictionaryResults currentWord={word} results={results} setWord={setWord} />
       </section>
     
     </div>
@@ -197,3 +204,24 @@ const words = [
     jlpt: "N5"
   }
 ]
+
+const decks: Deck[] = 
+  [
+    DeckSchema.parse({
+      id: 1,
+      title: "Hiragana",
+      description: "Basic Japanese syllabary",
+      cardCount: 46,
+      learnedCount: 23,
+      dueCount: 26,
+    }),
+
+    DeckSchema.parse({
+      id: 2,
+      title: "Katakana",
+      description: "Foreign-word syllabary",
+      cardCount: 46,
+      learnedCount: 2,
+      dueCount: 46,
+    })
+  ]

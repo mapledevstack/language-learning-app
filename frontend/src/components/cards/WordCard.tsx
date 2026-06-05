@@ -1,12 +1,29 @@
 import type { Word } from "@/schemas-and-types/WordSchema"
 import Card from "./Card"
 import { LucidePlus } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useNavigate } from "@tanstack/react-router"
+import type { Deck } from "@/schemas-and-types/DeckSchema"
 
 type Props = {
   word: Word | null
+  deckIds: number[]
+  decks: Deck[]
+  handleAddToDeck: (deckId: number) => void
 }
 
-const WordCard = ({ word } : Props) => {
+const WordCard = ({ word, deckIds, decks, handleAddToDeck } : Props) => {
+  const navigate = useNavigate()
+
   if(!word) return (
     <Card>{"<Word />"}</Card>
   )
@@ -18,9 +35,30 @@ const WordCard = ({ word } : Props) => {
         {word.jlpt}
       </div>
 
-      <button className="absolute right-4 top-4 bg-primary size-10 grid place-items-center rounded-full text-primary-foreground hover:scale-105 cursor-pointer transition-transform">
-        <LucidePlus className="size-6" />
-      </button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="default" className="absolute right-4 top-4 bg-primary size-10 grid place-items-center rounded-full text-primary-foreground hover:scale-105 cursor-pointer transition-transform">
+            <LucidePlus className="size-6" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Add to a Deck...</DropdownMenuLabel>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            {deckIds.map((deckId) => (
+              <DropdownMenuItem key={deckId} onClick={() => handleAddToDeck(deckId)}>
+                {decks.find(deck => deck.id === deckId)?.title}
+              </DropdownMenuItem>
+            ))}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="text-muted-foreground" onClick={()=> navigate({to: '/flashcards'})}>
+              Manage decks
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       <div className="mt-10 flex flex-col gap-6 items-center">
         <div className="text-4xl font-bold text-primary">

@@ -2,7 +2,7 @@ import { z } from "zod"
 
 export const FlashCardSchema = z.object({
   id: z.number(),
-  deckId: z.number(),
+  deckId: z.array(z.number()).default([]),
   
   front: z.object({
     expression: z.string()
