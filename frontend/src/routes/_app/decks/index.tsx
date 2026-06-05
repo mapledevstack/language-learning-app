@@ -1,9 +1,15 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { DeckSchema, type Deck } from "@/schemas-and-types/DeckSchema"
-import DeckCard from "../cards/DeckCard"
 import { useState } from "react"
-import CreateDeckCard from "../cards/CreateDeckCard"
+import CreateDeckCard from '@/components/cards/CreateDeckCard'
+import DeckCard from '@/components/cards/DeckCard'
 
-const DecksPage = () => {
+export const Route = createFileRoute('/_app/decks/')({
+  component: DecksPage,
+})
+
+
+function DecksPage() {
   const [decks, setDecks] = useState<Deck[]>(basicDecks)
 
   const handleCreateDeck = (title: string) => {
@@ -29,7 +35,6 @@ const DecksPage = () => {
     </div>
   )
 }
-export default DecksPage
 
 const basicDecks: Deck[] = 
   [

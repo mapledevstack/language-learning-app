@@ -1,13 +1,18 @@
-import { Route } from "@/routes/_app/flashcards/$deckId"
-import StudyFlashCard from "../cards/StudyFlashCard"
+import { createFileRoute } from '@tanstack/react-router'
 import { FlashCardSchema, type FlashCard } from "@/schemas-and-types/FlashCardSchema"
 import { DeckSchema, type Deck } from "@/schemas-and-types/DeckSchema"
 import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import { handleAgain, handleGood } from "@/lib/srs"
 import { motion } from "motion/react"
+import StudyFlashCard from '@/components/cards/StudyFlashCard'
 
-const FlashCardPage = () => {
+
+export const Route = createFileRoute('/_app/decks/$deckId')({
+  component: FlashCardPage,
+})
+
+function FlashCardPage() {
   const { deckId: deckIdParam } = Route.useParams()
   const deckId = Number(deckIdParam)
   
@@ -85,7 +90,6 @@ const FlashCardPage = () => {
     </div>
   )
 }
-export default FlashCardPage
 
 
 const decks: Deck[] = [

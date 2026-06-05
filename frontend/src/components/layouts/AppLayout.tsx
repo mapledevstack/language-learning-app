@@ -7,7 +7,7 @@ const AppLayout = () => {
       <nav className='flex gap-4 min-h-(--navbar-height) cursor-pointer justify-evenly items-center bg-sidebar'>
         <Link to='/dashboard'>Dashboard</Link>
         <Link to='/dictionary'>Dictionary</Link>
-        <Link to="/flashcards">Flashcards</Link>
+        <Link to="/decks">Flashcards</Link>
         <Link to='/profile'>Profile</Link>
       </nav>
 

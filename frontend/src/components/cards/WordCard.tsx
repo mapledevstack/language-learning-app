@@ -53,7 +53,7 @@ const WordCard = ({ word, deckIds, decks, handleAddToDeck } : Props) => {
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-muted-foreground" onClick={()=> navigate({to: '/flashcards'})}>
+            <DropdownMenuItem className="text-muted-foreground" onClick={()=> navigate({to: '/decks'})}>
               Manage decks
             </DropdownMenuItem>
           </DropdownMenuGroup>

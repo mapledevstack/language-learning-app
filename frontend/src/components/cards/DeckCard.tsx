@@ -29,7 +29,7 @@ const DeckCard = ({ deck } : Props) => {
         <div className="absolute inset-1 rounded-full bg-card"></div>
 
         <Link
-          to="/flashcards/$deckId"
+          to="/decks/$deckId"
           params={{deckId: String(deck.id)}}
         >
           <div className="group inset-2 absolute">
