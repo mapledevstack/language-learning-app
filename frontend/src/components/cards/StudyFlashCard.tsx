@@ -6,17 +6,18 @@ import StudyFlashCardBack from "./StudyFlashCardBack"
 
 type Props = {
   currentCard: FlashCard,
-  flip: boolean
+  flip: boolean,
+  flipAnimationEnabled: boolean
 }
 
-const StudyFlashCard = ({currentCard : card, flip} : Props) => {
+const StudyFlashCard = ({currentCard : card, flip, flipAnimationEnabled} : Props) => {
   return (
-    <Card className="aspect-3/4 w-[min(20rem,80vh,calc(80vh*3/4))] perspective-distant">
+    <Card className="w-3xs md:w-(--card-width) aspect-3/4 perspective-distant">
       <motion.div
         className="relative size-full"
         initial={{x: 0, opacity: 1}}
         animate={{rotateY: flip ? 180 : 0}}
-        transition={{duration: flip ? 0.3 : 0, ease: "easeInOut"}}
+        transition={{duration: (flipAnimationEnabled && flip) ? 0.3 : 0, ease: "easeInOut"}}
         style={{transformStyle: "preserve-3d"}}
       >
         

@@ -28,25 +28,28 @@ const CreateDeckCard = ({ handleCreateDeck } : Props) => {
   }, [isCreating])
 
   return (
-    <Card className="w-xs bg-accent-muted aspect-3/4 hover:scale-105 transition-transform flex flex-col justify-between p-2 items-center text-center relative">
+    <Card className="w-(--card-width) bg-accent-muted aspect-3/4 hover:scale-105 transition-transform flex flex-col justify-between p-2 items-center text-center relative">
     
         {isCreating &&
           <input
             ref={inputRef}
             type="text"
-            className="bg-background p-3 text-3xl text-primary w-full border-3 rounded-4xl shadow-sm text-center"
+            className="p-2 text-3xl w-[85%] text-primary bg-card rounded-4xl shadow-sm text-center"
+            placeholder="Deck name..."
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onKeyDown={(e) => {
               if(e.key === "Enter") {
                 createDeck()
+              } else if(e.key === "Escape") {
+                setIsCreating(false)
               }
             }}
             onBlur={() => {
               setTimeout(() => {
                 setIsCreating(false)
                 setTitle("")
-              }, 4000)
+              }, 10000)
             }}
           />}
         

@@ -7,6 +7,7 @@
 
 @theme inline {
     --navbar-height: 6rem;
+    --card-width: 20rem;
     --font-heading: var(--font-sans);
     --font-sans: 'Space Grotesk Variable', sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);

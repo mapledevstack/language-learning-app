@@ -5,7 +5,7 @@ import { DeckSchema, type Deck } from "@/schemas-and-types/DeckSchema"
 import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import { handleAgain, handleGood } from "@/lib/srs"
-import { AnimatePresence, motion } from "motion/react"
+import { motion } from "motion/react"
 
 const FlashCardPage = () => {
   const { deckId: deckIdParam } = Route.useParams()
@@ -20,6 +20,9 @@ const FlashCardPage = () => {
   const [studyCards, setStudyCards] = useState(allStudyCards)
   const [index, setIndex] = useState(0)
   const [flip, setFlip] = useState<boolean>(false)
+  
+  // Move to Profile Settings
+  const [flipAnimationEnabled, setFlipAnimationEnabled] = useState(true)
 
   const currentCard = studyCards[index]
   const remainingCards = studyCards.slice(index)
@@ -71,7 +74,7 @@ const FlashCardPage = () => {
       animate={{opacity: 1, y: 0}}
       transition={{ease:"easeInOut"}}
     >
-      <StudyFlashCard currentCard={currentCard} flip={flip} />
+      <StudyFlashCard currentCard={currentCard} flip={flip} flipAnimationEnabled={flipAnimationEnabled} />
     </motion.div>
       
       <div className="text-muted-foreground whitespace-nowrap">
