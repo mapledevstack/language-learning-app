@@ -1,4 +1,4 @@
-import type { Word } from "@/schemas-and-types/WordSchema"
+import type { Word } from "@/schemas/WordSchema"
 import Card from "./Card"
 import { cn } from "@/lib/utils"
 

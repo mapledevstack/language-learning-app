@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { FlashCardSchema, type FlashCard } from "@/schemas-and-types/FlashCardSchema"
-import { DeckSchema, type Deck } from "@/schemas-and-types/DeckSchema"
+import { FlashCardSchema, type FlashCard } from "@/schemas/FlashCardSchema"
+import { DeckSchema, type Deck } from "@/schemas/DeckSchema"
 import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import { handleAgain, handleGood } from "@/lib/srs"

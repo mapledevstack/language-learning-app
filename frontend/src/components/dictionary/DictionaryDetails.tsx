@@ -1,7 +1,7 @@
-import type { Word } from "@/schemas-and-types/WordSchema"
+import type { Word } from "@/schemas/WordSchema"
 import WordCard from "../cards/WordCard"
 import HandWritingCard from "../cards/HandWritingCard"
-import type { Deck } from "@/schemas-and-types/DeckSchema"
+import type { Deck } from "@/schemas/DeckSchema"
 
 type Props = {
   isWriting: boolean,

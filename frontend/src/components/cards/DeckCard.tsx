@@ -1,4 +1,4 @@
-import type { Deck } from "@/schemas-and-types/DeckSchema"
+import type { Deck } from "@/schemas/DeckSchema"
 import Card from "./Card"
 import { LucideEdit, LucidePlay } from "lucide-react"
 import { cn } from "@/lib/utils"

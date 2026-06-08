@@ -1,4 +1,4 @@
-import type { FlashCard } from "@/schemas-and-types/FlashCardSchema"
+import type { FlashCard } from "@/schemas/FlashCardSchema"
 import { motion } from "motion/react"
 import Card from "./Card"
 import StudyFlashCardFront from "./StudyFlashCardFront"

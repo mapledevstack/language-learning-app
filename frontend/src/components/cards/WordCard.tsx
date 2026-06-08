@@ -1,4 +1,4 @@
-import type { Word } from "@/schemas-and-types/WordSchema"
+import type { Word } from "@/schemas/WordSchema"
 import Card from "./Card"
 import { LucidePlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useNavigate } from "@tanstack/react-router"
-import type { Deck } from "@/schemas-and-types/DeckSchema"
+import type { Deck } from "@/schemas/DeckSchema"
 
 type Props = {
   word: Word | null

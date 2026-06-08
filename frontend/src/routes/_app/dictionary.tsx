@@ -1,8 +1,8 @@
 import DictionaryDetails from '@/components/dictionary/DictionaryDetails'
 import DictionaryResults from '@/components/dictionary/DictionaryResults'
 import DictionarySearch from '@/components/dictionary/DictionarySearch'
-import { DeckSchema, type Deck } from '@/schemas-and-types/DeckSchema'
-import type { Word } from '@/schemas-and-types/WordSchema'
+import { DeckSchema, type Deck } from '@/schemas/DeckSchema'
+import type { Word } from '@/schemas/WordSchema'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
 
@@ -38,13 +38,13 @@ function DictionaryPage() {
   }
 
   return (
-    <div className="h-full flex flex-col p-10 gap-10">
+    <div className="h-full flex flex-col p-10 gap-6">
       
       <section>
         <DictionarySearch results={results} isWriting={isWriting} setIsWriting={setIsWriting} query={query} setQuery={setQuery} />
       </section>
 
-      <section className="flex-1 md:min-h-0 grid md:grid-cols-[30%_70%] gap-4 items-start">
+      <section className="flex-1 md:min-h-0 grid md:grid-cols-[3fr_7fr] gap-4 items-start">
         <DictionaryDetails isWriting={isWriting} word={word} deckIds={deckIds} decks={decks} handleAddToDeck={handleAddToDeck} />
         <DictionaryResults currentWord={word} results={results} setWord={setWord} />
       </section>

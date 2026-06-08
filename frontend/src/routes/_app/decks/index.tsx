@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { DeckSchema, type Deck } from "@/schemas-and-types/DeckSchema"
+import { DeckSchema, type Deck } from "@/schemas/DeckSchema"
 import { useState } from "react"
 import CreateDeckCard from '@/components/cards/CreateDeckCard'
 import DeckCard from '@/components/cards/DeckCard'

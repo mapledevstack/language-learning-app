@@ -1,4 +1,4 @@
-import type { FlashCard } from "@/schemas-and-types/FlashCardSchema"
+import type { FlashCard } from "@/schemas/FlashCardSchema"
 
 export const handleAgain = (card : FlashCard) => {
   return card
