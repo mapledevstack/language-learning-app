@@ -8,7 +8,7 @@ import { motion } from "motion/react"
 import StudyFlashCard from '@/components/cards/StudyFlashCard'
 
 
-export const Route = createFileRoute('/_app/decks/$deckId')({
+export const Route = createFileRoute('/_app/decks/$deckId/')({
   component: FlashCardPage,
 })
 
