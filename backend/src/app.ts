@@ -1,5 +1,5 @@
 import express from "express"
-import dictionaryRoutes from "./modules/dictionary/dictionary.routes.js"
+import dictionaryRoutes from "./features/dictionary/dictionary.routes.js"
 
 const app = express()
 

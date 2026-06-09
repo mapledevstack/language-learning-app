@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import dotenv from "dotenv"
+import "dotenv/config"
 import fs from "node:fs"
 
 const FILE_PATH = "data/processed/dictionary-words.json"
@@ -7,7 +7,6 @@ const FILE_PATH = "data/processed/dictionary-words.json"
 const words = JSON.parse(fs.readFileSync(FILE_PATH, "utf8")).slice(300, 303)
 // console.log(words)
 
-dotenv.config({path: './src/.env'})
 const MONGO_URI = process.env.MONGO_URI
 
 if(!MONGO_URI) {
