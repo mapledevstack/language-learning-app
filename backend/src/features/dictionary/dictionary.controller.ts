@@ -1,12 +1,16 @@
-import { Request, Response } from "express";
-import { getAllWords } from "./dictionary.service.js";
+import { Request, Response } from "express"
+import { getAllWords, searchWords } from "./dictionary.service.js"
 
-export const getAllWordsController = async(req: Request, res: Response) => {
-  try{
-    const words = await getAllWords()
-    res.status(200).json(words)
-  } catch(error) {
-    console.error(error)
-    res.status(500).json({message: "Failed to fetch words"})
-  }
+export const getAllWordsController = async (req: Request, res: Response) => {
+  const words = await getAllWords()
+
+  res.json(words)
+}
+
+export const searchWordsController = async (req: Request, res: Response) => {
+  const query = String(req.query.q ?? "")
+
+  const words = await searchWords(query)
+
+  res.json(words)
 }

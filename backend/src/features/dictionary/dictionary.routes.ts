@@ -1,8 +1,12 @@
-import { Router } from "express";
-import { getAllWordsController } from "./dictionary.controller.js";
+import { Router } from "express"
+import {
+  getAllWordsController,
+  searchWordsController,
+} from "./dictionary.controller.js"
 
 const router = Router()
 
-router.get('/', getAllWordsController)
+router.get("/", getAllWordsController)
+router.get("/search", searchWordsController)
 
 export default router
