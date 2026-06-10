@@ -1,5 +1,5 @@
 import { DictionaryWord } from "./dictionary.model.js"
 
 export const getAllWords = async() => {
-  return DictionaryWord.find().limit(10)
+  return DictionaryWord.find().limit(100)
 }

@@ -1,20 +1,29 @@
 import fs from "node:fs"
 
-const FILE_PATH = "data/raw/jmdictExtended-2026-06-02.json"
+const convertDictionary = async (PATH: string) => {
+  const file = fs.readdirSync(`${PATH}/raw`)[0]
 
-const file = fs.readFileSync(FILE_PATH, "utf-8")
-const data = JSON.parse(file.trim()) as {words: Record<string, unknown>[]} 
-const words = data.words.map(word => {
-  const {id, ...remaining} = word
-  return remaining
-})
+  if (!file) {
+    console.log("data doesn't exist")
+    process.exit(0)
+  }
 
-fs.writeFileSync(
-  "data/processed/dictionary-words.json", 
-  JSON.stringify(words)
-)
+  const data = JSON.parse(
+    fs.readFileSync(`${PATH}/raw/${file}`, "utf8").trim(),
+  ) as {
+    words: Record<string, unknown>[]
+    [key: string]: unknown
+  }
 
-console.log("Words json created!")
+  const { words, ...meta } = data
+
+  fs.writeFileSync(`${PATH}/processed/meta.json`, JSON.stringify(meta))
+  fs.writeFileSync(`${PATH}/processed/words.json`, JSON.stringify(words))
+
+  console.log("words and meta data json created!")
+}
+
+export default convertDictionary
 
 /*
 const keys = [
@@ -28,6 +37,7 @@ const keys = [
 ]
 */
 
+/*
 const example = {
   "id": "1006080",
   "kanji": [
@@ -142,4 +152,4 @@ const example = {
     }
   ]
 }
-
+*/
