@@ -31,13 +31,13 @@ const DictionarySearch = ({ isWriting, setIsWriting, query, setQuery, results }:
     setQuery(value)
 
     const kanaTokens = tokenize(value).map(token => {
-      if(typeof token === "string" && token.trim()) {
+      if(typeof token === "string") {
         return isRomaji(token) ? toKana(token) : token
       }
+      return ""
     })
 
-
-    setTokens(kanaTokens.filter(token => token !== undefined))
+    setTokens(kanaTokens.filter(token => token.trim()))
   }
 
   return (

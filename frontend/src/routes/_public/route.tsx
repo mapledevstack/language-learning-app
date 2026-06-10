@@ -1,6 +1,6 @@
-import PublicLayout from '@/components/layouts/PublicLayout'
-import { createFileRoute } from '@tanstack/react-router'
+import PublicLayout from "@/layouts/PublicLayout"
+import { createFileRoute } from "@tanstack/react-router"
 
-export const Route = createFileRoute('/_public')({
+export const Route = createFileRoute("/_public")({
   component: PublicLayout,
 })
