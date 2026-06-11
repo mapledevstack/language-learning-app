@@ -10,8 +10,6 @@ const DictionaryPage = () => {
   const [word, setWord] = useState<Word | null>(null)
   const [isWriting, setIsWriting] = useState<boolean>(false)
 
-  const deckIds = [...new Set(decks.map((deck) => deck.id))]
-
   const filterResults = (query: string, words: Word[]) => {
     const newWords = words.filter(
       (word) =>
@@ -31,12 +29,6 @@ const DictionaryPage = () => {
     query ? setWord(results[0] ?? null) : setWord(null)
   }, [query])
 
-  const handleAddToDeck = (deckId: number) => {
-    console.log(
-      `Added ${word?.readings} to ${decks.find((deck) => deck.id === deckId)?.title}`,
-    )
-  }
-
   return (
     <div className="h-full flex flex-col p-10 gap-6">
       <section>
@@ -50,13 +42,7 @@ const DictionaryPage = () => {
       </section>
 
       <section className="flex-1 md:min-h-0 grid md:grid-cols-[3fr_7fr] gap-4 items-start">
-        <DictionaryDetails
-          isWriting={isWriting}
-          word={word}
-          deckIds={deckIds}
-          decks={decks}
-          handleAddToDeck={handleAddToDeck}
-        />
+        <DictionaryDetails isWriting={isWriting} word={word} decks={decks} />
         <DictionaryResults
           currentWord={word}
           results={results}

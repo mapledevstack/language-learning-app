@@ -25,7 +25,10 @@ const AppLayout = () => {
           <nav className="flex h-(--navbar-height) cursor-pointer bg-primary text-primary-foreground w-full pl-(--navigation-border)">
             {navigationMenu.map((menu) => {
               return (
-                <div className="flex-1 hover:bg-sidebar-primary transition-all h-full">
+                <div
+                  className="flex-1 hover:bg-sidebar-primary transition-all h-full"
+                  key={menu.label}
+                >
                   <Link
                     to={menu.to}
                     className="h-full font-bold flex items-center justify-center text-xl"

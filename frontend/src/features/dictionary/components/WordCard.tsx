@@ -16,13 +16,17 @@ import type { Deck } from "@/schemas/DeckSchema"
 
 type Props = {
   word: Word | null
-  deckIds: number[]
   decks: Deck[]
-  handleAddToDeck: (deckId: number) => void
 }
 
-const WordCard = ({ word, deckIds, decks, handleAddToDeck }: Props) => {
+const WordCard = ({ word, decks }: Props) => {
   const navigate = useNavigate()
+
+  const handleAddToDeck = (deckId: number) => {
+    console.log(
+      `Added ${word?.readings} to ${decks.find((deck) => deck.id === deckId)?.title}`,
+    )
+  }
 
   if (!word) return <Card>{"<Word />"}</Card>
 
@@ -47,12 +51,12 @@ const WordCard = ({ word, deckIds, decks, handleAddToDeck }: Props) => {
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            {deckIds.map((deckId) => (
+            {decks.map((deck) => (
               <DropdownMenuItem
-                key={deckId}
-                onClick={() => handleAddToDeck(deckId)}
+                key={deck.id}
+                onClick={() => handleAddToDeck(deck.id)}
               >
-                {decks.find((deck) => deck.id === deckId)?.title}
+                {deck.title}
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
