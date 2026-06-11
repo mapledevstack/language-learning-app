@@ -9,7 +9,7 @@ const vidId = "C3oPjuudXas"
 
 const ImmersionWatchPage = () => {
   const [player, setPlayer] = useState<YouTubePlayer | undefined>()
-  const [currentTime, setCurrentTime] = useState<any>(0)
+  const [currentTime, setCurrentTime] = useState(0)
 
   useEffect(() => {
     if (!player) return
@@ -29,7 +29,6 @@ const ImmersionWatchPage = () => {
       <section className="flex-1 md:overflow-hidden flex flex-col gap-4">
         <VideoCard setPlayer={setPlayer} setCurrentTime={setCurrentTime} />
         <SubtitleCard
-          subtitles={subtitles}
           currentTime={currentTime}
           setCurrentTime={setCurrentTime}
         />
@@ -43,17 +42,6 @@ const ImmersionWatchPage = () => {
   )
 }
 export default ImmersionWatchPage
-
-const subtitles: any[] = [
-  { start: 0, end: 3, text: "今日はメイクを紹介します" },
-  { start: 3, end: 6, text: "まず下地から始めます" },
-  { start: 6, end: 10, text: "次にファンデーションです" },
-  { start: 10, end: 15, text: "今日はメイクを紹介します" },
-  { start: 15, end: 20, text: "次にファンデーションです" },
-  { start: 20, end: 26, text: "今日はメイクを紹介します" },
-  { start: 26, end: 30, text: "次にファンデーションです" },
-  { start: 30, end: 32, text: "今日はメイクを紹介します" },
-]
 
 const word = {
   id: 1000290,

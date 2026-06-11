@@ -5,7 +5,7 @@ const vidId = "C3oPjuudXas"
 
 type Props = {
   setPlayer: (player: YouTubePlayer) => void
-  setCurrentTime: (currentTime: any) => void
+  setCurrentTime: (currentTime: number) => void
 }
 
 const VideoCard = ({ setPlayer, setCurrentTime }: Props) => {
