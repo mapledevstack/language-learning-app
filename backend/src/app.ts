@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import morgan from "morgan"
 import dictionaryRoutes from "./features/dictionary/dictionary.routes.js"
+import immersionRoutes from "./features/immersion/immersion.routes.js"
 import errorHandler from "./middleware/errorHandler.js"
 import notFound from "./middleware/notFound.js"
 
@@ -12,6 +13,7 @@ app.use(cors())
 app.use(morgan("dev"))
 
 app.use("/api/v1/dictionary", dictionaryRoutes)
+app.use("/api/v1/immersion", immersionRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
