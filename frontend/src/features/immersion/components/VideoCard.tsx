@@ -1,14 +1,13 @@
 import Card from "@/components/Card"
 import YouTube, { type YouTubePlayer } from "react-youtube"
 
-const vidId = "C3oPjuudXas"
-
 type Props = {
+  vidId: string
   setPlayer: (player: YouTubePlayer) => void
   setCurrentTime: (currentTime: number) => void
 }
 
-const VideoCard = ({ setPlayer, setCurrentTime }: Props) => {
+const VideoCard = ({ vidId, setPlayer, setCurrentTime }: Props) => {
   return (
     <Card>
       <YouTube

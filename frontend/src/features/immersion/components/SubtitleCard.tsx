@@ -4,21 +4,19 @@ import { useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
 
 type Props = {
+  vidId: string
   currentTime: number
   setCurrentTime: (currentTime: number) => void
 }
 
-const vidId = "C3oPjuudXas"
-
-const SubtitleCard = ({ currentTime, setCurrentTime }: Props) => {
+const SubtitleCard = ({ vidId, currentTime, setCurrentTime }: Props) => {
   const { data: subtitles } = useSubtitles(vidId)
 
   const activeSubRef = useRef<HTMLDivElement | null>(null)
 
-  const currentTimeMs = currentTime * 1000
   const activeSubtitleIndex = subtitles.findIndex(
     (sub) =>
-      currentTimeMs >= sub.offset && currentTimeMs < sub.offset + sub.duration,
+      currentTime >= sub.offset && currentTime < sub.offset + sub.duration,
   )
 
   useEffect(() => {
@@ -36,8 +34,9 @@ const SubtitleCard = ({ currentTime, setCurrentTime }: Props) => {
         return (
           <div
             className={cn(
-              "text-2xl text-muted-foreground transition-all",
-              index === activeSubtitleIndex && "text-foreground",
+              "text-2xl text-muted-foreground/60 transition-all duration-200",
+              index === activeSubtitleIndex &&
+                "text-card-foreground text-[1.6rem]",
             )}
             key={index}
             ref={index === activeSubtitleIndex ? activeSubRef : null}

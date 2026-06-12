@@ -4,12 +4,13 @@ import SubtitleCard from "../components/SubtitleCard"
 import VideoCard from "../components/VideoCard"
 import { useEffect, useState } from "react"
 import type { YouTubePlayer } from "react-youtube"
-
-const vidId = "C3oPjuudXas"
+import { Route } from "@/routes/_app/immersion/$vidId"
 
 const ImmersionWatchPage = () => {
   const [player, setPlayer] = useState<YouTubePlayer | undefined>()
   const [currentTime, setCurrentTime] = useState(0)
+
+  const { vidId } = Route.useParams()
 
   useEffect(() => {
     if (!player) return
@@ -17,7 +18,7 @@ const ImmersionWatchPage = () => {
     const interval = setInterval(() => {
       const time = player.getCurrentTime()
       if (time !== currentTime) {
-        setCurrentTime(time)
+        setCurrentTime(time * 1000)
       }
     }, 250)
 
@@ -27,8 +28,13 @@ const ImmersionWatchPage = () => {
   return (
     <div className="h-full w-full grid md:grid-cols-[6.5fr_3.5fr] p-10 gap-4">
       <section className="flex-1 md:overflow-hidden flex flex-col gap-4">
-        <VideoCard setPlayer={setPlayer} setCurrentTime={setCurrentTime} />
+        <VideoCard
+          vidId={vidId}
+          setPlayer={setPlayer}
+          setCurrentTime={setCurrentTime}
+        />
         <SubtitleCard
+          vidId={vidId}
           currentTime={currentTime}
           setCurrentTime={setCurrentTime}
         />
