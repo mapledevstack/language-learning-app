@@ -1,4 +1,4 @@
-import { LucideEdit } from "lucide-react"
+import EditDialog from "../components/EditDialog"
 import Topics from "../components/Topics"
 import VideoLink from "../components/VideoLink"
 
@@ -8,10 +8,7 @@ const ImmersionHomePage = () => {
       <VideoLink />
       <Topics />
 
-      <button className="fixed bg-primary text-2xl p-3 rounded-4xl hover:scale-105 transition-transform text-shadow-md whitespace-nowrap flex items-center justify-center gap-2 z-10 bottom-6 right-6">
-        Edit
-        <LucideEdit />
-      </button>
+      <EditDialog />
     </div>
   )
 }
