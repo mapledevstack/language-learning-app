@@ -10,5 +10,6 @@ export const connectDB = async (mongoUri: string | undefined) => {
     console.log("MongoDB connected")
   } catch (error) {
     console.error(error)
+    process.exit(1)
   }
 }
