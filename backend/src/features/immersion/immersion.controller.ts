@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
-import { getSubtitles, searchVideos } from "./immersion.service.js"
+import { getSubtitles, getVideos } from "./immersion.service.js"
 import catchAsync from "../../middleware/catchAsync.js"
 
-export const searchVideosController = catchAsync(
+export const getVideosController = catchAsync(
   async (req: Request, res: Response) => {
     const query = req.query.q
 
@@ -10,7 +10,7 @@ export const searchVideosController = catchAsync(
       throw new Error("search query required")
     }
 
-    const videos = await searchVideos(query)
+    const videos = await getVideos(query)
     res.json(videos)
   },
 )

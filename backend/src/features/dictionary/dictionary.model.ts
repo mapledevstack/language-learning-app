@@ -1,6 +1,6 @@
-import mongoose from "mongoose"
+import { model, Schema } from "mongoose"
 
-const DictionaryWordSchema = new mongoose.Schema(
+const DictionaryWordSchema = new Schema(
   {},
   {
     strict: false,
@@ -9,7 +9,4 @@ const DictionaryWordSchema = new mongoose.Schema(
   },
 )
 
-export const DictionaryWord = mongoose.model(
-  "DictionaryWord",
-  DictionaryWordSchema,
-)
+export const DictionaryWord = model("DictionaryWord", DictionaryWordSchema)

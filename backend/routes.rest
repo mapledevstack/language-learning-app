@@ -4,4 +4,4 @@ GET http://localhost:3000/api/v1/dictionary/search?q=す
 ####
 GET http://localhost:3000/api/v1/immersion/videos/C3oPjuudXas/subtitles
 ####
-GET http://localhost:3000/api/v1/immersion/videos/
+GET http://localhost:3000/api/v1/immersion/videos/?q=料理
