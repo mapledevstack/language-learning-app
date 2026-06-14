@@ -1,29 +1,59 @@
 import { Request, Response } from "express"
-import { getSubtitles, getVideos } from "./immersion.service.js"
-import catchAsync from "../../middleware/catchAsync.js"
+import {
+  createTopic,
+  deleteTopic,
+  getAllTopics,
+  getSubtitles,
+  getTopicVideos,
+} from "./immersion.service.js"
 
-export const getVideosController = catchAsync(
-  async (req: Request, res: Response) => {
-    const query = req.query.q
+export const getAllTopicsController = async (req: Request, res: Response) => {
+  const topics = await getAllTopics()
 
-    if (typeof query !== "string" || !query.trim()) {
-      throw new Error("search query required")
-    }
+  res.json(topics)
+}
 
-    const videos = await getVideos(query)
-    res.json(videos)
-  },
-)
+export const createTopicController = async (req: Request, res: Response) => {
+  const { name, coverImg, type } = req.body
 
-export const getSubtitlesController = catchAsync(
-  async (req: Request, res: Response) => {
-    const id = req.params.id
+  if (!name.trim()) {
+    throw new Error("topic name is required")
+  }
 
-    if (typeof id !== "string") {
-      throw new Error("Video Id not valid")
-    }
+  const topic = await createTopic(name.trim(), coverImg, type)
 
-    const subtitles = await getSubtitles(id)
-    res.json(subtitles)
-  },
-)
+  res.status(201).json(topic)
+}
+
+export const deleteTopicController = async (
+  req: Request<{ topicId: string }>,
+  res: Response,
+) => {
+  const topicId = req.params.topicId
+
+  await deleteTopic(topicId)
+
+  res.sendStatus(204)
+}
+
+export const getTopicVideosController = async (
+  req: Request<{ topicId: string }>,
+  res: Response,
+) => {
+  const topicId = req.params.topicId
+
+  const videos = await getTopicVideos(topicId)
+
+  res.json(videos)
+}
+
+export const getSubtitlesController = async (req: Request, res: Response) => {
+  const vidId = req.params.vidId
+
+  if (typeof vidId !== "string") {
+    throw new Error("Video Id not valid")
+  }
+
+  const subtitles = await getSubtitles(vidId)
+  res.json(subtitles)
+}

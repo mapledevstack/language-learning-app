@@ -1,12 +1,20 @@
 import { Router } from "express"
 import {
+  createTopicController,
+  deleteTopicController,
+  getAllTopicsController,
   getSubtitlesController,
-  getVideosController,
+  getTopicVideosController,
 } from "./immersion.controller.js"
 
 const router = Router()
 
-router.get("/videos", getVideosController)
-router.get("/videos/:id/subtitles", getSubtitlesController)
+router.get("/topics", getAllTopicsController)
+router.post("/topics", createTopicController)
+router.delete("/topics/:topicId", deleteTopicController)
+
+router.get("/topics/:topicId/videos", getTopicVideosController)
+
+router.get("/videos/:vidId/subtitles", getSubtitlesController)
 
 export default router

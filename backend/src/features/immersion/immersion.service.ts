@@ -1,21 +1,14 @@
 import { fetchTranscript } from "youtube-transcript"
 import "dotenv/config"
 import { Topic, Video } from "./immersion.model.js"
-import { VideoResult, YoutubeSearchResponse } from "./immersion.types.js"
+import {
+  TopicType,
+  VideoResult,
+  YoutubeSearchResponse,
+} from "./immersion.types.js"
+import { Types } from "mongoose"
 
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY
-
-const getCachedVideos = async (topic: string) => {
-  const cachedTopic = await Topic.findOne({ name: topic })
-
-  if (!cachedTopic || cachedTopic.vidIds.length === 0) {
-    return null
-  }
-
-  return await Video.find({
-    vidId: { $in: cachedTopic.vidIds },
-  }).limit(50)
-}
 
 const fetchYoutubeVideos = async (topic: string) => {
   const params = new URLSearchParams({
@@ -49,7 +42,7 @@ const fetchYoutubeVideos = async (topic: string) => {
   return videos
 }
 
-const cacheVideos = async (topic: string, videos: VideoResult[]) => {
+const cacheVideos = async (topicId: Types.ObjectId, videos: VideoResult[]) => {
   for (const video of videos) {
     await Video.updateOne(
       { vidId: video.vidId },
@@ -58,31 +51,61 @@ const cacheVideos = async (topic: string, videos: VideoResult[]) => {
     )
   }
 
-  await Topic.updateOne(
-    { name: topic },
-    {
-      $set: {
-        name: topic,
-        type: "default",
-        vidIds: videos.map((video) => video.vidId),
-      },
+  await Topic.findByIdAndUpdate(topicId, {
+    $set: {
+      vidIds: videos.map((video) => video.vidId),
     },
-    { upsert: true },
-  )
+  })
 }
 
-export const getVideos = async (query: string) => {
-  const topic = query.trim().toLocaleLowerCase()
+export const getAllTopics = async () => {
+  const topics = await Topic.find(
+    {},
+    {
+      name: 1,
+      type: 1,
+      coverImg: 1,
+    },
+  )
 
-  const cachedVideos = await getCachedVideos(topic)
+  return topics
+}
 
-  if (cachedVideos) {
-    return cachedVideos
+export const createTopic = async (
+  name: string,
+  coverImg: string,
+  type: TopicType,
+) => {
+  const topic = await Topic.create({
+    name,
+    coverImg,
+    type,
+  })
+
+  const videos = await fetchYoutubeVideos(name)
+  await cacheVideos(topic._id, videos)
+
+  return await Topic.findById(topic._id)
+}
+
+export const deleteTopic = async (topicId: string) => {
+  const topic = await Topic.findByIdAndDelete(topicId)
+
+  if (!topic) {
+    throw new Error("topic not found")
+  }
+}
+
+export const getTopicVideos = async (topicId: string) => {
+  const topic = await Topic.findById(topicId)
+
+  if (!topic) {
+    throw new Error("topic not found")
   }
 
-  const videos = await fetchYoutubeVideos(topic)
-
-  cacheVideos(topic, videos)
+  const videos = Video.find({
+    vidId: { $in: topic.vidIds },
+  })
 
   return videos
 }

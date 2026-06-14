@@ -15,3 +15,5 @@ export type VideoResult = {
   title: string
   channelTitle: string
 }
+
+export type TopicType = "default" | "custom" | "watch_later" | "history"
