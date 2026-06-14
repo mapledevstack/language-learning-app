@@ -1,20 +1,25 @@
 import Card from "@/components/Card"
 import { useNavigate } from "@tanstack/react-router"
+import type { Topic } from "../schemas/TopicSchema"
 
-const TopicCard = ({ topic }: any) => {
+type Props = {
+  topic: Topic
+}
+
+const TopicCard = ({ topic }: Props) => {
   const navigate = useNavigate()
 
   const handleClick = () => {
     navigate({
-      to: "/immersion/topic/$topic",
-      params: { topic: topic.id },
+      to: "/immersion/topics/$topicId",
+      params: { topicId: topic._id },
     })
   }
 
   return (
     <div onClick={() => handleClick()}>
       <Card className="aspect-video text-primary text-3xl grid place-items-center shadow-2xl hover:scale-105 transition-transform cursor-pointer">
-        {topic.title}
+        {topic.name}
       </Card>
     </div>
   )
