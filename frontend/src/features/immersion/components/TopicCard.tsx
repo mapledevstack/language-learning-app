@@ -18,7 +18,7 @@ const TopicCard = ({ topic }: Props) => {
 
   return (
     <div onClick={() => handleClick()}>
-      <Card className="aspect-video text-primary text-3xl grid place-items-center shadow-2xl hover:scale-105 transition-transform cursor-pointer">
+      <Card className="aspect-video text-primary text-3xl grid place-items-center shadow-2xl hover:scale-105 transition-transform cursor-pointer capitalize">
         {topic.name}
       </Card>
     </div>
