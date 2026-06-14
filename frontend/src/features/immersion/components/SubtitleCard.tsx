@@ -10,9 +10,13 @@ type Props = {
 }
 
 const SubtitleCard = ({ vidId, currentTime, setCurrentTime }: Props) => {
-  const { data: subtitles } = useSubtitles(vidId)
+  const { data: subtitles, error } = useSubtitles(vidId)
 
   const activeSubRef = useRef<HTMLDivElement | null>(null)
+
+  if (error) {
+    return <div className="">Subtitles Not Available</div>
+  }
 
   const activeSubtitleIndex = subtitles.findIndex(
     (sub) =>
