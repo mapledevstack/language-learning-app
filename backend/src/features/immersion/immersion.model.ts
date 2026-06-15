@@ -25,6 +25,7 @@ const topicSchema = new Schema({
     type: String,
     required: true,
     trim: true,
+    unique: true,
   },
 
   type: {
@@ -44,5 +45,32 @@ const topicSchema = new Schema({
   },
 })
 
+const subtitleSchema = new Schema({
+  vidId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+
+  subtitles: [
+    {
+      text: String,
+
+      offset: Number,
+      duration: Number,
+
+      tokens: [
+        {
+          text: String,
+          baseForm: String,
+          reading: String,
+          pos: String,
+        },
+      ],
+    },
+  ],
+})
+
 export const Video = model("Video", videoSchema)
 export const Topic = model("Topic", topicSchema)
+export const Subtitle = model("Subtitle", subtitleSchema)

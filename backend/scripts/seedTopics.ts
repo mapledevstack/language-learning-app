@@ -1,6 +1,6 @@
 import { connectDB } from "../src/config/db.js"
-import { getVideos } from "../src/features/immersion/immersion.service.js"
 import "dotenv/config"
+import { createTopic } from "../src/features/immersion/immersion.service.js"
 
 const MONGO_URI = process.env.MONGO_URI
 await connectDB(MONGO_URI)
@@ -20,6 +20,8 @@ const defaultTopics = [
 ]
 
 for (const topic of defaultTopics) {
-  await getVideos(topic.jpName)
+  await createTopic(topic.jpName, null, "default")
   console.log(`Added ${topic.name}`)
 }
+
+process.exit(0)

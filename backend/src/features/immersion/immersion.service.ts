@@ -1,12 +1,13 @@
 import { fetchTranscript } from "youtube-transcript"
 import "dotenv/config"
-import { Topic, Video } from "./immersion.model.js"
+import { Subtitle, Topic, Video } from "./immersion.model.js"
 import {
   TopicType,
   VideoResult,
   YoutubeSearchResponse,
 } from "./immersion.types.js"
 import { Types } from "mongoose"
+import kuromoji, { IpadicFeatures, Tokenizer } from "kuromoji"
 
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY
 
@@ -51,10 +52,39 @@ const cacheVideos = async (topicId: Types.ObjectId, videos: VideoResult[]) => {
   }
 
   await Topic.findByIdAndUpdate(topicId, {
-    $set: {
-      vidIds: videos.map((video) => video.vidId),
+    $addToSet: {
+      vidIds: {
+        $each: videos.map((video) => video.vidId),
+      },
     },
   })
+}
+
+let tokenizer: kuromoji.Tokenizer<kuromoji.IpadicFeatures> | null = null
+
+const getTokenizer = async () => {
+  if (tokenizer) return tokenizer
+
+  tokenizer = await new Promise<Tokenizer<IpadicFeatures>>(
+    (resolve, reject) => {
+      kuromoji
+        .builder({ dicPath: "node_modules/kuromoji/dict" })
+        .build((err, tokenizer) => {
+          if (err) reject(err)
+          else resolve(tokenizer)
+        })
+    },
+  )
+  return tokenizer
+}
+
+const hasJpSubtitles = async (vidId: string) => {
+  try {
+    await getSubtitles(vidId)
+    return true
+  } catch {
+    return false
+  }
 }
 
 export const getAllTopics = async () => {
@@ -72,17 +102,32 @@ export const getAllTopics = async () => {
 
 export const createTopic = async (
   name: string,
-  coverImg: string,
+  coverImg: string | null,
   type: TopicType,
 ) => {
-  const topic = await Topic.create({
-    name,
-    coverImg,
-    type,
-  })
+  const topic = await Topic.findOneAndUpdate(
+    { name },
+    {
+      name,
+      coverImg,
+      type,
+    },
+    {
+      upsert: true,
+      returnDocument: "after",
+    },
+  )
 
   const videos = await fetchYoutubeVideos(name)
-  await cacheVideos(topic._id, videos)
+  const filteredVideos = []
+
+  for (const video of videos) {
+    if (await hasJpSubtitles(video.vidId)) {
+      filteredVideos.push(video)
+    }
+  }
+
+  await cacheVideos(topic._id, filteredVideos)
 
   return await Topic.findById(topic._id)
 }
@@ -110,7 +155,30 @@ export const getTopicVideos = async (topicId: string) => {
 }
 
 export const getSubtitles = async (vidId: string) => {
-  const subtitles = await fetchTranscript(vidId, { lang: "ja" })
+  const cachedSubtitles = await Subtitle.findOne({ vidId: vidId })
+
+  if (cachedSubtitles) {
+    return cachedSubtitles.subtitles
+  }
+
+  const rawSubtitles = await fetchTranscript(vidId, { lang: "ja" })
+  const tokenizer = await getTokenizer()
+
+  const subtitles = rawSubtitles.map((sub) => ({
+    text: sub.text,
+    offset: sub.offset,
+    duration: sub.duration,
+
+    tokens: tokenizer.tokenize(sub.text).map((token) => ({
+      text: token.surface_form,
+      baseForm:
+        token.basic_form && token.basic_form !== "*"
+          ? token.basic_form
+          : token.surface_form,
+    })),
+  }))
+
+  await Subtitle.create({ vidId, subtitles })
 
   return subtitles
 }
