@@ -3,7 +3,7 @@ import { connectDB } from "../../src/config/db.js"
 import { Word } from "../../src/features/dictionary/dictionary.model.js"
 import mongoose from "mongoose"
 
-export const importDictionary = async (
+export const importWords = async (
   PATH: string,
   MONGO_URI: string | undefined,
 ) => {

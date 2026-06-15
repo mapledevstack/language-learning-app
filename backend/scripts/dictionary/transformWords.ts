@@ -1,6 +1,6 @@
 import fs from "node:fs"
 
-export const transformDictionary = async (PATH: string) => {
+export const transformWords = async (PATH: string) => {
   const data: RawDictionary = JSON.parse(
     fs.readFileSync(`${PATH}/raw/words.json`, "utf8"),
   )
@@ -11,7 +11,9 @@ export const transformDictionary = async (PATH: string) => {
   )
   console.log("Updated words tags")
 
-  const words: Word[] = data.words.map(transformWord)
+  const words: Word[] = data.words
+    .map(transformWord)
+    .filter((word) => word.forms.length > 0)
 
   fs.writeFileSync(
     `${PATH}/processed/words.json`,
@@ -20,8 +22,6 @@ export const transformDictionary = async (PATH: string) => {
 
   console.log(`Transformed ${words.length} words`)
 }
-
-transformDictionary("data")
 
 function transformWord(word: RawWord): Word {
   return {
@@ -49,7 +49,7 @@ function getForms(word: RawWord): Form[] {
     if (kana) {
       forms.push(createKanjiForm(kanji, kana))
     } else {
-      console.log(`No kana for ${kanji.text} - wordId: ${word.id}`)
+      console.log(`${kanji.text} has no kana - wordId: ${word.id}`)
     }
   }
 

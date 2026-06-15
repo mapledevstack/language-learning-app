@@ -1,6 +1,6 @@
 import fs from "node:fs"
 
-export const downloadDictionary = async (
+export const downloadWords = async (
   JMDict_Extended_API_URL: string,
   PATH: string,
 ) => {
