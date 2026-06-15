@@ -5,7 +5,6 @@ export type YoutubeSearchResponse = {
     }
     snippet: {
       title: string
-      channelTitle: string
     }
   }[]
 }
@@ -13,7 +12,6 @@ export type YoutubeSearchResponse = {
 export type VideoResult = {
   vidId: string
   title: string
-  channelTitle: string
 }
 
 export type TopicType = "default" | "custom" | "watch_later" | "history"

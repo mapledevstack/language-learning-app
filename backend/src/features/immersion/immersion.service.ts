@@ -36,7 +36,6 @@ const fetchYoutubeVideos = async (topic: string) => {
   const videos = data.items.map((item) => ({
     vidId: item.id.videoId,
     title: item.snippet.title,
-    channelTitle: item.snippet.channelTitle,
   }))
 
   return videos

@@ -1,11 +1,5 @@
 import { DictionaryWord } from "./dictionary.model.js"
 
-export const getAllWords = async () => {
-  const words = await DictionaryWord.find().limit(200)
-
-  return words
-}
-
 export const searchWords = async (query: string) => {
   query = query.trim()
 

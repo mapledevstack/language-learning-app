@@ -1,11 +1,5 @@
 import { Request, Response } from "express"
-import { getAllWords, searchWords } from "./dictionary.service.js"
-
-export const getAllWordsController = async (req: Request, res: Response) => {
-  const words = await getAllWords()
-
-  res.json(words)
-}
+import { searchWords } from "./dictionary.service.js"
 
 export const searchWordsController = async (req: Request, res: Response) => {
   const query = String(req.query.q ?? "")

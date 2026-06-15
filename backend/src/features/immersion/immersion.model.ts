@@ -12,11 +12,6 @@ const videoSchema = new Schema({
     required: true,
     trim: true,
   },
-  channelTitle: {
-    type: String,
-    required: true,
-    trim: true,
-  },
 })
 
 const topicSchema = new Schema({
