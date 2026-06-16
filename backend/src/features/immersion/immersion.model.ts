@@ -54,6 +54,7 @@ const subtitleSchema = new Schema({
 
   subtitles: [
     {
+      _id: false,
       text: String,
 
       offset: Number,
@@ -61,6 +62,7 @@ const subtitleSchema = new Schema({
 
       tokens: [
         {
+          _id: false,
           text: String,
           baseForm: String,
           reading: String,

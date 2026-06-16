@@ -88,14 +88,19 @@ const hasJpSubtitles = async (vidId: string) => {
 }
 
 export const getAllTopics = async () => {
-  const topics = await Topic.find(
-    {},
+  const topics = await Topic.aggregate([
     {
-      name: 1,
-      type: 1,
-      coverImg: 1,
+      $project: {
+        name: 1,
+        type: 1,
+        coverImg: 1,
+
+        vidCount: {
+          $size: "$vidIds",
+        },
+      },
     },
-  )
+  ])
 
   return topics
 }

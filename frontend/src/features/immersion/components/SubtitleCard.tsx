@@ -10,13 +10,9 @@ type Props = {
 }
 
 const SubtitleCard = ({ vidId, currentTime, setCurrentTime }: Props) => {
-  const { data: subtitles, error } = useSubtitles(vidId)
+  const { data: subtitles } = useSubtitles(vidId)
 
   const activeSubRef = useRef<HTMLDivElement | null>(null)
-
-  if (error) {
-    return <div className="">Subtitles Not Available</div>
-  }
 
   const activeSubtitleIndex = subtitles.findIndex(
     (sub) =>
@@ -38,14 +34,22 @@ const SubtitleCard = ({ vidId, currentTime, setCurrentTime }: Props) => {
         return (
           <div
             className={cn(
-              "text-2xl text-muted-foreground/60 transition-all duration-200",
+              "w-full text-2xl text-muted-foreground/60 rounded-xl transition-all duration-200",
               index === activeSubtitleIndex &&
                 "text-card-foreground text-[1.6rem]",
             )}
             key={index}
             ref={index === activeSubtitleIndex ? activeSubRef : null}
           >
-            {sub.text}
+            <div className="flex">
+              {sub.tokens.map((token) => {
+                return (
+                  <div className="hover:bg-sidebar-primary/90 transition-all rounded-md whitespace-nowrap duration-300 p-1 -m-1 cursor-pointer">
+                    {token.text}
+                  </div>
+                )
+              })}
+            </div>
           </div>
         )
       })}
