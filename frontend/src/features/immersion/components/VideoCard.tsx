@@ -4,10 +4,9 @@ import YouTube, { type YouTubePlayer } from "react-youtube"
 type Props = {
   vidId: string
   setPlayer: (player: YouTubePlayer) => void
-  setCurrentTime: (currentTime: number) => void
 }
 
-const VideoCard = ({ vidId, setPlayer, setCurrentTime }: Props) => {
+const VideoCard = ({ vidId, setPlayer }: Props) => {
   return (
     <Card>
       <YouTube
@@ -15,8 +14,16 @@ const VideoCard = ({ vidId, setPlayer, setCurrentTime }: Props) => {
         onReady={(event) => {
           setPlayer(event.target)
         }}
-        className="w-full aspect-video"
+        onStateChange={() => window.focus()}
+        className="relative w-full aspect-video"
         iframeClassName="w-full h-full rounded-xl"
+        opts={{
+          playerVars: {
+            disablekb: 1,
+            autoplay: 1,
+            hl: "ja",
+          },
+        }}
       />
     </Card>
   )

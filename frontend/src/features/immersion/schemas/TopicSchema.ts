@@ -5,6 +5,7 @@ export const TopicSchema = z.object({
   name: z.string(),
   type: z.enum(["default", "custom", "watch_later", "history"]),
   coverImg: z.string().nullable(),
+  vidCount: z.number(),
 })
 
 export const TopicsSchema = z.array(TopicSchema)

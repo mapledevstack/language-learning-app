@@ -1,5 +1,5 @@
-import { getSubtitles } from "@/api/subtitles"
 import { useSuspenseQuery } from "@tanstack/react-query"
+import { getSubtitles } from "../api/immersionApi"
 
 const useSubtitles = (vidId: string) => {
   return useSuspenseQuery({

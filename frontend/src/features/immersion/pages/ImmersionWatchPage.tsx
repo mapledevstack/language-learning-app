@@ -2,7 +2,7 @@ import WordCard from "@/features/dictionary/components/WordCard"
 import { DeckSchema, type Deck } from "@/schemas/DeckSchema"
 import SubtitleCard from "../components/SubtitleCard"
 import VideoCard from "../components/VideoCard"
-import { Suspense, useEffect, useState } from "react"
+import { Suspense, useEffect, useRef, useState } from "react"
 import type { YouTubePlayer } from "react-youtube"
 import { Route } from "@/routes/_app/immersion/$vidId"
 import { ErrorBoundary } from "react-error-boundary"
@@ -18,29 +18,52 @@ const ImmersionWatchPage = () => {
 
     const interval = setInterval(() => {
       const time = player.getCurrentTime()
-      if (time !== currentTime) {
-        setCurrentTime(time * 1000)
-      }
+      setCurrentTime(time * 1000)
     }, 250)
 
     return () => clearInterval(interval)
   }, [player])
 
+  const handleSeek = (seekTimeMs: number | "start" | "end") => {
+    if (!player) return
+
+    if (seekTimeMs === "start") {
+      player.seekTo(0, true)
+      return
+    }
+
+    if (seekTimeMs === "end") {
+      player.seekTo(player.getDuration() - 1.5, true)
+      return
+    }
+
+    player.seekTo(seekTimeMs / 1000, true)
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!player) return
+      if (e.key === " ") {
+        if (player.getPlayerState() === 1) player.pauseVideo()
+        else player.playVideo()
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [player])
+
   return (
     <div className="h-full w-full grid md:grid-cols-[6.5fr_3.5fr] p-10 gap-4">
       <section className="flex-1 md:overflow-hidden flex flex-col gap-4">
-        <VideoCard
-          vidId={vidId}
-          setPlayer={setPlayer}
-          setCurrentTime={setCurrentTime}
-        />
+        <VideoCard vidId={vidId} setPlayer={setPlayer} />
 
         <ErrorBoundary fallback={<p>No Japanese Subtitles Found</p>}>
           <Suspense fallback={<p>Loading subtitles...</p>}>
             <SubtitleCard
               vidId={vidId}
               currentTime={currentTime}
-              setCurrentTime={setCurrentTime}
+              handleSeek={handleSeek}
             />
           </Suspense>
         </ErrorBoundary>
