@@ -2,7 +2,7 @@ import WordCard from "@/features/dictionary/components/WordCard"
 import { DeckSchema, type Deck } from "@/schemas/DeckSchema"
 import SubtitleCard from "../components/SubtitleCard"
 import VideoCard from "../components/VideoCard"
-import { Suspense, useEffect, useRef, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import type { YouTubePlayer } from "react-youtube"
 import { Route } from "@/routes/_app/immersion/$vidId"
 import { ErrorBoundary } from "react-error-boundary"
@@ -61,6 +61,7 @@ const ImmersionWatchPage = () => {
         <ErrorBoundary fallback={<p>No Japanese Subtitles Found</p>}>
           <Suspense fallback={<p>Loading subtitles...</p>}>
             <SubtitleCard
+              player={player}
               vidId={vidId}
               currentTime={currentTime}
               handleSeek={handleSeek}

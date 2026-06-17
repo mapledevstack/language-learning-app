@@ -2,14 +2,16 @@ import Card from "@/components/Card"
 import useSubtitles from "../hooks/useSubtitles"
 import { useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
+import type { YouTubePlayer } from "react-youtube"
 
 type Props = {
+  player: YouTubePlayer
   vidId: string
   currentTime: number
   handleSeek: (seekTime: number | "start" | "end") => void
 }
 
-const SubtitleCard = ({ vidId, currentTime, handleSeek }: Props) => {
+const SubtitleCard = ({ player, vidId, currentTime, handleSeek }: Props) => {
   const { data: subtitles } = useSubtitles(vidId)
 
   const activeSubRef = useRef<HTMLDivElement | null>(null)
@@ -36,43 +38,54 @@ const SubtitleCard = ({ vidId, currentTime, handleSeek }: Props) => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!["ArrowUp", "ArrowLeft", "ArrowRight"].includes(e.key)) return
+      if (!["ArrowUp", "ArrowLeft", "ArrowRight", " "].includes(e.key)) return
       e.preventDefault()
 
       if (subtitles.length === 0) return
 
+      const seekPreviousSubtitle = () => {
+        if (nearestSubtitleIndex === 0) {
+          player.seekTo(0, true)
+          return
+        }
+        if (
+          nearestSubtitleIndex === subtitles.length - 1 &&
+          activeSubtitleIndex === -1
+        ) {
+          player.seekTo(subtitles[nearestSubtitleIndex].offset / 1000, true)
+          return
+        }
+        player.seekTo(subtitles[nearestSubtitleIndex - 1].offset / 1000, true)
+      }
+
+      const seekNextSubtitle = () => {
+        if (nearestSubtitleIndex === subtitles.length - 1) {
+          player.seekTo(player.getDuration() - 1.5, true)
+          return
+        }
+        if (nearestSubtitleIndex === 0 && activeSubtitleIndex === -1) {
+          player.seekTo(subtitles[nearestSubtitleIndex].offset / 1000, true)
+          return
+        }
+        player.seekTo(subtitles[nearestSubtitleIndex + 1].offset / 1000, true)
+      }
+
       switch (e.key) {
         case "ArrowUp":
-          handleSeek(subtitles[nearestSubtitleIndex].offset)
+          player.seekTo(subtitles[nearestSubtitleIndex].offset / 1000, true)
           break
-        case "ArrowLeft": {
-          if (nearestSubtitleIndex === 0) handleSeek("start")
-          else if (
-            nearestSubtitleIndex === subtitles.length - 1 &&
-            activeSubtitleIndex === -1
-          )
-            handleSeek(subtitles[nearestSubtitleIndex].offset)
-          else handleSeek(subtitles[nearestSubtitleIndex - 1].offset)
+        case "ArrowLeft":
+          seekPreviousSubtitle()
           break
-        }
-        case "ArrowRight": {
-          if (nearestSubtitleIndex === subtitles.length - 1) handleSeek("end")
-          else if (nearestSubtitleIndex === 0 && activeSubtitleIndex === -1)
-            handleSeek(subtitles[nearestSubtitleIndex].offset)
-          else handleSeek(subtitles[nearestSubtitleIndex + 1].offset)
+        case "ArrowRight":
+          seekNextSubtitle()
           break
-        }
       }
     }
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [subtitles, nearestSubtitleIndex, activeSubtitleIndex, handleSeek])
-
-  useEffect(() => {
-    console.log(`Active`, activeSubtitleIndex)
-    console.log("Nearest", nearestSubtitleIndex)
-  }, [activeSubtitleIndex, nearestSubtitleIndex])
 
   const colorCode = () => {}
 
@@ -82,23 +95,30 @@ const SubtitleCard = ({ vidId, currentTime, handleSeek }: Props) => {
         return (
           <div
             className={cn(
-              "w-full text-2xl text-muted-foreground/60 hover:bg-accent rounded-xl transition-all duration-200",
+              "w-full text-2xl text-muted-foreground/60 hover:bg-accent rounded-xl transition-all duration-200 group",
               index === activeSubtitleIndex &&
                 "text-card-foreground text-[1.6rem]",
             )}
             key={index}
             ref={index === activeSubtitleIndex ? activeSubRef : null}
-            onClick={() => handleSeek(sub.offset)}
+            onClick={(e) => {
+              if (e.target !== e.currentTarget) return
+              handleSeek(sub.offset)
+            }}
           >
-            <div className="flex w-full flex-wrap">
+            <div
+              className="flex max-w-full w-fit flex-wrap"
+              onMouseEnter={() => player.pauseVideo()}
+              onMouseLeave={() => player.playVideo()}
+            >
               {sub.tokens.map((token, index) => {
                 return (
-                  <div
+                  <span
                     key={index}
                     className="hover:bg-sidebar-primary/90 transition-all rounded-md whitespace-nowrap duration-300 p-1 -m-1 cursor-pointer"
                   >
                     {token.text}
-                  </div>
+                  </span>
                 )
               })}
             </div>
