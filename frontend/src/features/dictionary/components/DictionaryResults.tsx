@@ -1,4 +1,4 @@
-import type { Word } from "@/schemas/WordSchema"
+import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import Card from "@/components/Card"
 import ResultCard from "./ResultCard"
 
@@ -16,7 +16,7 @@ const DictionaryResults = ({ currentWord, results, setWord }: Props) => {
       {results.map((res) => {
         return (
           <ResultCard
-            key={res.id}
+            key={res.wordId}
             result={res}
             setWord={setWord}
             currentWord={currentWord}

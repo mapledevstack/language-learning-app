@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import DictionaryDetails from "../components/DictionaryDetails"
 import DictionaryResults from "../components/DictionaryResults"
 import DictionarySearch from "../components/DictionarySearch"
-import type { Word } from "@/schemas/WordSchema"
+import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import { DeckSchema, type Deck } from "@/schemas/DeckSchema"
 
 const DictionaryPage = () => {
@@ -13,11 +13,12 @@ const DictionaryPage = () => {
   const filterResults = (query: string, words: Word[]) => {
     const newWords = words.filter(
       (word) =>
-        word.spellings.some((spelling) => spelling.includes(query)) ||
-        word.readings.some((reading) => reading.includes(query)) ||
-        word.meanings.some((meaning) =>
-          meaning.toLowerCase().includes(query.toLowerCase()),
-        ),
+        // word.spellings.some((spelling) => spelling.includes(query)) ||
+        // word.readings.some((reading) => reading.includes(query)) ||
+        // word.meanings.some((meaning) =>
+        //   meaning.toLowerCase().includes(query.toLowerCase()),
+        // ),
+        word,
     )
 
     return newWords
@@ -55,161 +56,6 @@ const DictionaryPage = () => {
 
 export default DictionaryPage
 
-const words = [
-  {
-    id: 1000290,
-    spellings: ["食べる"],
-    readings: ["たべる"],
-    meanings: ["to eat"],
-    partsOfSpeech: ["Ichidan verb"],
-    jlpt: "N5",
-  },
-  {
-    id: 1000310,
-    spellings: ["猫"],
-    readings: ["ねこ"],
-    meanings: ["cat"],
-    partsOfSpeech: ["Noun"],
-    jlpt: "N5",
-  },
-  {
-    id: 1000320,
-    spellings: ["学校"],
-    readings: ["がっこう"],
-    meanings: ["school"],
-    partsOfSpeech: ["Noun"],
-    jlpt: "N5",
-  },
-  {
-    id: 1000330,
-    spellings: ["面白い"],
-    readings: ["おもしろい"],
-    meanings: ["interesting", "funny"],
-    partsOfSpeech: ["I-adjective"],
-    jlpt: "N5",
-  },
-  {
-    id: 1000340,
-    spellings: ["勉強する"],
-    readings: ["べんきょうする"],
-    meanings: ["to study"],
-    partsOfSpeech: ["Suru verb"],
-    jlpt: "N5",
-  },
-  {
-    id: 1000350,
-    spellings: ["勉強する"],
-    readings: ["べんきょうする"],
-    meanings: ["to study"],
-    partsOfSpeech: ["Suru verb"],
-    jlpt: "N5",
-  },
-  {
-    id: 1000360,
-    spellings: ["勉強する"],
-    readings: ["べんきょうする"],
-    meanings: ["to study"],
-    partsOfSpeech: ["Suru verb"],
-    jlpt: "N5",
-  },
-  {
-    id: 1000370,
-    spellings: ["勉強する"],
-    readings: ["べんきょうする"],
-    meanings: ["to study"],
-    partsOfSpeech: ["Suru verb"],
-    jlpt: "N5",
-  },
-  {
-    id: 2000310,
-    spellings: ["猫"],
-    readings: ["ねこ"],
-    meanings: ["cat"],
-    partsOfSpeech: ["Noun"],
-    jlpt: "N5",
-  },
-  {
-    id: 2000320,
-    spellings: ["学校"],
-    readings: ["がっこう"],
-    meanings: ["school"],
-    partsOfSpeech: ["Noun"],
-    jlpt: "N5",
-  },
-  {
-    id: 2000330,
-    spellings: ["面白い"],
-    readings: ["おもしろい"],
-    meanings: ["interesting", "funny"],
-    partsOfSpeech: ["I-adjective"],
-    jlpt: "N5",
-  },
-  {
-    id: 2000340,
-    spellings: ["勉強する"],
-    readings: ["べんきょうする"],
-    meanings: ["to study"],
-    partsOfSpeech: ["Suru verb"],
-    jlpt: "N5",
-  },
-  {
-    id: 3000350,
-    spellings: ["勉強する"],
-    readings: ["べんきょうする"],
-    meanings: ["to study"],
-    partsOfSpeech: ["Suru verb"],
-    jlpt: "N5",
-  },
-  {
-    id: 3000360,
-    spellings: ["勉強する"],
-    readings: ["べんきょうする"],
-    meanings: ["to study"],
-    partsOfSpeech: ["Suru verb"],
-    jlpt: "N5",
-  },
-  {
-    id: 3000370,
-    spellings: ["勉強する"],
-    readings: ["べんきょうする"],
-    meanings: ["to study"],
-    partsOfSpeech: ["Suru verb"],
-    jlpt: "N5",
-  },
-  {
-    id: 3000310,
-    spellings: ["猫"],
-    readings: ["ねこ"],
-    meanings: ["cat"],
-    partsOfSpeech: ["Noun"],
-    jlpt: "N5",
-  },
-  {
-    id: 3000320,
-    spellings: ["学校"],
-    readings: ["がっこう"],
-    meanings: ["school"],
-    partsOfSpeech: ["Noun"],
-    jlpt: "N5",
-  },
-  {
-    id: 3000330,
-    spellings: ["面白い"],
-    readings: ["おもしろい"],
-    meanings: ["interesting", "funny"],
-    partsOfSpeech: ["I-adjective"],
-    jlpt: "N5",
-  },
-  {
-    id: 3000340,
-    spellings: ["勉強する"],
-    readings: ["べんきょうする"],
-    meanings: ["to study"],
-    partsOfSpeech: ["Suru verb"],
-    jlpt: "N5",
-  },
-]
-
 const decks: Deck[] = [
   DeckSchema.parse({
     id: 1,
@@ -228,4 +74,130 @@ const decks: Deck[] = [
     learnedCount: 2,
     dueCount: 46,
   }),
+]
+
+const words: Word[] = [
+  {
+    wordId: "1000040",
+    forms: [
+      {
+        text: "〃",
+        reading: "おなじ",
+        furigana: [
+          {
+            text: "〃",
+            reading: "おなじ",
+          },
+        ],
+        common: false,
+        tags: [],
+        pitchAccent: "LHHH",
+      },
+    ],
+    meanings: [
+      {
+        definitions: ["ditto mark"],
+        partsOfSpeech: ["n"],
+        tags: [],
+        notes: [],
+      },
+    ],
+  },
+
+  {
+    wordId: "1000110",
+    forms: [
+      {
+        text: "ＣＤプレーヤー",
+        reading: "シーディープレーヤー",
+        furigana: [
+          {
+            text: "Ｃ",
+            reading: "シー",
+          },
+          {
+            text: "Ｄ",
+            reading: "ディー",
+          },
+          {
+            text: "プレーヤー",
+            reading: null,
+          },
+        ],
+        common: true,
+        tags: [],
+        pitchAccent: "LHHhHHLLLLL",
+      },
+      {
+        text: "ＣＤプレイヤー",
+        reading: "シーディープレイヤー",
+        furigana: [
+          {
+            text: "Ｃ",
+            reading: "シー",
+          },
+          {
+            text: "Ｄ",
+            reading: "ディー",
+          },
+          {
+            text: "プレイヤー",
+            reading: null,
+          },
+        ],
+        common: false,
+        tags: [],
+        pitchAccent: null,
+      },
+    ],
+    meanings: [
+      {
+        definitions: ["CD player"],
+        partsOfSpeech: ["n"],
+        tags: [],
+        notes: [],
+      },
+    ],
+  },
+
+  {
+    wordId: "1000420",
+    forms: [
+      {
+        text: "彼の",
+        reading: "あの",
+        furigana: [
+          {
+            text: "彼",
+            reading: "あ",
+          },
+          {
+            text: "の",
+            reading: null,
+          },
+        ],
+        common: false,
+        tags: ["rK"],
+        pitchAccent: "LHH",
+      },
+      {
+        text: "あん",
+        reading: "あん",
+        furigana: [],
+        common: false,
+        tags: [],
+        pitchAccent: "HLL",
+      },
+    ],
+    meanings: [
+      {
+        definitions: ["that", "those", "the"],
+        partsOfSpeech: ["adj-pn"],
+        tags: ["uk"],
+        notes: [
+          "someone or something distant from both speaker and listener, or situation unfamiliar to both speaker and listener",
+        ],
+      },
+    ],
+  },
 ]

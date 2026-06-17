@@ -1,4 +1,4 @@
-import type { Word } from "@/schemas/WordSchema"
+import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import WordCard from "./WordCard"
 import HandWritingCard from "./HandWritingCard"
 import type { Deck } from "@/schemas/DeckSchema"
@@ -14,6 +14,7 @@ const DictionaryDetails = ({ isWriting, word, decks }: Props) => {
     <div className="h-full overflow-y-auto">
       <HandWritingCard isWriting={isWriting} />
       <WordCard word={word} decks={decks} />
+      {/* <KanjiCard kanji={example} /> */}
     </div>
   )
 }
