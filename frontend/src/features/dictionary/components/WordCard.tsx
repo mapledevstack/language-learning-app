@@ -1,4 +1,4 @@
-import type { Word } from "@/features/dictionary/schemas/WordSchema"
+import type { Word, WordForm } from "@/features/dictionary/schemas/WordSchema"
 import Card from "@/components/Card"
 import { LucidePlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -13,7 +13,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useNavigate } from "@tanstack/react-router"
 import type { Deck } from "@/schemas/DeckSchema"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { cn } from "@/lib/utils"
+import KanjiKanaWord from "./KanjiKanaWord"
 
 type Props = {
   word: Word | null
@@ -22,23 +24,64 @@ type Props = {
 
 const WordCard = ({ word, decks }: Props) => {
   const navigate = useNavigate()
-  const [form, setForm] = useState(null)
+  const [formIndex, setFormIndex] = useState(0)
 
-  // const handleAddToDeck = (deckId: number) => {
-  //   console.log(
-  //     `Added ${word?.readings} to ${decks.find((deck) => deck.id === deckId)?.title}`,
-  //   )
-  // }
+  useEffect(() => {
+    setFormIndex(0)
+  }, [word?.wordId])
+
+  const handleAddToDeck = (deckId: number) => {
+    console.log(
+      `Added ${word?.forms[formIndex].text} to ${decks.find((deck) => deck.id === deckId)?.title}`,
+    )
+  }
 
   if (!word) return <Card>{"<Word />"}</Card>
 
+  const selectedWordForm = word.forms[formIndex] ?? word.forms[0]
+
   return (
-    <Card className="relative flex flex-col items-center">
-      {/* <DropdownMenu>
+    <Card className="flex flex-col items-center overflow-x-hidden gap-4">
+      <div className="w-full flex gap-2 border p-2 rounded-md bg-accent overflow-x-auto whitespace-nowrap justify-center">
+        {word.forms.map((form, index) => (
+          <div
+            key={index}
+            className={cn(
+              "p-2 rounded-md border border-primary text-sm font-bold text-card-foreground transition-colors cursor-pointer",
+              formIndex === index
+                ? "bg-sidebar-primary"
+                : "hover:bg-sidebar-primary/30",
+            )}
+            onClick={() => setFormIndex(index)}
+          >
+            {form.text}
+          </div>
+        ))}
+      </div>
+
+      <div className="w-full bg-accent p-2 rounded-md text-center">
+        <div className="text-4xl">
+          <KanjiKanaWord form={selectedWordForm} />
+        </div>
+
+        {selectedWordForm?.tags && (
+          <div className="italic">
+            {selectedWordForm.tags.map((tag) => (
+              <span key={tag}>{tag}</span>
+            ))}
+          </div>
+        )}
+
+        {selectedWordForm?.pitchAccent && (
+          <div className="">{selectedWordForm.pitchAccent}</div>
+        )}
+      </div>
+
+      <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="default"
-            className="absolute right-4 top-4 bg-primary size-10 grid place-items-center rounded-full text-primary-foreground hover:scale-105 cursor-pointer transition-transform"
+            className="right-4 top-4 bg-primary size-10 grid place-items-center w-full rounded-xl text-primary-foreground hover:scale-105 cursor-pointer transition-transform"
           >
             <LucidePlus className="size-6" />
           </Button>
@@ -66,22 +109,30 @@ const WordCard = ({ word, decks }: Props) => {
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
-      </DropdownMenu> */}
+      </DropdownMenu>
 
-      <div className="w-full flex flex-col gap-6 items-center">
-        <div className="w-full flex flex-row">
-          <div className="text-4xl font-bold text-primary">
-            {word.forms.map((form) => (
-              <p>{form.text}</p>
-            ))}
-          </div>
-        </div>
+      <div className="bg-accent w-full p-4 rounded-md">
+        <ol className="space-y-4">
+          {word.meanings.map((meaning, index) => (
+            <li key={index} className="space-y-4">
+              <div className="font-medium">
+                {index + 1}. {meaning.definitions.join(" ; ")}
+              </div>
 
-        <div className="text-lg font-medium">
-          {word.meanings.map((meaning) => (
-            <p>{meaning.definitions}</p>
+              {meaning.partsOfSpeech.length > 0 && (
+                <div className="text-sm text-sidebar-primary-foreground text-center bg-sidebar-primary w-fit rounded-lg p-2 mx-auto font-bold">
+                  {meaning.partsOfSpeech.join(", ")}
+                </div>
+              )}
+
+              {meaning.notes.length > 0 && (
+                <div className="text-sm italic text-muted-foreground">
+                  {meaning.notes.join(", ")}
+                </div>
+              )}
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </Card>
   )

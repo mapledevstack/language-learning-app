@@ -5,7 +5,7 @@ export const FuriganaSchema = z.object({
   reading: z.string().nullable(),
 })
 
-export const FormSchema = z.object({
+export const WordFormSchema = z.object({
   text: z.string(),
   reading: z.string(),
 
@@ -31,11 +31,12 @@ export const MeaningSchema = z.object({
 export const WordSchema = z.object({
   wordId: z.string(),
 
-  forms: z.array(FormSchema),
+  forms: z.array(WordFormSchema),
 
   meanings: z.array(MeaningSchema),
 })
 
 export const WordsSchema = z.array(WordSchema)
 
+export type WordForm = z.infer<typeof WordFormSchema>
 export type Word = z.infer<typeof WordSchema>

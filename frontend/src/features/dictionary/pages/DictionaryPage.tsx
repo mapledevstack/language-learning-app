@@ -6,7 +6,7 @@ import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import { DeckSchema, type Deck } from "@/schemas/DeckSchema"
 
 const DictionaryPage = () => {
-  const [query, setQuery] = useState<string>("")
+  const [query, setQuery] = useState<string>("f")
   const [word, setWord] = useState<Word | null>(null)
   const [isWriting, setIsWriting] = useState<boolean>(false)
 
@@ -152,7 +152,7 @@ const words: Word[] = [
     ],
     meanings: [
       {
-        definitions: ["CD player"],
+        definitions: ["CD player", "amamamamamama", "Insane omg"],
         partsOfSpeech: ["n"],
         tags: [],
         notes: [],
@@ -191,7 +191,7 @@ const words: Word[] = [
     ],
     meanings: [
       {
-        definitions: ["that", "those", "the"],
+        definitions: ["that", "those", "the", "Insane omg"],
         partsOfSpeech: ["adj-pn"],
         tags: ["uk"],
         notes: [

@@ -12,7 +12,7 @@ const DictionaryResults = ({ currentWord, results, setWord }: Props) => {
   if (results.length === 0) return <Card>No Results...</Card>
 
   return (
-    <Card className="h-full flex flex-wrap justify-center gap-5 overflow-y-auto overflow-x-hidden">
+    <Card className="h-full flex flex-wrap justify-center gap-5 overflow-y-auto overflow-x-hidden content-start">
       {results.map((res) => {
         return (
           <ResultCard

@@ -1,6 +1,7 @@
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import Card from "@/components/Card"
 import { cn } from "@/lib/utils"
+import KanjiKanaWord from "./KanjiKanaWord"
 
 type Props = {
   result: Word
@@ -12,35 +13,35 @@ const ResultCard = ({ result, setWord, currentWord }: Props) => {
   return (
     <div
       onClick={() => setWord(result)}
-      className="hover:scale-105 transition-transform flex h-fit"
+      className="hover:scale-105 transition-all flex h-fit"
     >
       <Card
         className={cn(
-          "flex justify-between items-center",
+          "flex justify-between items-center transition-all gap-2 flex-col w-fit max-w-full",
           result.wordId === currentWord?.wordId
             ? "bg-primary text-primary-foreground"
-            : "bg-muted",
+            : "bg-muted hover:bg-sidebar-primary/50",
         )}
       >
-        <div className="flex flex-col gap-2 items-center">
-          <div className="text-muted-foreground">
-            {result.forms.map((form) => (
-              <p>{form.text}</p>
-            ))}
-          </div>
-
-          <div className="font-bold text-3xl">
-            {result.forms.map((form) => (
-              <p>{form.reading}</p>
-            ))}
-          </div>
-
-          <div className="capitalize text-muted-foreground">
-            {result.meanings.map((meaning) => (
-              <p>{meaning.definitions.join(", ")}</p>
-            ))}
-          </div>
+        <div className="font-bold text-3xl whitespace-nowrap">
+          <KanjiKanaWord
+            form={result.forms[0]}
+            furiganaClassName={
+              result.wordId === currentWord?.wordId
+                ? "text-sidebar-primary-foreground"
+                : "transition-colors"
+            }
+          />
         </div>
+
+        {result.meanings.map((meaning, index) => (
+          <p
+            key={index}
+            className="capitalize text-muted-foreground tracking-wider max-w-3xs truncate"
+          >
+            {meaning.definitions.join(", ")}
+          </p>
+        ))}
       </Card>
     </div>
   )
