@@ -6,6 +6,7 @@ import { Suspense, useEffect, useState } from "react"
 import type { YouTubePlayer } from "react-youtube"
 import { Route } from "@/routes/_app/immersion/$vidId"
 import { ErrorBoundary } from "react-error-boundary"
+import type { Word } from "@/features/dictionary/schemas/WordSchema"
 
 const ImmersionWatchPage = () => {
   const [player, setPlayer] = useState<YouTubePlayer | undefined>()
@@ -70,23 +71,18 @@ const ImmersionWatchPage = () => {
         </ErrorBoundary>
       </section>
 
-      <section className="flex flex-col">
-        <p>Vid Stats or WordDetails Switch</p>
-        <WordCard word={word} decks={decks} />
+      <section className="flex flex-col h-full min-h-0 gap-2">
+        <div className="bg-card p-4 w-full rounded-lg">
+          Vid Stats or WordDetails Switch
+        </div>
+        <div className="flex-1 min-h-0 overflow-y-scroll">
+          <WordCard word={words[2]} decks={decks} />
+        </div>
       </section>
     </div>
   )
 }
 export default ImmersionWatchPage
-
-const word = {
-  id: 1000290,
-  spellings: ["食べる"],
-  readings: ["たべる"],
-  meanings: ["to eat"],
-  partsOfSpeech: ["Ichidan verb"],
-  jlpt: "N5",
-}
 
 const decks: Deck[] = [
   DeckSchema.parse({
@@ -106,4 +102,130 @@ const decks: Deck[] = [
     learnedCount: 2,
     dueCount: 46,
   }),
+]
+
+const words: Word[] = [
+  {
+    wordId: "1000040",
+    forms: [
+      {
+        text: "〃",
+        reading: "おなじ",
+        furigana: [
+          {
+            text: "〃",
+            reading: "おなじ",
+          },
+        ],
+        common: false,
+        tags: [],
+        pitchAccent: "LHHH",
+      },
+    ],
+    meanings: [
+      {
+        definitions: ["ditto mark"],
+        partsOfSpeech: ["n"],
+        tags: [],
+        notes: [],
+      },
+    ],
+  },
+
+  {
+    wordId: "1000110",
+    forms: [
+      {
+        text: "ＣＤプレーヤー",
+        reading: "シーディープレーヤー",
+        furigana: [
+          {
+            text: "Ｃ",
+            reading: "シー",
+          },
+          {
+            text: "Ｄ",
+            reading: "ディー",
+          },
+          {
+            text: "プレーヤー",
+            reading: null,
+          },
+        ],
+        common: true,
+        tags: [],
+        pitchAccent: "LHHhHHLLLLL",
+      },
+      {
+        text: "ＣＤプレイヤー",
+        reading: "シーディープレイヤー",
+        furigana: [
+          {
+            text: "Ｃ",
+            reading: "シー",
+          },
+          {
+            text: "Ｄ",
+            reading: "ディー",
+          },
+          {
+            text: "プレイヤー",
+            reading: null,
+          },
+        ],
+        common: false,
+        tags: [],
+        pitchAccent: null,
+      },
+    ],
+    meanings: [
+      {
+        definitions: ["CD player", "amamamamamama", "Insane omg"],
+        partsOfSpeech: ["n"],
+        tags: [],
+        notes: [],
+      },
+    ],
+  },
+
+  {
+    wordId: "1000420",
+    forms: [
+      {
+        text: "彼の",
+        reading: "あの",
+        furigana: [
+          {
+            text: "彼",
+            reading: "あ",
+          },
+          {
+            text: "の",
+            reading: null,
+          },
+        ],
+        common: false,
+        tags: ["rK"],
+        pitchAccent: "LHH",
+      },
+      {
+        text: "あん",
+        reading: "あん",
+        furigana: [],
+        common: false,
+        tags: [],
+        pitchAccent: "HLL",
+      },
+    ],
+    meanings: [
+      {
+        definitions: ["that", "those", "the", "Insane omg"],
+        partsOfSpeech: ["adj-pn"],
+        tags: ["uk"],
+        notes: [
+          "someone or something distant from both speaker and listener, or situation unfamiliar to both speaker and listener",
+        ],
+      },
+    ],
+  },
 ]

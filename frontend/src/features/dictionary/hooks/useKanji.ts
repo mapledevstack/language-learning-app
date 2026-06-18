@@ -1,4 +1,4 @@
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { isKanji } from "wanakana"
 import { getKanjis } from "../api/dictionaryApi"
 import type { Word } from "../schemas/WordSchema"
