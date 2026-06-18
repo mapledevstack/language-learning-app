@@ -13,7 +13,7 @@ const DictionaryDetails = ({ isWriting, word, decks }: Props) => {
   return (
     <div className="h-full overflow-y-auto">
       <HandWritingCard isWriting={isWriting} />
-      <WordCard word={word} decks={decks} />
+      <WordCard key={word?.wordId} word={word} decks={decks} />
       {/* <KanjiCard kanji={example} /> */}
     </div>
   )

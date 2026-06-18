@@ -8,7 +8,7 @@ type Props = {
 
 const KanjiCard = ({ kanji }: Props) => {
   return (
-    <Card className="relative flex flex-col items-center gap-8 py-8">
+    <Card className="w-full relative flex flex-col items-center gap-8 py-8">
       <Badge position="left">{kanji.jlpt ?? "N/A"}</Badge>
       <Badge position="right">{kanji.grade ?? "—"}</Badge>
 

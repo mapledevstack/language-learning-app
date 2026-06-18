@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 export const KanjiSchema = z.object({
-  id: z.string(),
+  _id: z.string(),
   kanji: z.string(),
 
   meanings: z.array(z.string()),

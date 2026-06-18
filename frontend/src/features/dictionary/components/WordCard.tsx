@@ -1,4 +1,4 @@
-import type { Word, WordForm } from "@/features/dictionary/schemas/WordSchema"
+import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import Card from "@/components/Card"
 import { LucidePlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -13,9 +13,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useNavigate } from "@tanstack/react-router"
 import type { Deck } from "@/schemas/DeckSchema"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { cn } from "@/lib/utils"
 import KanjiKanaWord from "./KanjiKanaWord"
+import useKanji from "../hooks/useKanji"
+import KanjiCard from "./KanjiCard"
 
 type Props = {
   word: Word | null
@@ -25,10 +27,7 @@ type Props = {
 const WordCard = ({ word, decks }: Props) => {
   const navigate = useNavigate()
   const [formIndex, setFormIndex] = useState(0)
-
-  useEffect(() => {
-    setFormIndex(0)
-  }, [word?.wordId])
+  const [kanjiIndex, setKanjiIndex] = useState(0)
 
   const handleAddToDeck = (deckId: number) => {
     console.log(
@@ -38,7 +37,10 @@ const WordCard = ({ word, decks }: Props) => {
 
   if (!word) return <Card>{"<Word />"}</Card>
 
-  const selectedWordForm = word.forms[formIndex] ?? word.forms[0]
+  const { data: kanjisGroup = [] } = useKanji(word)
+  const selectedWordForm = word.forms[formIndex]
+  const selectedKanjis = kanjisGroup[formIndex] ?? []
+  const selectedKanji = selectedKanjis[kanjiIndex]
 
   return (
     <Card className="flex flex-col items-center overflow-x-hidden gap-4">
@@ -134,6 +136,28 @@ const WordCard = ({ word, decks }: Props) => {
           ))}
         </ol>
       </div>
+
+      {selectedKanjis.length > 0 && (
+        <div className="w-full flex gap-2 border p-2 rounded-md bg-accent overflow-x-auto whitespace-nowrap justify-center">
+          {selectedKanjis.map((kanji, index) => (
+            <div
+              key={index}
+              className={cn(
+                "p-2 rounded-md border border-primary text-sm font-bold text-card-foreground transition-colors cursor-pointer",
+                kanjiIndex === index
+                  ? "bg-sidebar-primary"
+                  : "hover:bg-sidebar-primary/30",
+              )}
+              onClick={() => setKanjiIndex(index)}
+            >
+              {kanji?.kanji}
+            </div>
+          ))}
+        </div>
+      )}
+      {selectedKanji && (
+        <KanjiCard key={selectedKanji._id} kanji={selectedKanji} />
+      )}
     </Card>
   )
 }
