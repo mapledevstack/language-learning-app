@@ -30,8 +30,10 @@ export const getKanjis = async (kanjisGroup: string[][]) => {
   return kanjiMap
 }
 
-export const getResults = async (search: string) => {
-  const res = await fetch(`${API_BASE_URL}/dictionary/search?q=${search}`)
+export const getResults = async (search: string, limit: number) => {
+  const res = await fetch(
+    `${API_BASE_URL}/dictionary/search?q=${search}&limit=${limit}`,
+  )
 
   if (!res.ok) {
     throw new Error("failed to fetch kanjis")

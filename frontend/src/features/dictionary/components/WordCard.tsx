@@ -35,9 +35,10 @@ const WordCard = ({ word, decks }: Props) => {
     )
   }
 
+  const { data: kanjisGroup = [] } = useKanji(word)
+
   if (!word) return <Card>{"<Word />"}</Card>
 
-  const { data: kanjisGroup = [] } = useKanji(word)
   const selectedWordForm = word.forms[formIndex]
   const selectedKanjis = kanjisGroup[formIndex] ?? []
   const selectedKanji = selectedKanjis[kanjiIndex]

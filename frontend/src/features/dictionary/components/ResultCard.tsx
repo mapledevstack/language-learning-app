@@ -34,14 +34,16 @@ const ResultCard = ({ result, currentWord, setWord }: Props) => {
           />
         </div>
 
-        {result.meanings.map((meaning, index) => (
-          <p
-            key={index}
-            className="capitalize text-muted-foreground tracking-wider max-w-3xs line-clamp-2"
-          >
-            {meaning.definitions.join(", ")}
-          </p>
-        ))}
+        <div className="line-clamp-1">
+          {result.meanings.map((meaning, index) => (
+            <p
+              key={index}
+              className="capitalize text-muted-foreground tracking-wider max-w-3xs"
+            >
+              {meaning.definitions.join(", ")}
+            </p>
+          ))}
+        </div>
       </Card>
     </div>
   )

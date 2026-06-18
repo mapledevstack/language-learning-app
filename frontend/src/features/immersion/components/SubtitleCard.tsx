@@ -10,9 +10,16 @@ type Props = {
   vidId: string
   currentTime: number
   handleSeek: (seekTime: number | "start" | "end") => void
+  setSearch: (search: string) => void
 }
 
-const SubtitleCard = ({ player, vidId, currentTime, handleSeek }: Props) => {
+const SubtitleCard = ({
+  player,
+  vidId,
+  currentTime,
+  handleSeek,
+  setSearch,
+}: Props) => {
   const { data: subtitles } = useSubtitles(vidId)
 
   const activeSubRef = useRef<HTMLDivElement | null>(null)
@@ -73,6 +80,7 @@ const SubtitleCard = ({ player, vidId, currentTime, handleSeek }: Props) => {
                   <span
                     key={index}
                     className="hover:bg-sidebar-primary/90 transition-all rounded-md whitespace-nowrap duration-300 p-1 -m-1 cursor-pointer"
+                    onClick={() => setSearch(token.text)}
                   >
                     {token.text}
                   </span>

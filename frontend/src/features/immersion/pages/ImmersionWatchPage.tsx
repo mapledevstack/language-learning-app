@@ -7,10 +7,16 @@ import type { YouTubePlayer } from "react-youtube"
 import { Route } from "@/routes/_app/immersion/$vidId"
 import { ErrorBoundary } from "react-error-boundary"
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
+import useWordSearch from "@/features/dictionary/hooks/useWordSearch"
+import { LucideChevronLeft, LucideChevronRight } from "lucide-react"
 
 const ImmersionWatchPage = () => {
   const [player, setPlayer] = useState<YouTubePlayer | undefined>()
   const [currentTime, setCurrentTime] = useState(0)
+  const [search, setSearch] = useState("")
+  const [resultIndex, setResultIndex] = useState(0)
+
+  const { data: results = [] } = useWordSearch(search, 5)
 
   const { vidId } = Route.useParams()
 
@@ -54,6 +60,11 @@ const ImmersionWatchPage = () => {
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [player])
 
+  useEffect(() => {
+    setResultIndex(0)
+  }, [search])
+  // To-do: change this so that Arrows Component can reset Index by just rerendering a new component using 'key'
+
   return (
     <div className="h-full w-full grid md:grid-cols-[6.5fr_3.5fr] p-10 gap-4">
       <section className="flex-1 md:overflow-hidden flex flex-col gap-4">
@@ -66,17 +77,44 @@ const ImmersionWatchPage = () => {
               vidId={vidId}
               currentTime={currentTime}
               handleSeek={handleSeek}
+              setSearch={setSearch}
             />
           </Suspense>
         </ErrorBoundary>
       </section>
 
-      <section className="flex flex-col h-full min-h-0 gap-2">
+      <section className="flex flex-col h-full min-h-0 gap-2 overflow-x-hidden">
         <div className="bg-card p-4 w-full rounded-lg">
           Vid Stats or WordDetails Switch
         </div>
-        <div className="flex-1 min-h-0 overflow-y-scroll">
-          <WordCard word={words[2]} decks={decks} />
+        <div className="flex-1 min-h-0 overflow-y-scroll flex flex-col gap-2">
+          <div className="w-full flex">
+            <button
+              className="flex-1 bg-card p-4 rounded-lg grid place-items-center disabled:text-muted not-disabled:bg-accent text-accent-foreground not-disabled:hover:scale-105 transition-all m-2"
+              onClick={() =>
+                setResultIndex((index) => (index === 0 ? index : index - 1))
+              }
+              disabled={resultIndex === 0}
+            >
+              <LucideChevronLeft />
+            </button>
+            <button
+              className="flex-1 bg-card p-4 rounded-lg grid place-items-center disabled:text-muted not-disabled:bg-accent text-accent-foreground not-disabled:hover:scale-105 transition-all m-2"
+              onClick={() =>
+                setResultIndex((index) =>
+                  index === results.length - 1 ? index : index + 1,
+                )
+              }
+              disabled={
+                results.length === 0 || resultIndex === results.length - 1
+              }
+            >
+              <LucideChevronRight />
+            </button>
+          </div>
+          <div className="flex-1 min-h-0">
+            <WordCard word={results[resultIndex] ?? null} decks={decks} />
+          </div>
         </div>
       </section>
     </div>
