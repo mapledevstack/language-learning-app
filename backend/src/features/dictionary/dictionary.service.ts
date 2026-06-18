@@ -16,7 +16,7 @@ export const getKanjis = async (kanjis: string[]) => {
   return result
 }
 
-export const getSearchResults = async (query: string) => {
+export const getSearchResults = async (query: string, limit: number) => {
   const results = await Word.find({
     $or: [
       { "forms.text": { $regex: query } },
@@ -38,5 +38,5 @@ export const getSearchResults = async (query: string) => {
     return Number(bCommon) - Number(aCommon)
   })
 
-  return results.slice(0, 30)
+  return results.slice(0, limit)
 }

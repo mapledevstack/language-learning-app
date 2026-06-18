@@ -35,12 +35,13 @@ export const getSearchResultsController = async (
   res: Response,
 ) => {
   const query = req.query.q
+  const limit = Number(req.query.limit) || 30
 
   if (typeof query !== "string" || !query.trim()) {
     throw new Error("search query not valid")
   }
 
-  const results = await getSearchResults(query)
+  const results = await getSearchResults(query, limit)
 
   res.json(results)
 }
