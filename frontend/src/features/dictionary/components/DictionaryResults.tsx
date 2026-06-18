@@ -18,8 +18,8 @@ const DictionaryResults = ({ currentWord, results, setWord }: Props) => {
           <ResultCard
             key={res.wordId}
             result={res}
-            setWord={setWord}
             currentWord={currentWord}
+            setWord={setWord}
           />
         )
       })}

@@ -15,6 +15,7 @@ type Props = {
   setIsWriting: (isWriting: boolean) => void
   query: string
   setQuery: (query: string) => void
+  setSearch: (search: string) => void
 }
 
 // results
@@ -25,6 +26,7 @@ const DictionarySearch = ({
   query,
   setQuery,
   results,
+  setSearch,
 }: Props) => {
   const [tokens, setTokens] = useState<string[]>([])
 
@@ -91,6 +93,7 @@ const DictionarySearch = ({
             <div
               className="bg-secondary text-secondary-foreground text-xl border p-1  rounded-md flex-1 text-center hover:bg-sidebar-primary hover:text-sidebar-primary-foreground transition-colors whitespace-nowrap"
               key={index}
+              onClick={() => setSearch(token)}
             >
               {token}
             </div>

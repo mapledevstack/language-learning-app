@@ -19,3 +19,8 @@ DELETE http://localhost:3000/api/v1/immersion/topics/6a2df8d66128b1c9d0f6aae0
 ####
 GET http://localhost:3000/api/v1/immersion/topics/6a2dd8285692d341fb464062/videos
 ####
+GET http://localhost:3000/api/v1/dictionary/kanji/?q=猫
+####
+GET http://localhost:3000/api/v1/dictionary/kanjis/?q=猫&q=戟
+####
+GET http://localhost:3000/api/v1/dictionary/search?q=猫

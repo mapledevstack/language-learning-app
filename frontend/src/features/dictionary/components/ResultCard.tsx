@@ -5,11 +5,11 @@ import KanjiKanaWord from "./KanjiKanaWord"
 
 type Props = {
   result: Word
-  setWord: (word: Word) => void
   currentWord: Word | null
+  setWord: (word: Word) => void
 }
 
-const ResultCard = ({ result, setWord, currentWord }: Props) => {
+const ResultCard = ({ result, currentWord, setWord }: Props) => {
   return (
     <div
       onClick={() => setWord(result)}
@@ -37,7 +37,7 @@ const ResultCard = ({ result, setWord, currentWord }: Props) => {
         {result.meanings.map((meaning, index) => (
           <p
             key={index}
-            className="capitalize text-muted-foreground tracking-wider max-w-3xs truncate"
+            className="capitalize text-muted-foreground tracking-wider max-w-3xs line-clamp-2"
           >
             {meaning.definitions.join(", ")}
           </p>

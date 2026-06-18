@@ -4,31 +4,15 @@ import DictionaryResults from "../components/DictionaryResults"
 import DictionarySearch from "../components/DictionarySearch"
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import { DeckSchema, type Deck } from "@/schemas/DeckSchema"
+import useWordSearch from "../hooks/useWordSearch"
 
 const DictionaryPage = () => {
-  const [query, setQuery] = useState<string>("f")
-  const [word, setWord] = useState<Word | null>(null)
+  const [query, setQuery] = useState("")
+  const [search, setSearch] = useState("")
   const [isWriting, setIsWriting] = useState<boolean>(false)
+  const [word, setWord] = useState<Word | null>(null)
 
-  const filterResults = (query: string, words: Word[]) => {
-    const newWords = words.filter(
-      (word) =>
-        // word.spellings.some((spelling) => spelling.includes(query)) ||
-        // word.readings.some((reading) => reading.includes(query)) ||
-        // word.meanings.some((meaning) =>
-        //   meaning.toLowerCase().includes(query.toLowerCase()),
-        // ),
-        word,
-    )
-
-    return newWords
-  }
-
-  const results = query ? filterResults(query, words) : []
-
-  useEffect(() => {
-    query ? setWord(results[0] ?? null) : setWord(null)
-  }, [query])
+  const { data: results = [] } = useWordSearch(search)
 
   return (
     <div className="h-full flex flex-col p-10 gap-6">
@@ -39,15 +23,16 @@ const DictionaryPage = () => {
           setIsWriting={setIsWriting}
           query={query}
           setQuery={setQuery}
+          setSearch={setSearch}
         />
       </section>
 
       <section className="flex-1 md:min-h-0 grid md:grid-cols-[3fr_7fr] gap-4 items-start">
         <DictionaryDetails isWriting={isWriting} word={word} decks={decks} />
         <DictionaryResults
+          setWord={setWord}
           currentWord={word}
           results={results}
-          setWord={setWord}
         />
       </section>
     </div>

@@ -1,5 +1,6 @@
 import { KanjiSchema } from "../schemas/KanjiSchema"
 import { z } from "zod"
+import { WordsSchema } from "../schemas/WordSchema"
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -27,4 +28,16 @@ export const getKanjis = async (kanjisGroup: string[][]) => {
   )
 
   return kanjiMap
+}
+
+export const getResults = async (search: string) => {
+  const res = await fetch(`${API_BASE_URL}/dictionary/search?q=${search}`)
+
+  if (!res.ok) {
+    throw new Error("failed to fetch kanjis")
+  }
+
+  const data = await res.json()
+
+  return WordsSchema.parse(data)
 }

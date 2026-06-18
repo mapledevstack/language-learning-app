@@ -146,7 +146,7 @@ export const deleteTopic = async (topicId: string) => {
 }
 
 export const getTopicVideos = async (topicId: string) => {
-  const topic = await Topic.findById(topicId)
+  const topic = await Topic.findById(topicId).lean()
 
   if (!topic) {
     throw new Error("topic not found")
