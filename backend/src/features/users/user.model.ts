@@ -1,7 +1,16 @@
-import { model, Schema } from "mongoose"
+import { Document, model, Schema } from "mongoose"
 import { compareValue, hashValue } from "../../utils/bcrypt.js"
 
-const userSchema = new Schema(
+export interface UserDocument extends Document {
+  email: string
+  password: string
+  verified: boolean
+
+  comparePassword(val: string): Promise<boolean>
+  omitPassword(): Omit<UserDocument, "password">
+}
+
+const userSchema = new Schema<UserDocument>(
   {
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
@@ -22,8 +31,8 @@ userSchema.methods.comparePassword = async function (value: string) {
 
 userSchema.methods.omitPassword = function () {
   const userObj = this.toObject()
-  delete userObj.password
-  return userObj
+  const { password, ...obj } = userObj
+  return obj
 }
 
 export const User = model("User", userSchema)
