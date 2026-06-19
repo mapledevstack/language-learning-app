@@ -2,6 +2,8 @@ import { SignOptions } from "jsonwebtoken"
 import jwt from "jsonwebtoken"
 import { JWT_REFRESH_SECRET, JWT_SECRET } from "../constants/env.js"
 import { Types } from "mongoose"
+import AppError from "./appError.js"
+import { UNAUTHORIZED } from "../constants/http.js"
 
 export type AccessTokenPayload = {
   sessionId: Types.ObjectId
@@ -21,3 +23,19 @@ export const signAccessToken = (payload: AccessTokenPayload) =>
 
 export const signRefreshToken = (payload: RefreshTokenPayload) =>
   jwt.sign(payload, JWT_REFRESH_SECRET, { ...defaults, expiresIn: "30d" })
+
+export const verifyAccessToken = (token: string) => {
+  try {
+    return jwt.verify(token, JWT_SECRET) as AccessTokenPayload
+  } catch {
+    throw new AppError("Invalid access token", UNAUTHORIZED)
+  }
+}
+
+export const verifyRefreshToken = (token: string) => {
+  try {
+    return jwt.verify(token, JWT_REFRESH_SECRET) as RefreshTokenPayload
+  } catch {
+    throw new AppError("Invalid refresh token", UNAUTHORIZED)
+  }
+}

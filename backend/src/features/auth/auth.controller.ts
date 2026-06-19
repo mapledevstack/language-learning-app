@@ -1,8 +1,10 @@
 import catchErrors from "../../utils/catchErrors.js"
 import { loginUser, registerUser } from "./auth.service.js"
 import { CREATED, OK } from "../../constants/http.js"
-import { setAuthCookies } from "../../utils/cookies.js"
+import { clearAuthCookies, setAuthCookies } from "../../utils/cookies.js"
 import { loginSchema, registerSchema } from "./auth.schemas.js"
+import { verifyRefreshToken } from "../../utils/jwt.js"
+import { Session } from "./auth.model.js"
 
 export const registerUserController = catchErrors(async (req, res) => {
   const request = registerSchema.parse(req.body)
@@ -37,5 +39,16 @@ export const loginUserController = catchErrors(async (req, res) => {
 })
 
 export const logoutUserController = catchErrors(async (req, res) => {
-  const accessToken = req.cookies.accessToken
+  const refreshToken = req.cookies.refreshToken
+  if (!refreshToken) {
+    return clearAuthCookies(res)
+      .status(OK)
+      .json({ message: "Logout successful" })
+  }
+
+  const { sessionId } = verifyRefreshToken(refreshToken)
+
+  await Session.findByIdAndDelete(sessionId)
+
+  return clearAuthCookies(res).status(OK).json({ message: "Logout successful" })
 })
