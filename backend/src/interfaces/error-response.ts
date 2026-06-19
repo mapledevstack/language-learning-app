@@ -1,6 +1,6 @@
 type ErrorResponse = {
+  path: string
   message: string
-  stack: string | undefined
 }
 
 export default ErrorResponse

@@ -6,13 +6,22 @@ import immersionRoutes from "./features/immersion/immersion.routes.js"
 import errorHandler from "./middleware/errorHandler.js"
 import notFound from "./middleware/notFound.js"
 import helmet from "helmet"
+import cookieParser from "cookie-parser"
+import { APP_ORIGIN } from "./constants/env.js"
+import { OK } from "./constants/http.js"
+import authRoutes from "./features/auth/auth.routes.js"
 
 const app = express()
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({ origin: APP_ORIGIN, credentials: true }))
+app.use(cookieParser())
 app.use(morgan("dev"))
-app.use(helmet())
+// app.use(helmet())
+
+app.get("/", (req, res) => res.status(OK).json({ status: "healthy" }))
+
+app.use("/auth", authRoutes)
 
 app.use("/api/v1/dictionary", dictionaryRoutes)
 app.use("/api/v1/immersion", immersionRoutes)

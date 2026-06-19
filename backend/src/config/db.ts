@@ -1,15 +1,14 @@
 import mongoose from "mongoose"
+import { MONGO_URI } from "../constants/env.js"
 
-export const connectDB = async (mongoUri: string | undefined) => {
-  if (!mongoUri) {
-    throw new Error("MONGO_URI not defined")
-  }
-
+const connectDB = async () => {
   try {
-    await mongoose.connect(mongoUri)
+    await mongoose.connect(MONGO_URI)
     console.log("MongoDB connected")
   } catch (error) {
-    console.error(error)
+    console.log(`Could not connect to DB`, error)
     process.exit(1)
   }
 }
+
+export default connectDB

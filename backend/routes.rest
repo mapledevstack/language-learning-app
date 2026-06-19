@@ -23,4 +23,4 @@ GET http://localhost:3000/api/v1/dictionary/kanji/?q=猫
 ####
 GET http://localhost:3000/api/v1/dictionary/kanjis/?q=猫&q=戟
 ####
-GET http://localhost:3000/api/v1/dictionary/search?q=猫
+GET http://localhost:3000/api/v1/dictionary/search?q=刻ん&limit=30

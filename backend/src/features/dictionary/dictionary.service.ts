@@ -16,7 +16,7 @@ export const getKanjis = async (kanjis: string[]) => {
   return result
 }
 
-export const getSearchResults = async (query: string, limit: number) => {
+export const getSearchResults = async (query: string, limit = 30) => {
   const results = await Word.find({
     $or: [
       { "forms.text": { $regex: query } },
@@ -24,19 +24,36 @@ export const getSearchResults = async (query: string, limit: number) => {
     ],
   })
     .lean()
-    .limit(150)
+    .limit(Math.max(limit * 5, 50))
 
-  results.sort((a, b) => {
-    const aExact = a.forms.some((f) => f.text === query)
-    const bExact = b.forms.some((f) => f.text === query)
+  const sortedResults = results
+    .sort((a, b) => {
+      const aExact = a.forms.some(
+        (f) => f.text === query || f.reading === query,
+      )
+      const bExact = b.forms.some(
+        (f) => f.text === query || f.reading === query,
+      )
 
-    if (aExact !== bExact) return Number(bExact) - Number(aExact)
+      if (aExact !== bExact) return Number(bExact) - Number(aExact)
 
-    const aCommon = a.forms.some((f) => f.common)
-    const bCommon = b.forms.some((f) => f.common)
+      const aStartsWith = a.forms.some(
+        (f) => f.text.startsWith(query) || f.reading.startsWith(query),
+      )
+      const bStartsWith = b.forms.some(
+        (f) => f.text.startsWith(query) || f.reading.startsWith(query),
+      )
 
-    return Number(bCommon) - Number(aCommon)
-  })
+      if (aStartsWith !== bStartsWith) {
+        return Number(bStartsWith) - Number(aStartsWith)
+      }
 
-  return results.slice(0, limit)
+      const aCommon = a.forms.some((f) => f.common)
+      const bCommon = b.forms.some((f) => f.common)
+
+      return Number(bCommon) - Number(aCommon)
+    })
+    .slice(0, limit)
+
+  return sortedResults
 }

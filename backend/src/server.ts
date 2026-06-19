@@ -1,12 +1,9 @@
 import app from "./app.js"
-import "dotenv/config"
-import { connectDB } from "./config/db.js"
+import connectDB from "./config/db.js"
+import { NODE_ENV, PORT } from "./constants/env.js"
 
-const PORT = 3000
-const MONGO_URI = process.env.MONGO_URI
-
-await connectDB(MONGO_URI)
+await connectDB()
 
 app.listen(PORT, () => {
-  console.log(`Server running on PORT: ${PORT}`)
+  console.log(`Server running on PORT: ${PORT} in ${NODE_ENV} environment`)
 })

@@ -1,0 +1,12 @@
+### Health check
+GET http://localhost:3000/
+
+### Register
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "123123",
+  "confirmPassword": "123123"
+}

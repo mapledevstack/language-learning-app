@@ -1,7 +1,8 @@
-import { NextFunction, Request, Response } from "express"
+import { RequestHandler } from "express"
+import { NOT_FOUND } from "../constants/http.js"
 
-const notFound = (req: Request, res: Response, next: NextFunction) => {
-  res.status(404)
+const notFound: RequestHandler = (req, res, next) => {
+  res.status(NOT_FOUND)
 
   const error = new Error(`${req.originalUrl} not found`)
   next(error)
