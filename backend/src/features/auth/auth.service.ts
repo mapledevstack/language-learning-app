@@ -1,7 +1,15 @@
 import { CONFLICT, UNAUTHORIZED } from "../../constants/http.js"
 import AppError from "../../utils/appError.js"
-import { oneYearFromNow } from "../../utils/date.js"
-import { signAccessToken, signRefreshToken } from "../../utils/jwt.js"
+import {
+  ONE_DAY_MS,
+  oneYearFromNow,
+  thirtyDaysFromNow,
+} from "../../utils/date.js"
+import {
+  signAccessToken,
+  signRefreshToken,
+  verifyRefreshToken,
+} from "../../utils/jwt.js"
 import { User } from "../users/user.model.js"
 import { Session, VerificationCode } from "./auth.model.js"
 import { VerificationCodes } from "./auth.types.js"
@@ -81,4 +89,38 @@ export const loginUser = async ({
   const refreshToken = signRefreshToken({ sessionId })
 
   return { user: user.omitPassword(), accessToken, refreshToken }
+}
+
+export const logoutUser = async (refreshToken: string) => {
+  try {
+    const { sessionId } = verifyRefreshToken(refreshToken)
+    await Session.findByIdAndDelete(sessionId)
+  } catch {
+    // ignore session deletion and just clear cookies
+  }
+}
+
+export const refreshAccessToken = async (refreshToken: string) => {
+  const { sessionId } = verifyRefreshToken(refreshToken)
+
+  const session = await Session.findById(sessionId)
+
+  if (!session || session.expiresAt.getTime() < Date.now()) {
+    throw new AppError("Session Expired", UNAUTHORIZED)
+  }
+
+  // refresh the session and sign new refresh token if session expires within a day
+  const needsRefresh = session.expiresAt.getTime() - Date.now() < ONE_DAY_MS
+  if (needsRefresh) {
+    session.expiresAt = thirtyDaysFromNow()
+    await session.save()
+  }
+
+  const newRefreshToken = needsRefresh
+    ? signRefreshToken({ sessionId })
+    : refreshToken
+
+  const newAccessToken = signAccessToken({ userId: session.userId, sessionId })
+
+  return { newAccessToken, newRefreshToken }
 }

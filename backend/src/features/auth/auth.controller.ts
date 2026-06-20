@@ -1,10 +1,21 @@
 import catchErrors from "../../utils/catchErrors.js"
-import { loginUser, registerUser } from "./auth.service.js"
-import { CREATED, OK } from "../../constants/http.js"
-import { clearAuthCookies, setAuthCookies } from "../../utils/cookies.js"
+import {
+  loginUser,
+  logoutUser,
+  refreshAccessToken,
+  registerUser,
+} from "./auth.service.js"
+import { CREATED, OK, UNAUTHORIZED } from "../../constants/http.js"
+import {
+  clearAuthCookies,
+  setAccessCookie,
+  setAuthCookies,
+  setRefreshCookie,
+} from "../../utils/cookies.js"
 import { loginSchema, registerSchema } from "./auth.schemas.js"
 import { verifyRefreshToken } from "../../utils/jwt.js"
 import { Session } from "./auth.model.js"
+import AppError from "../../utils/appError.js"
 
 export const registerUserController = catchErrors(async (req, res) => {
   const request = registerSchema.parse(req.body)
@@ -39,16 +50,36 @@ export const loginUserController = catchErrors(async (req, res) => {
 })
 
 export const logoutUserController = catchErrors(async (req, res) => {
-  const refreshToken = req.cookies.refreshToken
-  if (!refreshToken) {
-    return clearAuthCookies(res)
-      .status(OK)
-      .json({ message: "Logout successful" })
+  const refreshToken = req.cookies.refreshToken as string | undefined
+
+  if (refreshToken) {
+    await logoutUser(refreshToken)
   }
 
-  const { sessionId } = verifyRefreshToken(refreshToken)
-
-  await Session.findByIdAndDelete(sessionId)
-
   return clearAuthCookies(res).status(OK).json({ message: "Logout successful" })
+})
+
+export const refreshAccessTokenController = catchErrors(async (req, res) => {
+  const refreshToken = req.cookies.refreshToken
+
+  if (!refreshToken) {
+    clearAuthCookies(res)
+    throw new AppError("Missing refresh token", UNAUTHORIZED)
+  }
+
+  try {
+    const { newAccessToken, newRefreshToken } =
+      await refreshAccessToken(refreshToken)
+
+    setAccessCookie(res, newAccessToken)
+
+    if (newRefreshToken !== refreshToken) {
+      setRefreshCookie(res, newRefreshToken)
+    }
+
+    return res.status(OK).json({ message: "Access token refreshed" })
+  } catch (error) {
+    clearAuthCookies(res)
+    throw error
+  }
 })
