@@ -15,3 +15,5 @@ export const registerSchema = loginSchema
   .refine(({ password, confirmPassword }) => password === confirmPassword, {
     error: "Passwords do not match",
   })
+
+export const verificationCodeSchema = z.string().min(1).max(24)

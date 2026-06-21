@@ -4,6 +4,7 @@ import {
   logoutUser,
   refreshAccessToken,
   registerUser,
+  verifyEmail,
 } from "./auth.service.js"
 import { CREATED, OK, UNAUTHORIZED } from "../../constants/http.js"
 import {
@@ -12,7 +13,11 @@ import {
   setAuthCookies,
   setRefreshCookie,
 } from "../../utils/cookies.js"
-import { loginSchema, registerSchema } from "./auth.schemas.js"
+import {
+  loginSchema,
+  registerSchema,
+  verificationCodeSchema,
+} from "./auth.schemas.js"
 import { verifyRefreshToken } from "../../utils/jwt.js"
 import { Session } from "./auth.model.js"
 import AppError from "../../utils/appError.js"
@@ -46,6 +51,7 @@ export const loginUserController = catchErrors(async (req, res) => {
 
   return setAuthCookies({ res, accessToken, refreshToken }).status(OK).json({
     message: "Login successful",
+    user,
   })
 })
 
@@ -82,4 +88,12 @@ export const refreshAccessTokenController = catchErrors(async (req, res) => {
     clearAuthCookies(res)
     throw error
   }
+})
+
+export const verifyEmailController = catchErrors(async (req, res) => {
+  const verificationCodeId = verificationCodeSchema.parse(req.params.code)
+
+  await verifyEmail(verificationCodeId)
+
+  return res.status(OK).json({ message: "Email successfully verified" })
 })
