@@ -3,15 +3,21 @@ import {
   CONFLICT,
   INTERNAL_SERVER_ERROR,
   NOT_FOUND,
+  TOO_MANY_REQUESTS,
   UNAUTHORIZED,
 } from "../../constants/http.js"
 import AppError from "../../utils/appError.js"
 import {
+  fiveMinutesAgo,
   ONE_DAY_MS,
+  oneHourFromNow,
   oneYearFromNow,
   thirtyDaysFromNow,
 } from "../../utils/date.js"
-import { verifyEmailTemplate } from "../../utils/emailTemplates.js"
+import {
+  passwordResetTemplate,
+  verifyEmailTemplate,
+} from "../../utils/emailTemplates.js"
 import {
   signAccessToken,
   signRefreshToken,
@@ -168,4 +174,74 @@ export const verifyEmail = async (verificationCodeId: string) => {
   await verification.deleteOne()
 
   return { user: updatedUser.omitPassword() }
+}
+
+export const sendPasswordResetEmail = async (email: string) => {
+  const user = await User.findOne({ email })
+
+  if (!user) {
+    throw new AppError("User not found", NOT_FOUND)
+  }
+
+  const fiveMinsAgo = fiveMinutesAgo()
+  const recentRequestCount = await VerificationCode.countDocuments({
+    userId: user._id,
+    type: VerificationCodes.PasswordReset,
+    createdAt: { $gt: fiveMinsAgo },
+  })
+
+  if (recentRequestCount > 5) {
+    throw new AppError("Rate limit exceeded", TOO_MANY_REQUESTS)
+  }
+
+  const verification = await VerificationCode.create({
+    userId: user._id,
+    type: VerificationCodes.PasswordReset,
+    expiresAt: oneHourFromNow(),
+  })
+
+  const url = `${APP_ORIGIN}/auth/password/reset?code=${verification._id}&exp=${verification.expiresAt.getTime()}`
+
+  const { data, error } = await sendMail({
+    to: user.email,
+    ...passwordResetTemplate(url),
+  })
+
+  if (!data?.id) {
+    throw new AppError(
+      `${error?.name} - ${error?.message}`,
+      INTERNAL_SERVER_ERROR,
+    )
+  }
+
+  return { url, emailId: data.id }
+}
+
+export const resetPassword = async (
+  verificationCodeId: string,
+  password: string,
+) => {
+  const verification = await VerificationCode.findOne({
+    _id: verificationCodeId,
+    type: VerificationCodes.PasswordReset,
+    expiresAt: { $gt: new Date() },
+  })
+
+  if (!verification) {
+    throw new AppError("Invalid or expired verification code", NOT_FOUND)
+  }
+
+  const user = await User.findById(verification.userId)
+  if (!user) {
+    throw new AppError("Failed to update password", INTERNAL_SERVER_ERROR)
+  }
+
+  user.updatePassword(password)
+  await user.save()
+
+  await verification.deleteOne()
+
+  await Session.deleteMany({ userId: user._id })
+
+  return { user: user.omitPassword() }
 }

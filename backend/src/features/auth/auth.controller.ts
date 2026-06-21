@@ -4,6 +4,8 @@ import {
   logoutUser,
   refreshAccessToken,
   registerUser,
+  resetPassword,
+  sendPasswordResetEmail,
   verifyEmail,
 } from "./auth.service.js"
 import { CREATED, OK, UNAUTHORIZED } from "../../constants/http.js"
@@ -14,12 +16,12 @@ import {
   setRefreshCookie,
 } from "../../utils/cookies.js"
 import {
+  emailSchema,
   loginSchema,
   registerSchema,
+  resetPasswordSchema,
   verificationCodeSchema,
 } from "./auth.schemas.js"
-import { verifyRefreshToken } from "../../utils/jwt.js"
-import { Session } from "./auth.model.js"
 import AppError from "../../utils/appError.js"
 
 export const registerUserController = catchErrors(async (req, res) => {
@@ -96,4 +98,24 @@ export const verifyEmailController = catchErrors(async (req, res) => {
   await verifyEmail(verificationCodeId)
 
   return res.status(OK).json({ message: "Email successfully verified" })
+})
+
+export const sendPasswordResetEmailController = catchErrors(
+  async (req, res) => {
+    const email = emailSchema.parse(req.body.email)
+
+    await sendPasswordResetEmail(email)
+
+    return res.status(200).json({ message: "Password reset email sent" })
+  },
+)
+
+export const resetPasswordController = catchErrors(async (req, res) => {
+  const { verificationCodeId, password } = resetPasswordSchema.parse(req.body)
+
+  await resetPassword(verificationCodeId, password)
+
+  return clearAuthCookies(res).status(OK).json({
+    message: "Password reset successfully",
+  })
 })

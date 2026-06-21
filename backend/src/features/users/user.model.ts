@@ -1,4 +1,4 @@
-import { Document, model, Schema } from "mongoose"
+import { Document, model, Schema, Types } from "mongoose"
 import { compareValue, hashValue } from "../../utils/bcrypt.js"
 
 export interface UserDocument extends Document {
@@ -8,6 +8,7 @@ export interface UserDocument extends Document {
 
   comparePassword(val: string): Promise<boolean>
   omitPassword(): Omit<UserDocument, "password">
+  updatePassword(password: string): void
 }
 
 const userSchema = new Schema<UserDocument>(
@@ -33,6 +34,10 @@ userSchema.methods.omitPassword = function () {
   const userObj = this.toObject()
   const { password, ...obj } = userObj
   return obj
+}
+
+userSchema.methods.updatePassword = async function (password: string) {
+  this.password = password
 }
 
 export const User = model("User", userSchema)
