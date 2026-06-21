@@ -1,5 +1,7 @@
 import { Request, Response } from "express"
 import { getKanji, getKanjis, getSearchResults } from "./dictionary.service.js"
+import { searchQuerySchema } from "./dictionary.schema.js"
+import catchErrors from "../../utils/catchErrors.js"
 
 export const getKanjiController = async (req: Request, res: Response) => {
   const query = req.query.q
@@ -30,18 +32,10 @@ export const getKanjisController = async (req: Request, res: Response) => {
   res.json(result)
 }
 
-export const getSearchResultsController = async (
-  req: Request,
-  res: Response,
-) => {
-  const query = req.query.q
-  const limit = Number(req.query.limit) || 30
+export const getSearchResultsController = catchErrors(async (req, res) => {
+  const { q, limit } = searchQuerySchema.parse(req.query)
 
-  if (typeof query !== "string" || !query.trim()) {
-    throw new Error("search query not valid")
-  }
-
-  const results = await getSearchResults(query, limit)
+  const results = await getSearchResults(q, limit)
 
   res.json(results)
-}
+})

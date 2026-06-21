@@ -1,3 +1,5 @@
+import { isJapanese, isRomaji, toKana } from "wanakana"
+import { escapeRegex } from "../../utils/regEx.js"
 import { Kanji, Word } from "./dictionary.model.js"
 
 export const getKanji = async (kanji: string) => {
@@ -16,17 +18,31 @@ export const getKanjis = async (kanjis: string[]) => {
   return result
 }
 
-export const getSearchResults = async (query: string, limit = 30) => {
-  const results = await Word.find({
-    $or: [
-      { "forms.text": { $regex: query } },
-      { "forms.reading": { $regex: query } },
-    ],
-  })
+export const getSearchResults = async (q: string, limit: number) => {
+  const query = isRomaji(q) ? toKana(q) : q
+  const regex = new RegExp(escapeRegex(query), "i")
+  const isEnglish = !isJapanese(query)
+
+  const conditions = isEnglish
+    ? [{ "meanings.definitions": regex }]
+    : [{ "forms.text": regex }, { "forms.reading": regex }]
+
+  const results = await Word.find({ $or: conditions })
     .lean()
     .limit(Math.max(limit * 5, 50))
 
-  const sortedResults = results
+  if (isEnglish) {
+    return results
+      .sort((a, b) => {
+        const aCommon = a.forms.some((f) => f.common)
+        const bCommon = b.forms.some((f) => f.common)
+
+        return Number(bCommon) - Number(aCommon)
+      })
+      .slice(0, limit)
+  }
+
+  return results
     .sort((a, b) => {
       const aExact = a.forms.some(
         (f) => f.text === query || f.reading === query,
@@ -54,6 +70,4 @@ export const getSearchResults = async (query: string, limit = 30) => {
       return Number(bCommon) - Number(aCommon)
     })
     .slice(0, limit)
-
-  return sortedResults
 }
