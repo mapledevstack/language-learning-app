@@ -10,6 +10,9 @@ import cookieParser from "cookie-parser"
 import { APP_ORIGIN } from "./constants/env.js"
 import { OK } from "./constants/http.js"
 import authRoutes from "./features/auth/auth.routes.js"
+import authenticate from "./middleware/authenticate.js"
+import userRoutes from "./features/users/user.routes.js"
+import sessionRoutes from "./features/auth/session.routes.js"
 
 const app = express()
 
@@ -17,11 +20,13 @@ app.use(express.json())
 app.use(cors({ origin: APP_ORIGIN, credentials: true }))
 app.use(cookieParser())
 app.use(morgan("dev"))
-// app.use(helmet())
+app.use(helmet())
 
-app.get("/", (req, res) => res.status(OK).json({ status: "healthy" }))
+app.get("/api/v1", (req, res) => res.status(OK).json({ status: "healthy" }))
 
-app.use("/auth", authRoutes)
+app.use("/api/v1/auth", authRoutes)
+app.use("/api/v1/me", authenticate, userRoutes)
+app.use("/api/v1/sessions", authenticate, sessionRoutes)
 
 app.use("/api/v1/dictionary", dictionaryRoutes)
 app.use("/api/v1/immersion", immersionRoutes)

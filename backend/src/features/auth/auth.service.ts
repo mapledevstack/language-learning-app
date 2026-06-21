@@ -25,7 +25,8 @@ import {
 } from "../../utils/jwt.js"
 import { sendMail } from "../../utils/sendMail.js"
 import { User } from "../users/user.model.js"
-import { Session, VerificationCode } from "./auth.model.js"
+import { VerificationCode } from "./auth.model.js"
+import { Session } from "./session.model.js"
 import { VerificationCodes } from "./auth.types.js"
 
 type RegisterParams = {

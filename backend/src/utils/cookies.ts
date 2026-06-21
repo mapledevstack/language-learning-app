@@ -2,7 +2,7 @@ import { CookieOptions, Response } from "express"
 import { NODE_ENV } from "../constants/env.js"
 import { fifteenMinutesFromNow, thirtyDaysFromNow } from "./date.js"
 
-export const REFRESH_PATH = "/auth"
+export const REFRESH_PATH = "/api/v1/auth"
 
 const defaults: CookieOptions = {
   sameSite: "strict",
