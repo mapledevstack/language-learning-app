@@ -1,4 +1,5 @@
 import AuthPage from "@/features/auth/pages/AuthPage"
+import { AUTH_MODE } from "@/features/auth/schemas/authModes"
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_public/auth")({
@@ -7,10 +8,3 @@ export const Route = createFileRoute("/_public/auth")({
   }),
   component: AuthPage,
 })
-
-export const AUTH_MODE = {
-  LOGIN: "login",
-  SIGNUP: "signup",
-} as const
-
-export type AuthMode = (typeof AUTH_MODE)[keyof typeof AUTH_MODE]

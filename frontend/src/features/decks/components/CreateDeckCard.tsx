@@ -3,7 +3,7 @@ import CreateDialog from "./CreateDialog"
 
 const CreateDeckCard = () => {
   return (
-    <StudyCard className="group bg-accent-muted hover:scale-105 transition-transform relative">
+    <StudyCard className="group bg-accent-muted hover:scale-105 transition-all relative hover:bg-accent border-primary">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-20">
         <div
           className="p-5 absolute size-20 rounded-full"

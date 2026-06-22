@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 import StudyCard from "./StudyCard"
 import { motion } from "motion/react"
+import { cn } from "@/utils/cn"
 
 type Props = {
   isFlipped: boolean
@@ -9,6 +10,7 @@ type Props = {
   back: ReactNode
   cardScale?: number
   symmetricFlip?: boolean
+  className?: string
 }
 
 const FlipCard = ({
@@ -18,12 +20,16 @@ const FlipCard = ({
   back,
   cardScale,
   symmetricFlip = true,
+  className = "bg-card",
 }: Props) => {
   return (
-    <StudyCard className="perspective-distant" cardScale={cardScale}>
+    <StudyCard
+      className={cn("perspective-distant", className)}
+      cardScale={cardScale}
+    >
       <motion.div
         className="relative size-full"
-        initial={{ x: 0, opacity: 1 }}
+        initial={{ x: 0, opacity: 1, rotateY: isFlipped ? 180 : 0 }}
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{
           duration: flipAnimationEnabled

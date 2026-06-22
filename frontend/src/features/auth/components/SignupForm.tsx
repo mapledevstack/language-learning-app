@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button"
 import {
   Field,
-  FieldDescription,
   FieldGroup,
   FieldLabel,
+  FieldLegend,
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { AUTH_MODE, Route } from "@/routes/_public/auth"
+import { Route } from "@/routes/_public/auth"
 import { useState } from "react"
 
 const SignupForm = () => {
@@ -18,8 +18,12 @@ const SignupForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("")
 
   return (
-    <form className="h-full p-4">
-      <FieldGroup className="h-full flex flex-col justify-evenly">
+    <form className="h-full p-6 bg-card rounded-4xl">
+      <FieldLegend>
+        <h1 className="text-2xl font-bold">Create a new account</h1>
+      </FieldLegend>
+
+      <FieldGroup className="flex flex-col justify-evenly">
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
           <Input
@@ -44,7 +48,7 @@ const SignupForm = () => {
         </Field>
 
         <Field>
-          <FieldLabel htmlFor="confirm-password">Password</FieldLabel>
+          <FieldLabel htmlFor="confirm-password">Confirm password</FieldLabel>
           <Input
             id="confirm-password"
             type="password"
@@ -77,7 +81,12 @@ const SignupForm = () => {
           <Button
             type="button"
             variant={"link"}
-            onClick={() => navigate({ search: { mode: "login" } })}
+            onClick={() => {
+              setEmail("")
+              setPassword("")
+              setConfirmPassword("")
+              navigate({ search: { mode: "login" } })
+            }}
           >
             Login
           </Button>

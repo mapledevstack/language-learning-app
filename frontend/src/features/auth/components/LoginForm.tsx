@@ -1,15 +1,16 @@
 import { Button } from "@/components/ui/button"
 import {
   Field,
-  FieldDescription,
   FieldGroup,
   FieldLabel,
+  FieldLegend,
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { AUTH_MODE, Route } from "@/routes/_public/auth"
+import { Route } from "@/routes/_public/auth"
+import { useMutation } from "@tanstack/react-query"
 import { useState, type SubmitEvent } from "react"
-import useLogin from "../hooks/useLogin"
+import { login } from "../api/authApi"
 
 const LoginForm = () => {
   const navigate = Route.useNavigate()
@@ -17,9 +18,30 @@ const LoginForm = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
+  const { mutate, isPending, isError } = useMutation({
+    mutationFn: login,
+    onSuccess: () => {
+      navigate({ to: "/dashboard", replace: true })
+    },
+  })
+
+  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    mutate({ email, password })
+  }
+
   return (
-    <form className="h-full p-4">
-      <FieldGroup className="h-full flex flex-col justify-evenly">
+    <form className="h-full p-6 bg-card rounded-4xl" onSubmit={handleSubmit}>
+      <FieldLegend>
+        <h1 className="text-2xl font-bold">Login to your account</h1>
+      </FieldLegend>
+
+      <div className="text-destructive">
+        {isError && "Invalid email or password"}
+      </div>
+
+      <FieldGroup className="flex flex-col justify-evenly">
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
           <Input
@@ -41,6 +63,7 @@ const LoginForm = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+
           <div className="flex justify-end">
             <Button type="button" variant={"link"}>
               Forgot password?
@@ -62,7 +85,11 @@ const LoginForm = () => {
           >
             Reset
           </Button>
-          <Button type="submit" className="text-2xl flex-1 pt-6 pb-6">
+          <Button
+            type="submit"
+            className="text-2xl flex-1 pt-6 pb-6"
+            disabled={isPending}
+          >
             Submit
           </Button>
         </Field>
@@ -71,7 +98,11 @@ const LoginForm = () => {
           <Button
             type="button"
             variant={"link"}
-            onClick={() => navigate({ search: { mode: "signup" } })}
+            onClick={() => {
+              setEmail("")
+              setPassword("")
+              navigate({ search: { mode: "signup" } })
+            }}
           >
             Signup
           </Button>

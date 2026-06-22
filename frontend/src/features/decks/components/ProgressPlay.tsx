@@ -28,7 +28,7 @@ const ProgressPlay = ({ deck }: Props) => {
         <div className="inset-2 absolute">
           <div
             className={cn(
-              "inset-2 flex items-center justify-center absolute group-hover:opacity-0 transition-opacity",
+              "inset-2 flex text-primary items-center justify-center absolute group-hover:opacity-0 transition-opacity",
               deck.dueCount < 100 && "text-4xl",
               deck.dueCount >= 100 && "text-3xl",
               deck.dueCount >= 1000 && "text-2xl!",

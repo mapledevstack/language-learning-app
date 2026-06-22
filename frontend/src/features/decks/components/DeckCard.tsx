@@ -11,7 +11,7 @@ type Props = {
 
 const DeckCard = ({ deck }: Props) => {
   return (
-    <StudyCard className="group bg-accent-muted hover:scale-105 transition-transform relative">
+    <StudyCard className="group bg-sidebar-primary/20 hover:scale-105 transition-all relative hover:bg-sidebar-primary/40">
       <div className="w-full flex justify-between">
         <Link to="/decks/$deckId/edit" params={{ deckId: String(deck.id) }}>
           <Badge label={`Edit ${deck.title}`} hover={true}>
@@ -26,7 +26,9 @@ const DeckCard = ({ deck }: Props) => {
 
       <ProgressPlay deck={deck} />
 
-      <h1 className="text-4xl text-primary shadow-sm">{deck.title}</h1>
+      <h1 className="text-4xl text-primary shadow-sm group-hover:text-primary-foreground transition-colors">
+        {deck.title}
+      </h1>
     </StudyCard>
   )
 }
