@@ -4,7 +4,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group"
 import { LucideCheckCircle2, LucideCircleAlert, Search } from "lucide-react"
-import youtubeLogo from "../../../assets/youtube-logo.svg"
+import youtubeLogo from "../../../assets/logos/youtube-logo.svg"
 import { useState, type KeyboardEvent } from "react"
 import getVidId from "../utils/getVidId"
 import { useNavigate } from "@tanstack/react-router"

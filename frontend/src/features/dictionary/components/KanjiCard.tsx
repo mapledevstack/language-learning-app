@@ -9,11 +9,11 @@ type Props = {
 const KanjiCard = ({ kanji }: Props) => {
   return (
     <Card className="w-full relative flex flex-col items-center gap-8 py-8">
-      <Badge position="left">{kanji.jlpt ?? "N/A"}</Badge>
-      <Badge position="right">{kanji.grade ?? "—"}</Badge>
+      <Badge position="left">{kanji.jlpt ?? "NA"}</Badge>
+      <Badge position="right">{kanji.grade ?? "NA"}</Badge>
 
       <span className="text-sm text-muted-foreground italic">
-        freq: {kanji.frequency ?? "—"}
+        freq: {kanji.frequency ?? "NA"}
       </span>
 
       <h1 className="text-8xl font-bold text-primary bg-sidebar-primary/10 rounded-2xl p-12">
