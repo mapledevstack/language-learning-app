@@ -5,13 +5,17 @@ import Card from "./Card"
 type Props = {
   children: ReactNode
   className?: string
+  cardScale?: number
 }
 
-const StudyCard = ({ children, className }: Props) => {
+const StudyCard = ({ children, className, cardScale = 1 }: Props) => {
   return (
     <Card
+      style={{
+        width: `calc(var(--card-width) * ${cardScale})`,
+      }}
       className={cn(
-        "w-(--card-width) aspect-3/4 flex flex-col justify-between p-4 items-center text-center",
+        "aspect-3/4 flex flex-col justify-between p-4 items-center text-center",
         className,
       )}
     >

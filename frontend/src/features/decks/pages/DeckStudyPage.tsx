@@ -1,10 +1,12 @@
-import StudyFlashCard from "../components/StudyFlashCard"
 import { useEffect, useState } from "react"
 import { handleAgain, handleGood } from "../utils/srs"
 import { motion } from "motion/react"
 import { Route } from "@/routes/_app/decks/$deckId"
 import useFlashCards from "../hooks/useFlashCards"
 import FlashCardStats from "../components/FlashCardStats"
+import FlipCard from "@/components/cards/FlipCard"
+import StudyFlashCardFront from "../components/StudyFlashCardFront"
+import StudyFlashCardBack from "../components/StudyFlashCardBack"
 
 const DeckStudyPage = () => {
   const { deckId: deckIdParam } = Route.useParams()
@@ -73,10 +75,12 @@ const DeckStudyPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ ease: "easeInOut" }}
       >
-        <StudyFlashCard
-          currentCard={currentCard}
-          flip={isFlipped}
+        <FlipCard
+          isFlipped={isFlipped}
           flipAnimationEnabled={flipAnimationEnabled}
+          front={<StudyFlashCardFront card={currentCard} />}
+          back={<StudyFlashCardBack card={currentCard} />}
+          symmetricFlip={false}
         />
       </motion.div>
 
