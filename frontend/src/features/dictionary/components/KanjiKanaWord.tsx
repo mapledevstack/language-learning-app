@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import type { WordForm } from "../schemas/WordSchema"
 
 type Props = {

@@ -1,4 +1,4 @@
-import Card from "@/components/Card"
+import Card from "@/components/cards/Card"
 import type { Video } from "../schemas/VideoSchema"
 import { useNavigate } from "@tanstack/react-router"
 

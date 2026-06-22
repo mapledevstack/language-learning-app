@@ -4,11 +4,10 @@ import { RouterProvider, createRouter } from "@tanstack/react-router"
 import "./index.css"
 
 import { routeTree } from "./routeTree.gen"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { QueryClientProvider } from "@tanstack/react-query"
+import queryClient from "./config/queryClient"
 
 const router = createRouter({ routeTree })
-
-const queryClient = new QueryClient()
 
 declare module "@tanstack/react-router" {
   interface Register {

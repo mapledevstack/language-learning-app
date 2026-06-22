@@ -1,4 +1,4 @@
-import Card from "@/components/Card"
+import Card from "@/components/cards/Card"
 import YouTube, { type YouTubePlayer } from "react-youtube"
 
 type Props = {

@@ -3,7 +3,7 @@ import DictionaryDetails from "../components/DictionaryDetails"
 import DictionaryResults from "../components/DictionaryResults"
 import DictionarySearch from "../components/DictionarySearch"
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
-import { DeckSchema, type Deck } from "@/schemas/DeckSchema"
+import { DeckSchema, type Deck } from "@/features/decks/schemas/DeckSchema"
 import useWordSearch from "../hooks/useWordSearch"
 
 const DictionaryPage = () => {

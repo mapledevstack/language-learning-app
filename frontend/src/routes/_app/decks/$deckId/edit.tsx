@@ -1,9 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
+import DeckEditPage from "@/features/decks/pages/DeckEditPage"
+import { createFileRoute } from "@tanstack/react-router"
 
-export const Route = createFileRoute('/_app/decks/$deckId/edit')({
-  component: FlashCardsEditPage,
+export const Route = createFileRoute("/_app/decks/$deckId/edit")({
+  component: DeckEditPage,
 })
-
-function FlashCardsEditPage() {
-  return <div>Hello "/_app/decks/$deckId/edit"!</div>
-}

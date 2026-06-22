@@ -1,6 +1,6 @@
-import type { FlashCard } from "@/schemas/FlashCardSchema"
+import type { FlashCard } from "@/features/decks/schemas/FlashCardSchema"
 import { motion } from "motion/react"
-import Card from "@/components/Card"
+import Card from "@/components/cards/Card"
 import StudyFlashCardFront from "./StudyFlashCardFront"
 import StudyFlashCardBack from "./StudyFlashCardBack"
 

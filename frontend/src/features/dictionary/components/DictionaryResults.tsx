@@ -1,5 +1,5 @@
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
-import Card from "@/components/Card"
+import Card from "@/components/cards/Card"
 import ResultCard from "./ResultCard"
 
 type Props = {

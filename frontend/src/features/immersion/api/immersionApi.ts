@@ -1,4 +1,4 @@
-import type { Subtitles } from "@/schemas/SubtitlesSchema"
+import type { Subtitles } from "@/features/immersion/schemas/SubtitlesSchema"
 import { TopicsSchema } from "../schemas/TopicSchema"
 import { VideosSchema } from "../schemas/VideoSchema"
 

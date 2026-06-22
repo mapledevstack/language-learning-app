@@ -1,7 +1,7 @@
-import Card from "@/components/Card"
+import Card from "@/components/cards/Card"
 import useSubtitles from "../hooks/useSubtitles"
 import { useEffect, useRef } from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import type { YouTubePlayer } from "react-youtube"
 import useSubtitleNavigation from "../hooks/useSubtitleNavigation"
 
@@ -54,7 +54,7 @@ const SubtitleCard = ({
   const colorCode = () => {}
 
   return (
-    <Card className="flex-1 overflow-y-scroll overflow-x-hidden flex flex-col items-start gap-1">
+    <Card className="flex-1 overflow-y-scroll overflow-x-hidden flex flex-col items-start gap-1 p-4">
       {subtitles.map((sub, index) => {
         return (
           <div
@@ -80,7 +80,7 @@ const SubtitleCard = ({
                   <span
                     key={index}
                     className="hover:bg-sidebar-primary/90 transition-all rounded-md whitespace-nowrap duration-300 p-1 -m-1 cursor-pointer"
-                    onClick={() => setSearch(token.text)}
+                    onClick={() => setSearch(token.baseForm)}
                   >
                     {token.text}
                   </span>

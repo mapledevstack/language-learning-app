@@ -1,4 +1,4 @@
-import type { Subtitles } from "@/schemas/SubtitlesSchema"
+import type { Subtitles } from "@/features/immersion/schemas/SubtitlesSchema"
 import { useEffect } from "react"
 import type { YouTubePlayer } from "react-youtube"
 

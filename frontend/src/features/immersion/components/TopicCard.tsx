@@ -1,4 +1,4 @@
-import Card from "@/components/Card"
+import Card from "@/components/cards/Card"
 import { useNavigate } from "@tanstack/react-router"
 import type { Topic } from "../schemas/TopicSchema"
 import { topicImages } from "../utils/topicImages"

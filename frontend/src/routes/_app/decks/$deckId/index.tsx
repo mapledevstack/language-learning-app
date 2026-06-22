@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
-import FlashCardPage from "@/features/decks/pages/FlashCardsPage"
+import DeckStudyPage from "@/features/decks/pages/DeckStudyPage"
 
 export const Route = createFileRoute("/_app/decks/$deckId/")({
-  component: FlashCardPage,
+  component: DeckStudyPage,
 })

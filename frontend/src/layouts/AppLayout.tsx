@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { Link, Outlet } from "@tanstack/react-router"
 import { LucideMenu } from "lucide-react"
 import { useState } from "react"

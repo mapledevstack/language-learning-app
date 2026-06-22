@@ -1,6 +1,6 @@
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
-import Card from "@/components/Card"
-import { cn } from "@/lib/utils"
+import Card from "@/components/cards/Card"
+import { cn } from "@/utils/cn"
 import KanjiKanaWord from "./KanjiKanaWord"
 
 type Props = {

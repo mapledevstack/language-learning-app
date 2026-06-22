@@ -1,5 +1,5 @@
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
-import Card from "@/components/Card"
+import Card from "@/components/cards/Card"
 import { LucidePlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -12,9 +12,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useNavigate } from "@tanstack/react-router"
-import type { Deck } from "@/schemas/DeckSchema"
-import { useState } from "react"
-import { cn } from "@/lib/utils"
+import type { Deck } from "@/features/decks/schemas/DeckSchema"
+import { useEffect, useState } from "react"
+import { cn } from "@/utils/cn"
 import KanjiKanaWord from "./KanjiKanaWord"
 import useKanji from "../hooks/useKanji"
 import KanjiCard from "./KanjiCard"
@@ -45,7 +45,7 @@ const WordCard = ({ word, decks }: Props) => {
 
   return (
     <Card className="flex flex-col items-center overflow-x-hidden gap-4">
-      <div className="w-full flex gap-2 border p-2 rounded-md bg-accent overflow-x-auto whitespace-nowrap justify-center">
+      <div className="w-full flex gap-2 border p-2 rounded-md bg-accent overflow-x-auto whitespace-nowrap justify-center ">
         {word.forms.map((form, index) => (
           <div
             key={index}
@@ -55,7 +55,9 @@ const WordCard = ({ word, decks }: Props) => {
                 ? "bg-sidebar-primary"
                 : "hover:bg-sidebar-primary/30",
             )}
-            onClick={() => setFormIndex(index)}
+            onClick={() => {
+              ;(setFormIndex(index), setKanjiIndex(0))
+            }}
           >
             {form.text}
           </div>

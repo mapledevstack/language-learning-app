@@ -1,5 +1,5 @@
-import Card from "@/components/Card"
-import { cn } from "@/lib/utils"
+import Card from "@/components/cards/Card"
+import { cn } from "@/utils/cn"
 
 type Props = {
   isWriting: boolean

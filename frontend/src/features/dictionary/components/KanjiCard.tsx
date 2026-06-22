@@ -1,4 +1,4 @@
-import Card from "@/components/Card"
+import Card from "@/components/cards/Card"
 import type { Kanji } from "../schemas/KanjiSchema"
 import type { ReactNode } from "react"
 

@@ -1,4 +1,4 @@
-import type { FlashCard } from "@/schemas/FlashCardSchema"
+import type { FlashCard } from "@/features/decks/schemas/FlashCardSchema"
 
 type Props = {
   card: FlashCard

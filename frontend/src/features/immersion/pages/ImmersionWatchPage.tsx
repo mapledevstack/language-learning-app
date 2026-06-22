@@ -1,5 +1,5 @@
 import WordCard from "@/features/dictionary/components/WordCard"
-import { DeckSchema, type Deck } from "@/schemas/DeckSchema"
+import { DeckSchema, type Deck } from "@/features/decks/schemas/DeckSchema"
 import SubtitleCard from "../components/SubtitleCard"
 import VideoCard from "../components/VideoCard"
 import { Suspense, useEffect, useState } from "react"
@@ -113,7 +113,11 @@ const ImmersionWatchPage = () => {
             </button>
           </div>
           <div className="flex-1 min-h-0">
-            <WordCard word={results[resultIndex] ?? null} decks={decks} />
+            <WordCard
+              key={results[resultIndex]?.wordId ?? 0}
+              word={results[resultIndex] ?? null}
+              decks={decks}
+            />
           </div>
         </div>
       </section>

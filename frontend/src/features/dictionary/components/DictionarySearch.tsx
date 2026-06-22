@@ -1,6 +1,6 @@
 import { LucideLineSquiggle, Search } from "lucide-react"
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { useState, type ChangeEvent, type KeyboardEvent } from "react"
 import { isRomaji, toKana, tokenize } from "wanakana"
 import {
