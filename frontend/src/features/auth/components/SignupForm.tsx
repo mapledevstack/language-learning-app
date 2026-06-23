@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import {
   Field,
+  FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldLegend,
@@ -8,7 +9,10 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Route } from "@/routes/_public/auth"
-import { useState } from "react"
+import { useMutation } from "@tanstack/react-query"
+import { useState, type SubmitEvent } from "react"
+import { signup } from "../api/authApi"
+import { Spinner } from "@/components/ui/spinner"
 
 const SignupForm = () => {
   const navigate = Route.useNavigate()
@@ -17,11 +21,28 @@ const SignupForm = () => {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
 
+  const { mutate, isPending, isError } = useMutation({
+    mutationFn: signup,
+    onSuccess: () => {
+      navigate({ to: "/dashboard", replace: true })
+    },
+  })
+
+  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    mutate({ email, password, confirmPassword })
+  }
+
   return (
-    <form className="h-full p-6 bg-card rounded-4xl">
+    <form className="h-full p-6 bg-card rounded-4xl" onSubmit={handleSubmit}>
       <FieldLegend>
         <h1 className="text-2xl font-bold">Create a new account</h1>
       </FieldLegend>
+
+      <div className="text-destructive">
+        {isError && "Invalid email or password"}
+      </div>
 
       <FieldGroup className="flex flex-col justify-evenly">
         <Field>
@@ -45,6 +66,9 @@ const SignupForm = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          <FieldDescription className="text-muted-foreground">
+            Must be at least 6 characters long
+          </FieldDescription>
         </Field>
 
         <Field>
@@ -72,8 +96,15 @@ const SignupForm = () => {
           >
             Reset
           </Button>
-          <Button type="submit" className="text-2xl flex-1 pt-6 pb-6">
-            Submit
+          <Button
+            type="submit"
+            className="text-2xl flex-1 pt-6 pb-6"
+            disabled={
+              isPending || password.length < 6 || password !== confirmPassword
+            }
+          >
+            <span>{"Create account"}</span>
+            {isPending && <Spinner />}
           </Button>
         </Field>
 
@@ -88,7 +119,7 @@ const SignupForm = () => {
               navigate({ search: { mode: "login" } })
             }}
           >
-            Login
+            Already have an account?
           </Button>
         </Field>
       </FieldGroup>

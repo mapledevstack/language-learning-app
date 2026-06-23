@@ -24,7 +24,7 @@ const AuthPage = () => {
           isFlipped={isFlipped}
           front={<LoginForm />}
           back={<SignupForm />}
-          cardScale={1.45}
+          cardScale={1.5}
           className="bg-background border-none"
         />
       </motion.div>

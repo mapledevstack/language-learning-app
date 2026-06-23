@@ -11,6 +11,8 @@ import { Route } from "@/routes/_public/auth"
 import { useMutation } from "@tanstack/react-query"
 import { useState, type SubmitEvent } from "react"
 import { login } from "../api/authApi"
+import { Spinner } from "@/components/ui/spinner"
+import { Link } from "@tanstack/react-router"
 
 const LoginForm = () => {
   const navigate = Route.useNavigate()
@@ -65,9 +67,13 @@ const LoginForm = () => {
           />
 
           <div className="flex justify-end">
-            <Button type="button" variant={"link"}>
+            <Link
+              type="button"
+              className="text-primary underline"
+              to="/auth/password/forgot"
+            >
               Forgot password?
-            </Button>
+            </Link>
           </div>
         </Field>
 
@@ -90,7 +96,8 @@ const LoginForm = () => {
             className="text-2xl flex-1 pt-6 pb-6"
             disabled={isPending}
           >
-            Submit
+            <span>{"Login"}</span>
+            {isPending && <Spinner />}
           </Button>
         </Field>
 
@@ -104,7 +111,7 @@ const LoginForm = () => {
               navigate({ search: { mode: "signup" } })
             }}
           >
-            Signup
+            Create new account?
           </Button>
         </Field>
       </FieldGroup>
