@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import DictionaryDetails from "../components/DictionaryDetails"
 import DictionaryResults from "../components/DictionaryResults"
 import DictionarySearch from "../components/DictionarySearch"
@@ -11,6 +11,7 @@ const DictionaryPage = () => {
   const [search, setSearch] = useState("")
   const [isWriting, setIsWriting] = useState<boolean>(false)
   const [word, setWord] = useState<Word | null>(null)
+  const [tokens, setTokens] = useState<string[]>([])
 
   const { data: results = [] } = useWordSearch(search)
 
@@ -24,11 +25,18 @@ const DictionaryPage = () => {
           query={query}
           setQuery={setQuery}
           setSearch={setSearch}
+          tokens={tokens}
+          setTokens={setTokens}
         />
       </section>
 
       <section className="flex-1 md:min-h-0 grid md:grid-cols-[3fr_7fr] gap-4 items-start">
-        <DictionaryDetails isWriting={isWriting} word={word} decks={decks} />
+        <DictionaryDetails
+          isWriting={isWriting}
+          word={word}
+          decks={decks}
+          setTokens={setTokens}
+        />
         <DictionaryResults
           setWord={setWord}
           currentWord={word}

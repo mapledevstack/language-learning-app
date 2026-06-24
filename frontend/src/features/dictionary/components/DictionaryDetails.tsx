@@ -7,14 +7,14 @@ type Props = {
   isWriting: boolean
   word: Word | null
   decks: Deck[]
+  setTokens: (tokens: string[]) => void
 }
 
-const DictionaryDetails = ({ isWriting, word, decks }: Props) => {
+const DictionaryDetails = ({ isWriting, word, decks, setTokens }: Props) => {
   return (
     <div className="h-full overflow-y-auto">
-      <HandWritingCard isWriting={isWriting} />
+      <HandWritingCard isWriting={isWriting} setTokens={setTokens} />
       <WordCard key={word?.wordId} word={word} decks={decks} />
-      {/* <KanjiCard kanji={example} /> */}
     </div>
   )
 }

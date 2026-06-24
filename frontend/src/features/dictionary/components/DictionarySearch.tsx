@@ -16,6 +16,8 @@ type Props = {
   query: string
   setQuery: (query: string) => void
   setSearch: (search: string) => void
+  tokens: string[]
+  setTokens: (tokens: string[]) => void
 }
 
 // results
@@ -27,9 +29,9 @@ const DictionarySearch = ({
   setQuery,
   results,
   setSearch,
+  tokens,
+  setTokens,
 }: Props) => {
-  const [tokens, setTokens] = useState<string[]>([])
-
   const handleSearch = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter") return
   }
