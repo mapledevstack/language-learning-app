@@ -96,7 +96,7 @@ const LoginForm = () => {
             className="text-2xl flex-1 pt-6 pb-6"
             disabled={isPending}
           >
-            <span>{"Login"}</span>
+            <span className="m-2">{"Login"}</span>
             {isPending && <Spinner />}
           </Button>
         </Field>

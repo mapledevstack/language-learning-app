@@ -103,7 +103,7 @@ const SignupForm = () => {
               isPending || password.length < 6 || password !== confirmPassword
             }
           >
-            <span>{"Create account"}</span>
+            <span className="m-2">{"Create account"}</span>
             {isPending && <Spinner />}
           </Button>
         </Field>

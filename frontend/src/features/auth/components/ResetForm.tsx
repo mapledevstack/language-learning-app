@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import {
   Field,
+  FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldLegend,
@@ -13,15 +14,24 @@ import { useState, type SubmitEvent } from "react"
 
 type Props = {
   isPending: boolean
+  isError: boolean
   mutate: any
+  verificationCode: string
 }
 
-const ForgotForm = ({ isPending, mutate }: Props) => {
-  const [email, setEmail] = useState("")
+const ForgotForm = ({
+  isPending,
+  isError,
+  mutate,
+  verificationCode,
+}: Props) => {
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
-    mutate(email)
+
+    mutate({ verificationCode, password })
   }
 
   return (
@@ -30,19 +40,36 @@ const ForgotForm = ({ isPending, mutate }: Props) => {
       onSubmit={handleSubmit}
     >
       <FieldLegend>
-        <h1 className="text-2xl font-bold">Forgot password?</h1>
+        <h1 className="text-2xl font-bold">Reset password</h1>
       </FieldLegend>
+
+      <div className="text-destructive">
+        {isError && "Unable to reset password"}
+      </div>
 
       <FieldGroup className="flex flex-col justify-evenly">
         <Field>
-          <FieldLabel htmlFor="email">Email</FieldLabel>
+          <FieldLabel htmlFor="password">New Password</FieldLabel>
           <Input
-            id="email"
-            type="email"
-            placeholder="name@example.com"
+            id="password"
+            type="password"
             className="h-14"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <FieldDescription className="text-muted-foreground">
+            Must be at least 6 characters long
+          </FieldDescription>
+        </Field>
+
+        <Field>
+          <FieldLabel htmlFor="confirm-password">Confirm password</FieldLabel>
+          <Input
+            id="confirm-password"
+            type="password"
+            className="h-14"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </Field>
 
@@ -52,9 +79,9 @@ const ForgotForm = ({ isPending, mutate }: Props) => {
           <Button
             type="submit"
             className="text-2xl flex-1 pt-6 pb-6"
-            disabled={!email}
+            disabled={password.length < 6 || password !== confirmPassword}
           >
-            <span className="m-2">{"Send reset email"}</span>
+            <span className="m-2">{"Reset password"}</span>
             {isPending && <Spinner />}
           </Button>
         </Field>

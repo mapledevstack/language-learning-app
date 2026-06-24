@@ -11,5 +11,11 @@ export const SigninSchema = z.object({
   confirmPassword: z.string().min(1),
 })
 
+export const ResetSchema = z.object({
+  verificationCode: z.string(),
+  password: z.string(),
+})
+
 export type LoginInput = z.infer<typeof loginSchema>
 export type SigninInput = z.infer<typeof SigninSchema>
+export type ResetInput = z.infer<typeof ResetSchema>
