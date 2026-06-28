@@ -2,38 +2,36 @@ import { LucideLineSquiggle, Search } from "lucide-react"
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import { cn } from "@/utils/cn"
 import { useState, type ChangeEvent, type KeyboardEvent } from "react"
-import { isRomaji, toKana, tokenize } from "wanakana"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group"
+import getSearchTokens from "../utils/getSearchTokens"
 
 type Props = {
-  results: Word[]
+  resultsCount: number
   isWriting: boolean
   setIsWriting: (isWriting: boolean) => void
-  query: string
-  setQuery: (query: string) => void
   setSearch: (search: string) => void
   tokens: string[]
   setTokens: (tokens: string[]) => void
 }
 
-// results
-
 const DictionarySearch = ({
   isWriting,
   setIsWriting,
-  query,
-  setQuery,
-  results,
+  resultsCount,
   setSearch,
   tokens,
   setTokens,
 }: Props) => {
+  const [query, setQuery] = useState("")
+
   const handleSearch = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter") return
+
+    setSearch(query) // make it just for eng?
   }
 
   const handleQueryChange = (
@@ -42,15 +40,7 @@ const DictionarySearch = ({
     const value = e.target.value
 
     setQuery(value)
-
-    const kanaTokens = tokenize(value).map((token) => {
-      if (typeof token === "string") {
-        return isRomaji(token) ? toKana(token) : token
-      }
-      return ""
-    })
-
-    setTokens(kanaTokens.filter((token) => token.trim()))
+    setTokens(getSearchTokens(value))
   }
 
   return (
@@ -73,13 +63,13 @@ const DictionarySearch = ({
             placeholder="Search for a Word, Kanji, or Sentence..."
             value={query}
             onChange={(e) => handleQueryChange(e)}
-            onKeyUp={(e) => handleSearch(e)}
+            onKeyDown={(e) => handleSearch(e)}
           />
           <InputGroupAddon>
             <Search className="text-primary" />
           </InputGroupAddon>
           <InputGroupAddon align="inline-end">
-            <p className="text-primary">{results.length}</p> results
+            <p className="text-primary">{resultsCount}</p> results
           </InputGroupAddon>
         </InputGroup>
       </div>

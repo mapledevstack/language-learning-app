@@ -10,15 +10,18 @@ type Props = {
 }
 
 const ResultCard = ({ result, currentWord, setWord }: Props) => {
+  const isSelected = result.wordId === currentWord?.wordId
+
   return (
-    <div
+    <button
+      type="button"
       onClick={() => setWord(result)}
       className="hover:scale-105 transition-all flex h-fit"
     >
       <Card
         className={cn(
           "flex justify-between items-center transition-all gap-2 flex-col w-fit max-w-full",
-          result.wordId === currentWord?.wordId
+          isSelected
             ? "bg-primary text-primary-foreground"
             : "bg-muted hover:bg-sidebar-primary/50",
         )}
@@ -27,7 +30,7 @@ const ResultCard = ({ result, currentWord, setWord }: Props) => {
           <KanjiKanaWord
             form={result.forms[0]}
             furiganaClassName={
-              result.wordId === currentWord?.wordId
+              isSelected
                 ? "text-sidebar-primary-foreground"
                 : "transition-colors"
             }
@@ -45,7 +48,7 @@ const ResultCard = ({ result, currentWord, setWord }: Props) => {
           ))}
         </div>
       </Card>
-    </div>
+    </button>
   )
 }
 export default ResultCard

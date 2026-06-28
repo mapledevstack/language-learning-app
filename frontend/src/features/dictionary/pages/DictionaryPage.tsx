@@ -3,13 +3,11 @@ import DictionaryDetails from "../components/DictionaryDetails"
 import DictionaryResults from "../components/DictionaryResults"
 import DictionarySearch from "../components/DictionarySearch"
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
-import { DeckSchema, type Deck } from "@/features/decks/schemas/DeckSchema"
 import useWordSearch from "../hooks/useWordSearch"
 
 const DictionaryPage = () => {
-  const [query, setQuery] = useState("")
   const [search, setSearch] = useState("")
-  const [isWriting, setIsWriting] = useState<boolean>(false)
+  const [isWriting, setIsWriting] = useState(false)
   const [word, setWord] = useState<Word | null>(null)
   const [tokens, setTokens] = useState<string[]>([])
 
@@ -19,11 +17,9 @@ const DictionaryPage = () => {
     <div className="h-full flex flex-col p-10 gap-6">
       <section>
         <DictionarySearch
-          results={results}
+          resultsCount={results.length}
           isWriting={isWriting}
           setIsWriting={setIsWriting}
-          query={query}
-          setQuery={setQuery}
           setSearch={setSearch}
           tokens={tokens}
           setTokens={setTokens}
@@ -34,7 +30,6 @@ const DictionaryPage = () => {
         <DictionaryDetails
           isWriting={isWriting}
           word={word}
-          decks={decks}
           setTokens={setTokens}
         />
         <DictionaryResults
@@ -48,149 +43,3 @@ const DictionaryPage = () => {
 }
 
 export default DictionaryPage
-
-const decks: Deck[] = [
-  DeckSchema.parse({
-    id: 1,
-    title: "Hiragana",
-    description: "Basic Japanese syllabary",
-    cardCount: 46,
-    learnedCount: 23,
-    dueCount: 26,
-  }),
-
-  DeckSchema.parse({
-    id: 2,
-    title: "Katakana",
-    description: "Foreign-word syllabary",
-    cardCount: 46,
-    learnedCount: 2,
-    dueCount: 46,
-  }),
-]
-
-const words: Word[] = [
-  {
-    wordId: "1000040",
-    forms: [
-      {
-        text: "〃",
-        reading: "おなじ",
-        furigana: [
-          {
-            text: "〃",
-            reading: "おなじ",
-          },
-        ],
-        common: false,
-        tags: [],
-        pitchAccent: "LHHH",
-      },
-    ],
-    meanings: [
-      {
-        definitions: ["ditto mark"],
-        partsOfSpeech: ["n"],
-        tags: [],
-        notes: [],
-      },
-    ],
-  },
-
-  {
-    wordId: "1000110",
-    forms: [
-      {
-        text: "ＣＤプレーヤー",
-        reading: "シーディープレーヤー",
-        furigana: [
-          {
-            text: "Ｃ",
-            reading: "シー",
-          },
-          {
-            text: "Ｄ",
-            reading: "ディー",
-          },
-          {
-            text: "プレーヤー",
-            reading: null,
-          },
-        ],
-        common: true,
-        tags: [],
-        pitchAccent: "LHHhHHLLLLL",
-      },
-      {
-        text: "ＣＤプレイヤー",
-        reading: "シーディープレイヤー",
-        furigana: [
-          {
-            text: "Ｃ",
-            reading: "シー",
-          },
-          {
-            text: "Ｄ",
-            reading: "ディー",
-          },
-          {
-            text: "プレイヤー",
-            reading: null,
-          },
-        ],
-        common: false,
-        tags: [],
-        pitchAccent: null,
-      },
-    ],
-    meanings: [
-      {
-        definitions: ["CD player", "amamamamamama", "Insane omg"],
-        partsOfSpeech: ["n"],
-        tags: [],
-        notes: [],
-      },
-    ],
-  },
-
-  {
-    wordId: "1000420",
-    forms: [
-      {
-        text: "彼の",
-        reading: "あの",
-        furigana: [
-          {
-            text: "彼",
-            reading: "あ",
-          },
-          {
-            text: "の",
-            reading: null,
-          },
-        ],
-        common: false,
-        tags: ["rK"],
-        pitchAccent: "LHH",
-      },
-      {
-        text: "あん",
-        reading: "あん",
-        furigana: [],
-        common: false,
-        tags: [],
-        pitchAccent: "HLL",
-      },
-    ],
-    meanings: [
-      {
-        definitions: ["that", "those", "the", "Insane omg"],
-        partsOfSpeech: ["adj-pn"],
-        tags: ["uk"],
-        notes: [
-          "someone or something distant from both speaker and listener, or situation unfamiliar to both speaker and listener",
-        ],
-      },
-    ],
-  },
-]

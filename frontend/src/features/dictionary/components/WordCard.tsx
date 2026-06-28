@@ -1,6 +1,6 @@
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import Card from "@/components/cards/Card"
-import { LucidePlus } from "lucide-react"
+import { LucidePlus, LucideSearch } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -12,22 +12,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useNavigate } from "@tanstack/react-router"
-import type { Deck } from "@/features/decks/schemas/DeckSchema"
-import { useEffect, useState } from "react"
+import { DeckSchema, type Deck } from "@/features/decks/schemas/DeckSchema"
+import { useState } from "react"
 import { cn } from "@/utils/cn"
 import KanjiKanaWord from "./KanjiKanaWord"
 import useKanji from "../hooks/useKanji"
 import KanjiCard from "./KanjiCard"
+import EmptyCard from "@/components/cards/EmptyCard"
 
 type Props = {
   word: Word | null
-  decks: Deck[]
 }
 
-const WordCard = ({ word, decks }: Props) => {
+const WordCard = ({ word }: Props) => {
   const navigate = useNavigate()
   const [formIndex, setFormIndex] = useState(0)
   const [kanjiIndex, setKanjiIndex] = useState(0)
+
+  if (!word) return <EmptyCard text="Select a word" icon={LucideSearch} />
 
   const handleAddToDeck = (deckId: number) => {
     console.log(
@@ -36,8 +38,6 @@ const WordCard = ({ word, decks }: Props) => {
   }
 
   const { data: kanjisGroup = [] } = useKanji(word)
-
-  if (!word) return <Card>{"<Word />"}</Card>
 
   const selectedWordForm = word.forms[formIndex]
   const selectedKanjis = kanjisGroup[formIndex] ?? []
@@ -56,7 +56,8 @@ const WordCard = ({ word, decks }: Props) => {
                 : "hover:bg-sidebar-primary/30",
             )}
             onClick={() => {
-              ;(setFormIndex(index), setKanjiIndex(0))
+              setFormIndex(index)
+              setKanjiIndex(0)
             }}
           >
             {form.text}
@@ -165,3 +166,23 @@ const WordCard = ({ word, decks }: Props) => {
   )
 }
 export default WordCard
+
+const decks: Deck[] = [
+  DeckSchema.parse({
+    id: 1,
+    title: "Hiragana",
+    description: "Basic Japanese syllabary",
+    cardCount: 46,
+    learnedCount: 23,
+    dueCount: 26,
+  }),
+
+  DeckSchema.parse({
+    id: 2,
+    title: "Katakana",
+    description: "Foreign-word syllabary",
+    cardCount: 46,
+    learnedCount: 2,
+    dueCount: 46,
+  }),
+]
