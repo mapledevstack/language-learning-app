@@ -1,19 +1,20 @@
-import { LucideLineSquiggle, Search } from "lucide-react"
-import type { Word } from "@/features/dictionary/schemas/WordSchema"
+import { LucideLineSquiggle, LucideSearch, Search } from "lucide-react"
 import { cn } from "@/utils/cn"
-import { useState, type ChangeEvent, type KeyboardEvent } from "react"
+import { useState, type KeyboardEvent } from "react"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group"
 import getSearchTokens from "../utils/getSearchTokens"
+import { Button } from "@/components/ui/button"
 
 type Props = {
   resultsCount: number
   isWriting: boolean
   setIsWriting: (isWriting: boolean) => void
   setSearch: (search: string) => void
+  setSearchMode: (mode: "word" | "meaning") => void
   tokens: string[]
   setTokens: (tokens: string[]) => void
 }
@@ -25,20 +26,25 @@ const DictionarySearch = ({
   setSearch,
   tokens,
   setTokens,
+  setSearchMode,
 }: Props) => {
   const [query, setQuery] = useState("")
+
+  const searchByMeaning = () => {
+    const value = query.trim()
+    if (!value) return
+
+    setSearchMode("meaning")
+    setSearch(value)
+  }
 
   const handleSearch = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter") return
 
-    setSearch(query) // make it just for eng?
+    searchByMeaning()
   }
 
-  const handleQueryChange = (
-    e: ChangeEvent<HTMLInputElement, HTMLInputElement>,
-  ) => {
-    const value = e.target.value
-
+  const handleQueryChange = (value: string) => {
     setQuery(value)
     setTokens(getSearchTokens(value))
   }
@@ -62,7 +68,7 @@ const DictionarySearch = ({
           <InputGroupInput
             placeholder="Search for a Word, Kanji, or Sentence..."
             value={query}
-            onChange={(e) => handleQueryChange(e)}
+            onChange={(e) => handleQueryChange(e.target.value)}
             onKeyDown={(e) => handleSearch(e)}
           />
           <InputGroupAddon>
@@ -70,6 +76,11 @@ const DictionarySearch = ({
           </InputGroupAddon>
           <InputGroupAddon align="inline-end">
             <p className="text-primary">{resultsCount}</p> results
+          </InputGroupAddon>
+          <InputGroupAddon align="inline-end">
+            <Button className="pl-6 pr-6" onClick={searchByMeaning}>
+              <LucideSearch className="text-4xl" />
+            </Button>
           </InputGroupAddon>
         </InputGroup>
       </div>
@@ -85,7 +96,10 @@ const DictionarySearch = ({
             <div
               className="bg-secondary text-secondary-foreground text-xl border p-1  rounded-md flex-1 text-center hover:bg-sidebar-primary hover:text-sidebar-primary-foreground transition-colors whitespace-nowrap"
               key={index}
-              onClick={() => setSearch(token)}
+              onClick={() => {
+                setSearchMode("word")
+                setSearch(token)
+              }}
             >
               {token}
             </div>

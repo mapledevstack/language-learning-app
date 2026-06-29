@@ -7,17 +7,19 @@ import useWordSearch from "../hooks/useWordSearch"
 
 const DictionaryPage = () => {
   const [search, setSearch] = useState("")
+  const [searchMode, setSearchMode] = useState<"word" | "meaning">("word")
   const [isWriting, setIsWriting] = useState(false)
   const [word, setWord] = useState<Word | null>(null)
   const [tokens, setTokens] = useState<string[]>([])
 
-  const { data: results = [] } = useWordSearch(search)
+  const { data: results = [] } = useWordSearch(search, searchMode)
 
   return (
     <div className="h-full flex flex-col p-10 gap-6">
       <section>
         <DictionarySearch
           resultsCount={results.length}
+          setSearchMode={setSearchMode}
           isWriting={isWriting}
           setIsWriting={setIsWriting}
           setSearch={setSearch}

@@ -43,3 +43,17 @@ export const getResults = async (search: string, limit: number) => {
 
   return WordsSchema.parse(data)
 }
+
+export const getResultsFromMeaning = async (search: string, limit: number) => {
+  const res = await fetch(
+    `${API_BASE_URL}/dictionary/search/meaning?q=${search}&limit=${limit}`,
+  )
+
+  if (!res.ok) {
+    throw new Error("failed to fetch kanjis")
+  }
+
+  const data = await res.json()
+
+  return WordsSchema.parse(data)
+}
