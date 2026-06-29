@@ -219,11 +219,11 @@ export const sendPasswordResetEmail = async (email: string) => {
 }
 
 export const resetPassword = async (
-  verificationCodeId: string,
+  verificationCode: string,
   password: string,
 ) => {
   const verification = await VerificationCode.findOne({
-    _id: verificationCodeId,
+    _id: verificationCode,
     type: VerificationCodes.PasswordReset,
     expiresAt: { $gt: new Date() },
   })

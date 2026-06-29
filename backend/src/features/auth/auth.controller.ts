@@ -111,9 +111,9 @@ export const sendPasswordResetEmailController = catchErrors(
 )
 
 export const resetPasswordController = catchErrors(async (req, res) => {
-  const { verificationCodeId, password } = resetPasswordSchema.parse(req.body)
+  const { verificationCode, password } = resetPasswordSchema.parse(req.body)
 
-  await resetPassword(verificationCodeId, password)
+  await resetPassword(verificationCode, password)
 
   return clearAuthCookies(res).status(OK).json({
     message: "Password reset successfully",
