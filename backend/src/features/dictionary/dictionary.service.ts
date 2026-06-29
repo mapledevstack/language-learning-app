@@ -1,6 +1,8 @@
 import { isJapanese, isRomaji, toKana } from "wanakana"
 import { escapeRegex } from "../../utils/regex.js"
 import { Kanji, Word } from "./dictionary.model.js"
+import AppError from "../../utils/appError.js"
+import { BAD_GATEWAY } from "../../constants/http.js"
 
 export const getKanji = async (kanji: string) => {
   const result = await Kanji.findOne({ kanji }).lean()
@@ -75,4 +77,38 @@ export const getSearchFromMeaning = async (q: string, limit: number) => {
       return Number(bCommon) - Number(aCommon)
     })
     .slice(0, limit)
+}
+
+type TatoebaSentence = {
+  text: string
+  translations?: {
+    text: string
+    lang: string
+  }[][]
+}
+
+export const getSentences = async (q: string, limit = 3) => {
+  const url = new URL("https://tatoeba.org/en/api_v0/search")
+
+  url.searchParams.set("from", "jpn")
+  url.searchParams.set("to", "eng")
+  url.searchParams.set("query", q)
+  url.searchParams.set("orphans", "no")
+  url.searchParams.set("unapproved", "no")
+
+  const res = await fetch(url)
+
+  if (!res.ok) {
+    throw new AppError("Could not fetch example sentences", BAD_GATEWAY)
+  }
+
+  const data = await res.json()
+
+  return data.results.slice(0, limit).map((sentence: TatoebaSentence) => ({
+    japanese: sentence.text,
+    english:
+      sentence.translations
+        ?.flat()
+        .find((translation) => translation.lang === "eng")?.text ?? null,
+  }))
 }

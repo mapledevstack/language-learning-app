@@ -19,6 +19,8 @@ import KanjiKanaWord from "./KanjiKanaWord"
 import useKanji from "../hooks/useKanji"
 import KanjiCard from "./KanjiCard"
 import EmptyCard from "@/components/cards/EmptyCard"
+import useSentences from "../hooks/useSentences"
+import ExampleSentences from "./ExampleSentences"
 
 type Props = {
   word: Word | null
@@ -40,6 +42,7 @@ const WordCard = ({ word }: Props) => {
   const { data: kanjisGroup = [] } = useKanji(word)
 
   const selectedWordForm = word.forms[formIndex]
+  const { data: sentences = [] } = useSentences(selectedWordForm.text, 3)
   const selectedKanjis = kanjisGroup[formIndex] ?? []
   const selectedKanji = selectedKanjis[kanjiIndex]
 
@@ -140,6 +143,8 @@ const WordCard = ({ word }: Props) => {
           ))}
         </ol>
       </div>
+
+      <ExampleSentences sentences={sentences} />
 
       {selectedKanjis.length > 0 && (
         <div className="w-full flex gap-2 border p-2 rounded-md bg-accent overflow-x-auto whitespace-nowrap justify-center">

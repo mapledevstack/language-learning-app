@@ -4,10 +4,12 @@ import {
   getKanjis,
   getSearchFromMeaning,
   getSearchResults,
+  getSentences,
 } from "./dictionary.service.js"
 import { searchQuerySchema } from "./dictionary.schema.js"
 import catchErrors from "../../utils/catchErrors.js"
-import { OK } from "../../constants/http.js"
+import { BAD_REQUEST, OK } from "../../constants/http.js"
+import AppError from "../../utils/appError.js"
 
 export const getKanjiController = async (req: Request, res: Response) => {
   const query = req.query.q
@@ -52,4 +54,16 @@ export const searchFromMeaningController = catchErrors(async (req, res) => {
   const results = await getSearchFromMeaning(request.q, request.limit)
 
   return res.status(OK).json(results)
+})
+
+export const getSentencesController = catchErrors(async (req, res) => {
+  const { q, limit = 3 } = req.query
+
+  if (!q || typeof q !== "string") {
+    throw new AppError("Search query is required", BAD_REQUEST)
+  }
+
+  const sentences = await getSentences(q, Number(limit))
+
+  return res.status(OK).json(sentences)
 })

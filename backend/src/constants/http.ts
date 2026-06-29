@@ -8,6 +8,7 @@ export const CONFLICT = 409
 export const UNPROCESSABLE_CONTENT = 422
 export const TOO_MANY_REQUESTS = 429
 export const INTERNAL_SERVER_ERROR = 500
+export const BAD_GATEWAY = 502
 
 export type HttpStatusCode =
   | typeof OK
@@ -20,3 +21,4 @@ export type HttpStatusCode =
   | typeof UNPROCESSABLE_CONTENT
   | typeof TOO_MANY_REQUESTS
   | typeof INTERNAL_SERVER_ERROR
+  | typeof BAD_GATEWAY

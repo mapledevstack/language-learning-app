@@ -1,6 +1,8 @@
 import { KanjiSchema } from "../schemas/KanjiSchema"
 import { z } from "zod"
 import { WordsSchema } from "../schemas/WordSchema"
+import api from "@/utils/api"
+import { SentencesSchema, type Sentence } from "../schemas/SentenceSchema"
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -56,4 +58,15 @@ export const getResultsFromMeaning = async (search: string, limit: number) => {
   const data = await res.json()
 
   return WordsSchema.parse(data)
+}
+
+export const getSentences = async (
+  word: string,
+  limit = 3,
+): Promise<Sentence[]> => {
+  const data = await api.get(
+    `/dictionary/sentences?q=${encodeURIComponent(word)}&limit=${limit}`,
+  )
+
+  return SentencesSchema.parse(data)
 }
