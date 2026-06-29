@@ -1,7 +1,13 @@
 import { Request, Response } from "express"
-import { getKanji, getKanjis, getSearchResults } from "./dictionary.service.js"
+import {
+  getKanji,
+  getKanjis,
+  getSearchFromMeaning,
+  getSearchResults,
+} from "./dictionary.service.js"
 import { searchQuerySchema } from "./dictionary.schema.js"
 import catchErrors from "../../utils/catchErrors.js"
+import { OK } from "../../constants/http.js"
 
 export const getKanjiController = async (req: Request, res: Response) => {
   const query = req.query.q
@@ -38,4 +44,12 @@ export const getSearchResultsController = catchErrors(async (req, res) => {
   const results = await getSearchResults(q, limit)
 
   res.json(results)
+})
+
+export const searchFromMeaningController = catchErrors(async (req, res) => {
+  const request = searchQuerySchema.parse(req.query)
+
+  const results = await getSearchFromMeaning(request.q, request.limit)
+
+  return res.status(OK).json(results)
 })

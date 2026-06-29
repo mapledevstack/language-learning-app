@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import { MONGO_URI } from "../constants/env.js"
 
-const connectDB = async (retries = 3) => {
+const connectDB = async (retries = 5) => {
   if (retries === 0) {
     process.exit(1)
   }
