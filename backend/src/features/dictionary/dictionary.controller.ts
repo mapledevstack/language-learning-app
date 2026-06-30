@@ -1,4 +1,3 @@
-import { Request, Response } from "express"
 import {
   getKanji,
   getKanjis,
@@ -11,47 +10,48 @@ import catchErrors from "../../utils/catchErrors.js"
 import { BAD_REQUEST, OK } from "../../constants/http.js"
 import AppError from "../../utils/appError.js"
 
-export const getKanjiController = async (req: Request, res: Response) => {
+export const getKanjiController = catchErrors(async (req, res) => {
   const query = req.query.q
 
   if (typeof query !== "string" || !query.trim()) {
-    throw new Error("valid query required for kanji")
+    throw new AppError("Valid query is required for kanji", BAD_REQUEST)
   }
 
   const result = await getKanji(query.trim())
 
-  res.json(result)
-}
+  return res.status(OK).json(result)
+})
 
-export const getKanjisController = async (req: Request, res: Response) => {
+export const getKanjisController = catchErrors(async (req, res) => {
   const query = req.query.q
 
-  if (
-    typeof query !== "string" &&
-    !(Array.isArray(query) && query.every((q) => typeof q === "string"))
-  ) {
-    throw new Error("valid query required for kanjis")
+  const isValidQuery =
+    typeof query === "string" ||
+    (Array.isArray(query) && query.every((q) => typeof q === "string"))
+
+  if (!isValidQuery) {
+    throw new AppError("Valid query is required for kanjis", BAD_REQUEST)
   }
 
   const kanjis = Array.isArray(query) ? query : [query]
 
   const result = await getKanjis(kanjis)
 
-  res.json(result)
-}
+  return res.status(OK).json(result)
+})
 
 export const getSearchResultsController = catchErrors(async (req, res) => {
   const { q, limit } = searchQuerySchema.parse(req.query)
 
   const results = await getSearchResults(q, limit)
 
-  res.json(results)
+  return res.status(OK).json(results)
 })
 
 export const searchFromMeaningController = catchErrors(async (req, res) => {
-  const request = searchQuerySchema.parse(req.query)
+  const { q, limit } = searchQuerySchema.parse(req.query)
 
-  const results = await getSearchFromMeaning(request.q, request.limit)
+  const results = await getSearchFromMeaning(q, limit)
 
   return res.status(OK).json(results)
 })

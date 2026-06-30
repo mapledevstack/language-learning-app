@@ -1,23 +1,22 @@
-import { isJapanese, isRomaji, toKana } from "wanakana"
+import { isRomaji, toKana } from "wanakana"
 import { escapeRegex } from "../../utils/regex.js"
 import { Kanji, Word } from "./dictionary.model.js"
 import AppError from "../../utils/appError.js"
-import { BAD_GATEWAY } from "../../constants/http.js"
+import { BAD_GATEWAY, NOT_FOUND } from "../../constants/http.js"
+import { TATOEBA_API_URL } from "../../constants/env.js"
 
 export const getKanji = async (kanji: string) => {
   const result = await Kanji.findOne({ kanji }).lean()
 
   if (!result) {
-    throw new Error("kanji not found")
+    throw new AppError("Kanji not found", NOT_FOUND)
   }
 
   return result
 }
 
 export const getKanjis = async (kanjis: string[]) => {
-  const result = await Kanji.find({ kanji: { $in: kanjis } }).lean()
-
-  return result
+  return Kanji.find({ kanji: { $in: kanjis } }).lean()
 }
 
 export const getSearchResults = async (q: string, limit: number) => {
@@ -88,7 +87,7 @@ type TatoebaSentence = {
 }
 
 export const getSentences = async (q: string, limit = 3) => {
-  const url = new URL("https://tatoeba.org/en/api_v0/search")
+  const url = new URL(TATOEBA_API_URL)
 
   url.searchParams.set("from", "jpn")
   url.searchParams.set("to", "eng")
