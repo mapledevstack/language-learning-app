@@ -13,6 +13,7 @@ import authRoutes from "./features/auth/auth.routes.js"
 import authenticate from "./middleware/authenticate.js"
 import userRoutes from "./features/users/user.routes.js"
 import sessionRoutes from "./features/auth/session.routes.js"
+import grammarRoutes from "./features/grammar/grammar.routes.js"
 
 const app = express()
 
@@ -30,6 +31,7 @@ app.use("/api/v1/sessions", authenticate, sessionRoutes)
 
 app.use("/api/v1/dictionary", dictionaryRoutes)
 app.use("/api/v1/immersion", immersionRoutes)
+app.use("/api/v1/grammar", grammarRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
