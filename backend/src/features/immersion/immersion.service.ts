@@ -1,91 +1,14 @@
 import { fetchTranscript } from "youtube-transcript"
-import "dotenv/config"
 import { Subtitle, Topic, Video } from "./immersion.model.js"
+import { TopicType, VideoResult } from "./immersion.schemas.js"
+import AppError from "../../utils/appError.js"
+import { BAD_GATEWAY, NOT_FOUND } from "../../constants/http.js"
 import {
-  TopicType,
-  VideoResult,
-  YoutubeSearchResponse,
-} from "./immersion.types.js"
-import { Types } from "mongoose"
-import kuromoji, { IpadicFeatures, Tokenizer } from "kuromoji"
-
-const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY
-
-const fetchYoutubeVideos = async (topic: string) => {
-  const params = new URLSearchParams({
-    maxResults: "50",
-    type: "video",
-    part: "snippet",
-    regionCode: "JP",
-    relevanceLanguage: "ja",
-    videoEmbeddable: "true",
-    safeSearch: "none",
-    videoCaptions: "closedCaption",
-    videoDuration: "medium",
-    q: `${topic}日本語で`,
-    key: YOUTUBE_API_KEY!,
-  })
-  const url = `https://content-youtube.googleapis.com/youtube/v3/search?${params}`
-
-  const res = await fetch(url)
-  if (!res.ok) {
-    throw new Error(`Youtube API returned ${res.status}`)
-  }
-
-  const data: YoutubeSearchResponse = await res.json()
-
-  const videos = data.items.map((item) => ({
-    vidId: item.id.videoId,
-    title: item.snippet.title,
-  }))
-
-  return videos
-}
-
-const cacheVideos = async (topicId: Types.ObjectId, videos: VideoResult[]) => {
-  for (const video of videos) {
-    await Video.updateOne(
-      { vidId: video.vidId },
-      { $set: video },
-      { upsert: true },
-    )
-  }
-
-  await Topic.findByIdAndUpdate(topicId, {
-    $addToSet: {
-      vidIds: {
-        $each: videos.map((video) => video.vidId),
-      },
-    },
-  })
-}
-
-let tokenizer: kuromoji.Tokenizer<kuromoji.IpadicFeatures> | null = null
-
-const getTokenizer = async () => {
-  if (tokenizer) return tokenizer
-
-  tokenizer = await new Promise<Tokenizer<IpadicFeatures>>(
-    (resolve, reject) => {
-      kuromoji
-        .builder({ dicPath: "node_modules/kuromoji/dict" })
-        .build((err, tokenizer) => {
-          if (err) reject(err)
-          else resolve(tokenizer)
-        })
-    },
-  )
-  return tokenizer
-}
-
-const hasJpSubtitles = async (vidId: string) => {
-  try {
-    await getSubtitles(vidId)
-    return true
-  } catch {
-    return false
-  }
-}
+  cacheVideos,
+  fetchYoutubeVideos,
+  hasJpSubtitles,
+} from "./immersion.utils.js"
+import { getTokenizer } from "../../config/tokenizer.js"
 
 export const getAllTopics = async () => {
   const topics = await Topic.aggregate([
@@ -94,7 +17,6 @@ export const getAllTopics = async () => {
         name: 1,
         type: 1,
         coverImg: 1,
-
         vidCount: {
           $size: "$vidIds",
         },
@@ -123,8 +45,12 @@ export const createTopic = async (
     },
   )
 
+  if (!topic) {
+    throw new AppError("Could not create topic", BAD_GATEWAY)
+  }
+
   const videos = await fetchYoutubeVideos(name)
-  const filteredVideos = []
+  const filteredVideos: VideoResult[] = []
 
   for (const video of videos) {
     if (await hasJpSubtitles(video.vidId)) {
@@ -134,14 +60,14 @@ export const createTopic = async (
 
   await cacheVideos(topic._id, filteredVideos)
 
-  return await Topic.findById(topic._id)
+  return Topic.findById(topic._id)
 }
 
 export const deleteTopic = async (topicId: string) => {
   const topic = await Topic.findByIdAndDelete(topicId)
 
   if (!topic) {
-    throw new Error("topic not found")
+    throw new AppError("Topic not found", NOT_FOUND)
   }
 }
 
@@ -149,18 +75,18 @@ export const getTopicVideos = async (topicId: string) => {
   const topic = await Topic.findById(topicId).lean()
 
   if (!topic) {
-    throw new Error("topic not found")
+    throw new AppError("Topic not found", NOT_FOUND)
   }
 
-  const videos = Video.find({
+  const videos = await Video.find({
     vidId: { $in: topic.vidIds },
-  })
+  }).lean()
 
   return videos
 }
 
 export const getSubtitles = async (vidId: string) => {
-  const cachedSubtitles = await Subtitle.findOne({ vidId: vidId })
+  const cachedSubtitles = await Subtitle.findOne({ vidId }).lean()
 
   if (cachedSubtitles) {
     return cachedSubtitles.subtitles
@@ -173,7 +99,6 @@ export const getSubtitles = async (vidId: string) => {
     text: sub.text,
     offset: sub.offset,
     duration: sub.duration,
-
     tokens: tokenizer.tokenize(sub.text).map((token) => ({
       text: token.surface_form,
       baseForm:

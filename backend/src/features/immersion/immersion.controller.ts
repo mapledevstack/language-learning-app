@@ -6,6 +6,11 @@ import {
   getSubtitles,
   getTopicVideos,
 } from "./immersion.service.js"
+import {
+  createTopicSchema,
+  topicParamsSchema,
+  videoParamsSchema,
+} from "./immersion.schemas.js"
 
 export const getAllTopicsController = async (req: Request, res: Response) => {
   const topics = await getAllTopics()
@@ -14,13 +19,9 @@ export const getAllTopicsController = async (req: Request, res: Response) => {
 }
 
 export const createTopicController = async (req: Request, res: Response) => {
-  const { name, coverImg, type } = req.body
+  const { name, coverImg, type } = createTopicSchema.parse(req.body)
 
-  if (!name.trim()) {
-    throw new Error("topic name is required")
-  }
-
-  const topic = await createTopic(name.trim(), coverImg, type)
+  const topic = await createTopic(name, coverImg, type)
 
   res.status(201).json(topic)
 }
@@ -29,7 +30,7 @@ export const deleteTopicController = async (
   req: Request<{ topicId: string }>,
   res: Response,
 ) => {
-  const topicId = req.params.topicId
+  const { topicId } = topicParamsSchema.parse(req.params)
 
   await deleteTopic(topicId)
 
@@ -40,20 +41,20 @@ export const getTopicVideosController = async (
   req: Request<{ topicId: string }>,
   res: Response,
 ) => {
-  const topicId = req.params.topicId
+  const { topicId } = topicParamsSchema.parse(req.params)
 
   const videos = await getTopicVideos(topicId)
 
   res.json(videos)
 }
 
-export const getSubtitlesController = async (req: Request, res: Response) => {
-  const vidId = req.params.vidId
-
-  if (typeof vidId !== "string") {
-    throw new Error("Video Id not valid")
-  }
+export const getSubtitlesController = async (
+  req: Request<{ vidId: string }>,
+  res: Response,
+) => {
+  const { vidId } = videoParamsSchema.parse(req.params)
 
   const subtitles = await getSubtitles(vidId)
+
   res.json(subtitles)
 }
