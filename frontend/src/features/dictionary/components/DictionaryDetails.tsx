@@ -7,13 +7,12 @@ import { LucideSearch } from "lucide-react"
 type Props = {
   isWriting: boolean
   word: Word | null
-  setTokens: (tokens: string[]) => void
 }
 
-const DictionaryDetails = ({ isWriting, word, setTokens }: Props) => {
+const DictionaryDetails = ({ isWriting, word }: Props) => {
   return (
     <div className="h-full overflow-y-auto">
-      <HandWritingCard isWriting={isWriting} setTokens={setTokens} />
+      <HandWritingCard isWriting={isWriting} />
 
       {word ? (
         <WordCard key={word.wordId} word={word} />

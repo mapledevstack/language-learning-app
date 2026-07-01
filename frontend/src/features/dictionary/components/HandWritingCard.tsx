@@ -3,16 +3,17 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/utils/cn"
 import { LucideSearch, LucideTrash2, LucideUndo } from "lucide-react"
 import { useCallback, useEffect, useRef } from "react"
+import useDictionaryContext from "../hooks/useDictionaryContext"
 
 const CANVAS_ID = "kanji-canvas"
 
 type Props = {
   isWriting: boolean
-  setTokens: (tokens: string[]) => void
 }
 
-const HandWritingCard = ({ isWriting, setTokens }: Props) => {
+const HandWritingCard = ({ isWriting }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { setTokens } = useDictionaryContext()
 
   useEffect(() => {
     const canvas = canvasRef.current

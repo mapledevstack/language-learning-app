@@ -4,6 +4,7 @@ import DictionaryResults from "../components/DictionaryResults"
 import DictionarySearch from "../components/DictionarySearch"
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import useWordSearch from "../hooks/useWordSearch"
+import { DictionaryContext } from "../hooks/useDictionaryContext"
 
 const DictionaryPage = () => {
   const [search, setSearch] = useState("")
@@ -29,11 +30,10 @@ const DictionaryPage = () => {
       </section>
 
       <section className="flex-1 md:min-h-0 grid md:grid-cols-[3fr_7fr] gap-4 items-start">
-        <DictionaryDetails
-          isWriting={isWriting}
-          word={word}
-          setTokens={setTokens}
-        />
+        <DictionaryContext.Provider value={{ setTokens }}>
+          <DictionaryDetails isWriting={isWriting} word={word} />
+        </DictionaryContext.Provider>
+
         <DictionaryResults
           setWord={setWord}
           currentWord={word}

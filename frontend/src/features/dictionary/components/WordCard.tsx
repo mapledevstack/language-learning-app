@@ -119,7 +119,7 @@ const WordCard = ({ word }: Props) => {
         <KanjiCard key={selectedKanji._id} kanji={selectedKanji} />
       )}
 
-      <ExampleSentences sentences={sentences} />
+      {sentences.length > 0 && <ExampleSentences sentences={sentences} />}
     </Card>
   )
 }
