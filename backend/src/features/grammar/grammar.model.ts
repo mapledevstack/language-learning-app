@@ -29,7 +29,6 @@ const grammarResourceSchema = new Schema(
     embedding: {
       type: [Number],
       required: true,
-      select: false,
     },
   },
   { versionKey: false },

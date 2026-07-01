@@ -1,11 +1,16 @@
 import { GrammarResource } from "./grammar.model.js"
+import { cosineSimilarity, getEmbedding } from "./grammar.utils.js"
 
 export const searchGrammar = async (q: string, limit: number) => {
-  const regex = new RegExp(q, "i")
+  const queryEmbedding = await getEmbedding(q)
 
-  return GrammarResource.find({
-    $or: [{ title: regex }, { preview: regex }, { source: regex }],
-  })
-    .limit(limit)
-    .lean()
+  const resources = await GrammarResource.find().lean()
+
+  return resources
+    .map(({ embedding, ...resource }) => ({
+      ...resource,
+      score: cosineSimilarity(queryEmbedding, embedding),
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
 }

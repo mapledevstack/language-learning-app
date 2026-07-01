@@ -21,3 +21,19 @@ export const getEmbedding = async (text: string): Promise<number[]> => {
 
   return embedding
 }
+
+export const cosineSimilarity = (a: number[], b: number[]) => {
+  let dot = 0
+  let aMagnitude = 0
+  let bMagnitude = 0
+
+  for (let i = 0; i < a.length; i++) {
+    dot += a[i]! * b[i]!
+    aMagnitude += a[i]! * a[i]!
+    bMagnitude += b[i]! * b[i]!
+  }
+
+  if (aMagnitude === 0 || bMagnitude === 0) return 0
+
+  return dot / (Math.sqrt(aMagnitude) * Math.sqrt(bMagnitude))
+}
