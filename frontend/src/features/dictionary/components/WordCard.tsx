@@ -1,19 +1,7 @@
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import Card from "@/components/cards/Card"
-import { LucidePlus, LucideSearch } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { DeckSchema, type Deck } from "@/features/decks/schemas/DeckSchema"
 import { useState } from "react"
-import { cn } from "@/utils/cn"
 import KanjiKanaWord from "./KanjiKanaWord"
 import useKanji from "../hooks/useKanji"
 import KanjiCard from "./KanjiCard"
@@ -22,6 +10,12 @@ import ExampleSentences from "./ExampleSentences"
 import WordFormTabs from "./WordFormTabs"
 import AddToDeckButton from "./AddToDeckButton"
 import KanjiTabs from "./KanjiTabs"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import tags from "@/constants/tags"
 
 type Props = {
   word: Word
@@ -71,7 +65,7 @@ const WordCard = ({ word }: Props) => {
           </div>
         )}
 
-        {selectedWordForm?.pitchAccent && (
+        {selectedWordForm.pitchAccent && (
           <div className="">{selectedWordForm.pitchAccent}</div>
         )}
       </div>
@@ -87,8 +81,20 @@ const WordCard = ({ word }: Props) => {
               </div>
 
               {meaning.partsOfSpeech.length > 0 && (
-                <div className="text-sm text-sidebar-primary-foreground text-center bg-sidebar-primary w-fit rounded-lg p-2 mx-auto font-bold">
-                  {meaning.partsOfSpeech.join(", ")}
+                <div className="text-sm text-sidebar-primary-foreground text-center w-fit rounded-lg p-2 mx-auto font-bold gap-2 flex flex-wrap justify-center">
+                  {meaning.partsOfSpeech.map((pos) => (
+                    <div
+                      className="flex items-center bg-sidebar-primary p-1 rounded-lg text-sm font-bold text-card-foreground"
+                      key={pos}
+                    >
+                      <Tooltip key={pos}>
+                        <TooltipTrigger>{pos}</TooltipTrigger>
+                        <TooltipContent>
+                          <p>{tags[pos] ?? pos}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                  ))}
                 </div>
               )}
 
@@ -102,8 +108,6 @@ const WordCard = ({ word }: Props) => {
         </ol>
       </div>
 
-      <ExampleSentences sentences={sentences} />
-
       {selectedKanjis.length > 0 && (
         <KanjiTabs
           selectedKanjis={selectedKanjis}
@@ -114,6 +118,8 @@ const WordCard = ({ word }: Props) => {
       {selectedKanji && (
         <KanjiCard key={selectedKanji._id} kanji={selectedKanji} />
       )}
+
+      <ExampleSentences sentences={sentences} />
     </Card>
   )
 }
