@@ -2,6 +2,8 @@ import { GoogleGenAI } from "@google/genai"
 import AppError from "../../utils/appError.js"
 import { BAD_GATEWAY } from "../../constants/http.js"
 import { GOOGLE_API_KEY } from "../../constants/env.js"
+import { GrammarResource } from "./grammar.model.js"
+import { GrammarResourceWithEmbedding } from "./grammar.types.js"
 
 const ai = new GoogleGenAI({
   apiKey: GOOGLE_API_KEY,
@@ -36,4 +38,29 @@ export const cosineSimilarity = (a: number[], b: number[]) => {
   if (aMagnitude === 0 || bMagnitude === 0) return 0
 
   return dot / (Math.sqrt(aMagnitude) * Math.sqrt(bMagnitude))
+}
+
+let grammarCache: GrammarResourceWithEmbedding[] | null = null
+
+export const getGrammarResources = async () => {
+  if (grammarCache) return grammarCache
+
+  grammarCache =
+    await GrammarResource.find().lean<GrammarResourceWithEmbedding[]>()
+
+  return grammarCache
+}
+
+const queryEmbeddingCache = new Map<string, number[]>()
+
+export const getCachedEmbedding = async (q: string) => {
+  const key = q.trim().toLowerCase()
+
+  const cached = queryEmbeddingCache.get(key)
+  if (cached) return cached
+
+  const embedding = await getEmbedding(key)
+  queryEmbeddingCache.set(key, embedding)
+
+  return embedding
 }

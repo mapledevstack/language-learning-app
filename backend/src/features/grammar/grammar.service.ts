@@ -1,10 +1,12 @@
-import { GrammarResource } from "./grammar.model.js"
-import { cosineSimilarity, getEmbedding } from "./grammar.utils.js"
+import {
+  cosineSimilarity,
+  getCachedEmbedding,
+  getGrammarResources,
+} from "./grammar.utils.js"
 
 export const searchGrammar = async (q: string, limit: number) => {
-  const queryEmbedding = await getEmbedding(q)
-
-  const resources = await GrammarResource.find().lean()
+  const queryEmbedding = await getCachedEmbedding(q)
+  const resources = await getGrammarResources()
 
   return resources
     .map(({ embedding, ...resource }) => ({
