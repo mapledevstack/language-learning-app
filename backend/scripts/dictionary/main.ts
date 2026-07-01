@@ -1,7 +1,7 @@
 import "dotenv/config"
-import { downloadWords as downloadWords } from "./dictionary/downloadWords.js"
-import { transformWords as transformWords } from "./dictionary/transformWords.js"
-import { importWords as importWords } from "./dictionary/importWords.js"
+import { downloadWords as downloadWords } from "./downloadWords.js"
+import { transformWords as transformWords } from "./transformWords.js"
+import { importWords as importWords } from "./importWords.js"
 
 const MONGO_URI = process.env.MONGO_URI
 const DATA_PATH = "data"

@@ -1,5 +1,5 @@
-import { importKanji } from "./dictionary/importKanji.js"
-import { transformKanji } from "./dictionary/transformKanji.js"
+import { importKanji } from "./importKanji.js"
+import { transformKanji } from "./transformKanji.js"
 import "dotenv/config"
 
 const DATA_PATH = "data"

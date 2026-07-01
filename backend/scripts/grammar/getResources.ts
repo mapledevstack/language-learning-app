@@ -9,13 +9,12 @@ export type GrammarResource = {
 }
 
 const SOURCE = "Tae Kim's Guide to Japanese Grammar"
-const URL = "https://guidetojapanese.org/learn/grammar/verbs"
 
-const getResources = async (): Promise<GrammarResource[]> => {
-  const res = await fetch(URL)
+const getResources = async (url: string): Promise<GrammarResource[]> => {
+  const res = await fetch(url)
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch resources from ${URL}: ${res.status}`)
+    throw new Error(`Failed to fetch resources from ${url}: ${res.status}`)
   }
 
   const html = await res.text()
@@ -36,9 +35,11 @@ const getResources = async (): Promise<GrammarResource[]> => {
       title: topic,
       section: currentSection,
       source: SOURCE,
-      sourceUrl: currentSectionId ? `URL#${currentSectionId}` : URL,
+      sourceUrl: currentSectionId ? `${url}#${currentSectionId}` : url,
       content: currentContent.join("\n"),
     })
+
+    console.log(`Fetched ${currentSection}`)
   }
 
   $("article > .entry-content")
@@ -65,8 +66,6 @@ const getResources = async (): Promise<GrammarResource[]> => {
     })
 
   savePrevSection()
-
-  console.log(`Fetched ${resources.length} grammar resources from ${SOURCE}.`)
 
   return resources
 }

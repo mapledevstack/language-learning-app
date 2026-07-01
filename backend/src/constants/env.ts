@@ -26,3 +26,4 @@ export const RESEND_API_KEY = getEnv("RESEND_API_KEY")
 export const EMAIL_SENDER = getEnv("EMAIL_SENDER")
 
 export const TATOEBA_API_URL = "https://tatoeba.org/en/api_v0/search"
+export const GOOGLE_API_KEY = getEnv("GOOGLE_API_KEY")

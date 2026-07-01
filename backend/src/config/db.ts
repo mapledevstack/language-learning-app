@@ -12,7 +12,7 @@ const connectDB = async (retries = 5) => {
   } catch (error) {
     console.log(`Could not connect to DB`, error)
 
-    await new Promise((resolve) => setTimeout(resolve, 3000))
+    await new Promise((resolve) => setTimeout(resolve, 10000))
 
     return connectDB(retries - 1)
   }

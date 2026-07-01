@@ -1,9 +1,9 @@
-import { connectDB } from "../src/config/db.js"
 import "dotenv/config"
-import { createTopic } from "../src/features/immersion/immersion.service.js"
+import { createTopic } from "../../src/features/immersion/immersion.service.js"
+import connectDB from "../../src/config/db.js"
 
 const MONGO_URI = process.env.MONGO_URI
-await connectDB(MONGO_URI)
+await connectDB()
 
 const defaultTopics = [
   { name: "Cooking", jpName: "料理", coverImg: "cooking" },

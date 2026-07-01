@@ -8,6 +8,12 @@ const grammarResourceSchema = new Schema(
       trim: true,
     },
 
+    section: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
     source: {
       type: String,
       required: true,
@@ -20,22 +26,17 @@ const grammarResourceSchema = new Schema(
       trim: true,
     },
 
-    preview: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-
     embedding: {
       type: [Number],
       required: true,
       select: false,
     },
   },
-  { timestamps: true },
+  { versionKey: false },
 )
 
 export const GrammarResource = mongoose.model(
   "GrammarResource",
   grammarResourceSchema,
+  "grammar_resources",
 )
