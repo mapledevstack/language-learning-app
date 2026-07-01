@@ -56,8 +56,8 @@ const DictionarySearch = ({
           className={cn(
             "border p-3 rounded-full size-14 flex justify-center items-center hover:scale-105 transition-all whitespace-nowrap text-xl",
             isWriting
-              ? "bg-primary text-card-foreground"
-              : "bg-card text-primary",
+              ? "bg-primary text-card-foreground border-4"
+              : "bg-card text-primary border-primary border-4",
           )}
           onClick={() => setIsWriting(!isWriting)}
         >
