@@ -3,8 +3,6 @@ import WordCard from "./WordCard"
 import HandWritingCard from "./HandWritingCard"
 import EmptyCard from "@/components/cards/EmptyCard"
 import { LucideSearch } from "lucide-react"
-import { Suspense } from "react"
-import WordCardSkeleton from "../skeletons/WordCardSkeleton"
 
 type Props = {
   isWriting: boolean
@@ -18,9 +16,7 @@ const DictionaryDetails = ({ isWriting, word, setTokens }: Props) => {
       <HandWritingCard isWriting={isWriting} setTokens={setTokens} />
 
       {word ? (
-        <Suspense fallback={<WordCardSkeleton />}>
-          <WordCard key={word.wordId} word={word} />
-        </Suspense>
+        <WordCard key={word.wordId} word={word} />
       ) : (
         <EmptyCard text="Select a word" icon={LucideSearch} />
       )}
