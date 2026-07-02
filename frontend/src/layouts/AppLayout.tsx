@@ -8,6 +8,7 @@ const navigationMenu = [
   { label: "Dictionary", to: "/dictionary" },
   { label: "Flashcards", to: "/decks" },
   { label: "Immersion", to: "/immersion" },
+  { label: "Grammar", to: "/grammar" },
   { label: "Profile", to: "/profile" },
 ]
 
@@ -15,7 +16,7 @@ const AppLayout = () => {
   const [isNavOpen, setisNavOpen] = useState(false)
 
   return (
-    <div className="h-screen font-san bg-primary">
+    <div className="h-screen min-h-0 font-san bg-primary">
       <div className="bg-primary flex flex-col h-full relative">
         <div
           className="fixed top-0 left-0 w-screen z-50 flex flex-col items-center not-hover:-translate-y-26 transition-all duration-400"

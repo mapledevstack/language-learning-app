@@ -5,7 +5,6 @@ const useCurrentUser = () =>
   useQuery({
     queryKey: ["auth", "me"],
     queryFn: getCurrentUser,
-    staleTime: Infinity,
   })
 
 export default useCurrentUser

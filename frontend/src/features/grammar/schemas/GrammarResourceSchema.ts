@@ -2,10 +2,11 @@ import z from "zod"
 
 export const GrammarResourceSchema = z.object({
   _id: z.string(),
-  topic: z.string(),
+  title: z.string(),
   section: z.string(),
   source: z.string(),
   sourceUrl: z.string(),
+  score: z.number(),
 })
 
-export type GrammarResource = z.infer<typeof GrammarResourceSchema>
+export type GrammarResourceType = z.infer<typeof GrammarResourceSchema>

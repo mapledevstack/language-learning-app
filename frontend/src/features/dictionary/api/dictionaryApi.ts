@@ -3,8 +3,7 @@ import { z } from "zod"
 import { WordsSchema } from "../schemas/WordSchema"
 import api from "@/utils/api"
 import { SentencesSchema, type Sentence } from "../schemas/SentenceSchema"
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+import { API_BASE_URL } from "@/constants/env"
 
 export const getKanjis = async (kanjisGroup: string[][]) => {
   const flatKanjis = [...new Set(kanjisGroup.flat())]
