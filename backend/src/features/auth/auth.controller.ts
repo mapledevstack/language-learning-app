@@ -1,5 +1,6 @@
 import catchErrors from "../../utils/catchErrors.js"
 import {
+  demoLogin,
   loginUser,
   logoutUser,
   refreshAccessToken,
@@ -53,6 +54,19 @@ export const loginUserController = catchErrors(async (req, res) => {
 
   return setAuthCookies({ res, accessToken, refreshToken }).status(OK).json({
     message: "Login successful",
+    user,
+  })
+})
+
+export const demoLoginController = catchErrors(async (req, res) => {
+  const loginParams = {
+    userAgent: req.headers["user-agent"],
+  }
+
+  const { user, accessToken, refreshToken } = await demoLogin(loginParams)
+
+  return setAuthCookies({ res, accessToken, refreshToken }).status(OK).json({
+    message: "Demo login successful",
     user,
   })
 })

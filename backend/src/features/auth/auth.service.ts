@@ -117,6 +117,34 @@ export const loginUser = async ({
   return { user: user.omitPassword(), accessToken, refreshToken }
 }
 
+const DEMO_USER_EMAIL = "demo@example.com"
+
+export const demoLogin = async ({
+  userAgent,
+}: {
+  userAgent: string | undefined
+}) => {
+  const demoUser = await User.findOne({ email: DEMO_USER_EMAIL })
+
+  if (!demoUser) {
+    throw new AppError("Demo user not found", INTERNAL_SERVER_ERROR)
+  }
+
+  const userId = demoUser._id
+
+  const session = await Session.create({
+    userId,
+    ...(userAgent && { userAgent }),
+  })
+  const sessionId = session._id
+
+  const accessToken = signAccessToken({ userId, sessionId })
+
+  const refreshToken = signRefreshToken({ sessionId })
+
+  return { user: demoUser.omitPassword(), accessToken, refreshToken }
+}
+
 export const logoutUser = async (refreshToken: string) => {
   try {
     const { sessionId } = verifyRefreshToken(refreshToken)
