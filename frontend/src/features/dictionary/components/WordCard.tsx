@@ -19,9 +19,10 @@ import tags from "@/constants/tags"
 
 type Props = {
   word: Word
+  onTokenSelect?: (tokens: string[]) => void
 }
 
-const WordCard = ({ word }: Props) => {
+const WordCard = ({ word, onTokenSelect }: Props) => {
   const [formIndex, setFormIndex] = useState(0)
   const [kanjiIndex, setKanjiIndex] = useState(0)
 
@@ -119,7 +120,9 @@ const WordCard = ({ word }: Props) => {
         <KanjiCard key={selectedKanji._id} kanji={selectedKanji} />
       )}
 
-      {sentences.length > 0 && <ExampleSentences sentences={sentences} />}
+      {sentences.length > 0 && (
+        <ExampleSentences sentences={sentences} onTokenSelect={onTokenSelect} />
+      )}
     </Card>
   )
 }

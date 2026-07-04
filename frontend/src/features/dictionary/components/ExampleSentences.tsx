@@ -1,15 +1,13 @@
 import { useEffect } from "react"
 import type { Sentence } from "../schemas/SentenceSchema"
-import useDictionaryContext from "../hooks/useDictionaryContext"
 import getSearchTokens from "../utils/getSearchTokens"
 
 type Props = {
   sentences: Sentence[]
+  onTokenSelect?: (tokens: string[]) => void
 }
 
-const ExampleSentences = ({ sentences }: Props) => {
-  const { setTokens } = useDictionaryContext()
-
+const ExampleSentences = ({ sentences, onTokenSelect }: Props) => {
   useEffect(() => {
     const handleSelection = () => {
       const text = window.getSelection()?.toString().trim()
@@ -21,7 +19,7 @@ const ExampleSentences = ({ sentences }: Props) => {
       const tokens = getSearchTokens(text)
       console.log("Selected text:", text)
       console.log("Extracted tokens:", tokens)
-      setTokens(tokens)
+      onTokenSelect?.(tokens)
     }
 
     document.addEventListener("selectionchange", handleSelection)

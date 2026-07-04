@@ -2,7 +2,7 @@ import Card from "@/components/cards/Card"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/utils/cn"
 import { LucideSearch, LucideTrash2, LucideUndo } from "lucide-react"
-import { useCallback, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import useDictionaryContext from "../hooks/useDictionaryContext"
 
 const CANVAS_ID = "kanji-canvas"
