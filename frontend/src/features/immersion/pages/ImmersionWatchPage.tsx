@@ -1,14 +1,13 @@
 import WordCard from "@/features/dictionary/components/WordCard"
-import { DeckSchema, type Deck } from "@/features/decks/schemas/DeckSchema"
 import SubtitleCard from "../components/SubtitleCard"
 import VideoCard from "../components/VideoCard"
 import { Suspense, useEffect, useState } from "react"
 import type { YouTubePlayer } from "react-youtube"
 import { Route } from "@/routes/_app/immersion/$vidId"
 import { ErrorBoundary } from "react-error-boundary"
-import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import useWordSearch from "@/features/dictionary/hooks/useWordSearch"
 import { LucideChevronLeft, LucideChevronRight } from "lucide-react"
+import EmptyCard from "@/components/cards/EmptyCard"
 
 const ImmersionWatchPage = () => {
   const [player, setPlayer] = useState<YouTubePlayer | undefined>()
@@ -16,7 +15,11 @@ const ImmersionWatchPage = () => {
   const [search, setSearch] = useState("")
   const [resultIndex, setResultIndex] = useState(0)
 
-  const { data: results = [] } = useWordSearch(search, 5)
+  const [sideBar, setSideBar] = useState<"wordDetails" | "videoStats">(
+    "wordDetails",
+  )
+
+  const { data: results = [] } = useWordSearch(search, "word", 30)
 
   const { vidId } = Route.useParams()
 
@@ -84,190 +87,70 @@ const ImmersionWatchPage = () => {
       </section>
 
       <section className="flex flex-col h-full min-h-0 gap-2 overflow-x-hidden">
-        <div className="bg-card p-4 w-full rounded-lg">
-          Vid Stats or WordDetails Switch
-        </div>
-        <div className="flex-1 min-h-0 overflow-y-scroll flex flex-col gap-2">
-          <div className="w-full flex">
-            <button
-              className="flex-1 bg-card p-4 rounded-lg grid place-items-center disabled:text-muted not-disabled:bg-accent text-accent-foreground not-disabled:hover:scale-105 transition-all m-2"
-              onClick={() =>
-                setResultIndex((index) => (index === 0 ? index : index - 1))
-              }
-              disabled={resultIndex === 0}
-            >
-              <LucideChevronLeft />
-            </button>
-            <button
-              className="flex-1 bg-card p-4 rounded-lg grid place-items-center disabled:text-muted not-disabled:bg-accent text-accent-foreground not-disabled:hover:scale-105 transition-all m-2"
-              onClick={() =>
-                setResultIndex((index) =>
-                  index === results.length - 1 ? index : index + 1,
-                )
-              }
-              disabled={
-                results.length === 0 || resultIndex === results.length - 1
-              }
-            >
-              <LucideChevronRight />
-            </button>
+        <div className="bg-card p-4 w-full rounded-lg flex gap-4 text-center font-bold text-accent-foreground">
+          <div
+            className={`flex-1 cursor-pointer hover:bg-primary transition-all p-2 rounded-lg border-2 ${
+              sideBar === "wordDetails"
+                ? "border-accent-foreground"
+                : "border-transparent"
+            } tracking-wider`}
+            onClick={() => setSideBar("wordDetails")}
+          >
+            Word Details
           </div>
-          <div className="flex-1 min-h-0">
-            <WordCard
-              key={results[resultIndex]?.wordId ?? 0}
-              word={results[resultIndex] ?? null}
-              decks={decks}
-            />
+          <div
+            className={`flex-1 cursor-pointer hover:bg-primary transition-all p-2 rounded-lg border-2 ${
+              sideBar === "videoStats"
+                ? "border-accent-foreground"
+                : "border-transparent"
+            } tracking-wider`}
+            onClick={() => setSideBar("videoStats")}
+          >
+            Video Stats
           </div>
         </div>
+        {sideBar === "wordDetails" ? (
+          <div className="flex-1 min-h-0 overflow-y-scroll flex flex-col gap-2">
+            <div className="w-full flex">
+              <button
+                className="flex-1 bg-card p-4 rounded-lg grid place-items-center disabled:text-muted not-disabled:bg-accent text-accent-foreground not-disabled:hover:scale-105 transition-all m-2"
+                onClick={() =>
+                  setResultIndex((index) => (index === 0 ? index : index - 1))
+                }
+                disabled={resultIndex === 0}
+              >
+                <LucideChevronLeft />
+              </button>
+              <button
+                className="flex-1 bg-card p-4 rounded-lg grid place-items-center disabled:text-muted not-disabled:bg-accent text-accent-foreground not-disabled:hover:scale-105 transition-all m-2"
+                onClick={() =>
+                  setResultIndex((index) =>
+                    index === results.length - 1 ? index : index + 1,
+                  )
+                }
+                disabled={
+                  results.length === 0 || resultIndex === results.length - 1
+                }
+              >
+                <LucideChevronRight />
+              </button>
+            </div>
+            <div className="flex-1 min-h-0">
+              {results.length > 0 ? (
+                <WordCard
+                  key={results[resultIndex].wordId}
+                  word={results[resultIndex]}
+                />
+              ) : (
+                <EmptyCard text="Select a word" />
+              )}
+            </div>
+          </div>
+        ) : (
+          <EmptyCard text="Video Stats Coming Soon" />
+        )}
       </section>
     </div>
   )
 }
 export default ImmersionWatchPage
-
-const decks: Deck[] = [
-  DeckSchema.parse({
-    id: 1,
-    title: "Hiragana",
-    description: "Basic Japanese syllabary",
-    cardCount: 46,
-    learnedCount: 23,
-    dueCount: 26,
-  }),
-
-  DeckSchema.parse({
-    id: 2,
-    title: "Katakana",
-    description: "Foreign-word syllabary",
-    cardCount: 46,
-    learnedCount: 2,
-    dueCount: 46,
-  }),
-]
-
-const words: Word[] = [
-  {
-    wordId: "1000040",
-    forms: [
-      {
-        text: "〃",
-        reading: "おなじ",
-        furigana: [
-          {
-            text: "〃",
-            reading: "おなじ",
-          },
-        ],
-        common: false,
-        tags: [],
-        pitchAccent: "LHHH",
-      },
-    ],
-    meanings: [
-      {
-        definitions: ["ditto mark"],
-        partsOfSpeech: ["n"],
-        tags: [],
-        notes: [],
-      },
-    ],
-  },
-
-  {
-    wordId: "1000110",
-    forms: [
-      {
-        text: "ＣＤプレーヤー",
-        reading: "シーディープレーヤー",
-        furigana: [
-          {
-            text: "Ｃ",
-            reading: "シー",
-          },
-          {
-            text: "Ｄ",
-            reading: "ディー",
-          },
-          {
-            text: "プレーヤー",
-            reading: null,
-          },
-        ],
-        common: true,
-        tags: [],
-        pitchAccent: "LHHhHHLLLLL",
-      },
-      {
-        text: "ＣＤプレイヤー",
-        reading: "シーディープレイヤー",
-        furigana: [
-          {
-            text: "Ｃ",
-            reading: "シー",
-          },
-          {
-            text: "Ｄ",
-            reading: "ディー",
-          },
-          {
-            text: "プレイヤー",
-            reading: null,
-          },
-        ],
-        common: false,
-        tags: [],
-        pitchAccent: null,
-      },
-    ],
-    meanings: [
-      {
-        definitions: ["CD player", "amamamamamama", "Insane omg"],
-        partsOfSpeech: ["n"],
-        tags: [],
-        notes: [],
-      },
-    ],
-  },
-
-  {
-    wordId: "1000420",
-    forms: [
-      {
-        text: "彼の",
-        reading: "あの",
-        furigana: [
-          {
-            text: "彼",
-            reading: "あ",
-          },
-          {
-            text: "の",
-            reading: null,
-          },
-        ],
-        common: false,
-        tags: ["rK"],
-        pitchAccent: "LHH",
-      },
-      {
-        text: "あん",
-        reading: "あん",
-        furigana: [],
-        common: false,
-        tags: [],
-        pitchAccent: "HLL",
-      },
-    ],
-    meanings: [
-      {
-        definitions: ["that", "those", "the", "Insane omg"],
-        partsOfSpeech: ["adj-pn"],
-        tags: ["uk"],
-        notes: [
-          "someone or something distant from both speaker and listener, or situation unfamiliar to both speaker and listener",
-        ],
-      },
-    ],
-  },
-]
