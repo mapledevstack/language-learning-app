@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Route } from "@/routes/_public/auth"
 import { useMutation } from "@tanstack/react-query"
 import { useState, type SubmitEvent } from "react"
-import { login } from "../api/authApi"
+import { demoLogin, login } from "../api/authApi"
 import { Spinner } from "@/components/ui/spinner"
 import { Link } from "@tanstack/react-router"
 
@@ -20,8 +20,19 @@ const LoginForm = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const { mutate, isPending, isError } = useMutation({
+  const {
+    mutate: loginMutation,
+    isPending,
+    isError,
+  } = useMutation({
     mutationFn: login,
+    onSuccess: () => {
+      navigate({ to: "/dashboard", replace: true })
+    },
+  })
+
+  const { mutate: loginDemo, isPending: isDemoPending } = useMutation({
+    mutationFn: demoLogin,
     onSuccess: () => {
       navigate({ to: "/dashboard", replace: true })
     },
@@ -30,7 +41,7 @@ const LoginForm = () => {
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    mutate({ email, password })
+    loginMutation({ email, password })
   }
 
   return (
@@ -112,6 +123,17 @@ const LoginForm = () => {
             }}
           >
             Create new account?
+          </Button>
+        </Field>
+
+        <Field>
+          <Button
+            type="button"
+            variant={"link"}
+            onClick={() => loginDemo()}
+            disabled={isDemoPending || isPending}
+          >
+            Try Demo Account?
           </Button>
         </Field>
       </FieldGroup>

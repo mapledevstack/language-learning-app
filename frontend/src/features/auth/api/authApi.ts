@@ -25,3 +25,5 @@ export const getCurrentUser = async (): Promise<User> => {
   const user = await api.get("/me")
   return UserSchema.parse(user)
 }
+
+export const demoLogin = () => api.post("/auth/login/demo")
