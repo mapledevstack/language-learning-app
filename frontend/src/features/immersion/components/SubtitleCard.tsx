@@ -51,7 +51,7 @@ const SubtitleCard = ({
     nearestSubtitleIndex,
   })
 
-  const colorCode = () => {}
+  // const colorCode = () => {}
 
   return (
     <Card className="flex-1 overflow-y-scroll overflow-x-hidden flex flex-col items-start gap-1 p-4">

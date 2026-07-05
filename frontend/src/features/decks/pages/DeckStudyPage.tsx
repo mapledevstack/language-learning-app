@@ -25,7 +25,7 @@ const DeckStudyPage = () => {
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
 
   // Move to Profile Settings
-  const [flipAnimationEnabled, setFlipAnimationEnabled] = useState(true)
+  const [flipAnimationEnabled] = useState(true)
 
   const currentCard = studyCards[index]
   const remainingCards = studyCards.slice(index)

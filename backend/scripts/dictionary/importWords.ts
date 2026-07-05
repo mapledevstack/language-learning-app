@@ -1,7 +1,7 @@
 import fs from "node:fs"
-import { connectDB } from "../../src/config/db.js"
 import { Word } from "../../src/features/dictionary/dictionary.model.js"
 import mongoose from "mongoose"
+import connectDB from "../../src/config/db.js"
 
 export const importWords = async (
   PATH: string,
@@ -11,7 +11,7 @@ export const importWords = async (
     fs.readFileSync(`${PATH}/processed/words.json`, "utf8"),
   )
 
-  await connectDB(MONGO_URI)
+  await connectDB()
 
   await Word.deleteMany({})
   console.log("Deleted old words")

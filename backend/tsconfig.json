@@ -5,7 +5,7 @@
     "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
 
-    "rootDir": ".", // ./src
+    "rootDir": "./src",
     "outDir": "./dist",
 
     "strict": true,
@@ -17,5 +17,5 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true
   },
-  "include": ["src", "scripts", "*.d.ts"]
+  "include": ["src", "*.d.ts"]
 }

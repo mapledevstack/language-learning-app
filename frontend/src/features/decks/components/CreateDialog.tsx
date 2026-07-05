@@ -14,9 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { LucidePlus } from "lucide-react"
 
-type Props = {}
-
-const CreateDialog = (props: Props) => {
+const CreateDialog = () => {
   return (
     <Dialog>
       <form>

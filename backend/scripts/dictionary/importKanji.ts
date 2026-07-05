@@ -1,5 +1,5 @@
 import fs from "node:fs"
-import { connectDB } from "../../src/config/db.js"
+import connectDB from "../../src/config/db.js"
 import mongoose from "mongoose"
 import { Kanji } from "../../src/features/dictionary/dictionary.model.js"
 
@@ -11,7 +11,7 @@ export const importKanji = async (
     fs.readFileSync(`${PATH}/processed/kanji.json`, "utf8"),
   )
 
-  await connectDB(MONGO_URI)
+  await connectDB()
 
   await Kanji.deleteMany({})
   console.log("Deleted old words")
