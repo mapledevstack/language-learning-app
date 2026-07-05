@@ -13,11 +13,22 @@ const getFromEmail = () =>
 const getToEmail = (toEmail: string) =>
   NODE_ENV === "development" ? "delivered@resend.dev" : toEmail
 
-export const sendMail = async ({ to, subject, text, html }: Params) =>
-  await resend.emails.send({
+export const sendMail = async ({ to, subject, text, html }: Params) => {
+  console.log({
+    nodeEnv: process.env.NODE_ENV,
+    from: getFromEmail(),
+    hasApiKey: !!process.env.RESEND_API_KEY,
+  })
+
+  const response = await resend.emails.send({
     from: getFromEmail(),
     to: getToEmail(to),
     subject,
     text,
     html,
   })
+
+  console.log(response)
+
+  return response
+}
