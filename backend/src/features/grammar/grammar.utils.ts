@@ -50,17 +50,3 @@ export const getGrammarResources = async () => {
 
   return grammarCache
 }
-
-const queryEmbeddingCache = new Map<string, number[]>()
-
-export const getCachedEmbedding = async (q: string) => {
-  const key = q.trim().toLowerCase()
-
-  const cached = queryEmbeddingCache.get(key)
-  if (cached) return cached
-
-  const embedding = await getEmbedding(key)
-  queryEmbeddingCache.set(key, embedding)
-
-  return embedding
-}

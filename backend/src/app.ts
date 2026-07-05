@@ -23,7 +23,7 @@ app.use(cookieParser())
 app.use(morgan("dev"))
 app.use(helmet())
 
-app.get("/api/v1", (req, res) => res.status(OK).json({ status: "healthy" }))
+app.get("/api/v1", (_, res) => res.status(OK).json({ status: "healthy" }))
 
 app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/me", authenticate, userRoutes)

@@ -8,7 +8,7 @@ const DashboardPage = () => {
   return (
     <div className="h-full">
       <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl font-bold">
-        Welcome to your dashboard! {user?.email}
+        Welcome to your dashboard {user?.email}
       </div>
       <EmptyCard text={`Work in progress...`} icon={LucideHammer} />
     </div>

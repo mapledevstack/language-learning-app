@@ -1,11 +1,11 @@
 import {
   cosineSimilarity,
-  getCachedEmbedding,
+  getEmbedding,
   getGrammarResources,
 } from "./grammar.utils.js"
 
 export const searchGrammar = async (q: string, limit: number) => {
-  const queryEmbedding = await getCachedEmbedding(q)
+  const queryEmbedding = await getEmbedding(q)
   const resources = await getGrammarResources()
 
   return resources
