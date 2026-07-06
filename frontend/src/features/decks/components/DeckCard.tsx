@@ -3,7 +3,7 @@ import { LucideEdit, LucideTrash2 } from "lucide-react"
 import { Link } from "@tanstack/react-router"
 import StudyCard from "@/components/cards/StudyCard"
 import ProgressPlay from "./ProgressPlay"
-import Badge from "@/components/ui/badge"
+import CircleBadge from "@/components/ui/circle-badge"
 
 type Props = {
   deck: Deck
@@ -14,14 +14,14 @@ const DeckCard = ({ deck }: Props) => {
     <StudyCard className="group bg-sidebar-primary/20 hover:scale-105 transition-all relative hover:bg-sidebar-primary/40">
       <div className="w-full flex justify-between">
         <Link to="/decks/$deckId/edit" params={{ deckId: String(deck.id) }}>
-          <Badge label={`Edit ${deck.title}`} hover={true}>
+          <CircleBadge label={`Edit ${deck.title}`} hover={true}>
             <LucideEdit className="size-6" />
-          </Badge>
+          </CircleBadge>
         </Link>
 
-        <Badge label={`Delete ${deck.title}`} hover={true}>
+        <CircleBadge label={`Delete ${deck.title}`} hover={true}>
           <LucideTrash2 className="size-6" />
-        </Badge>
+        </CircleBadge>
       </div>
 
       <ProgressPlay deck={deck} />
