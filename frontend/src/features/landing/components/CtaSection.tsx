@@ -6,10 +6,6 @@ const CtaSection = () => {
   return (
     <section id="cta" className="relative px-6 py-24 lg:py-32">
       <div className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-border/70 bg-card px-8 py-16 text-center shadow-2xl shadow-primary/5 lg:px-16 lg:py-24">
-        <div className="pointer-events-none absolute -left-16 -top-16 h-64 w-64 rounded-full bg-primary/20 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 -right-10 h-72 w-72 rounded-full bg-chart-1/25 blur-3xl" />
-        <div className="pointer-events-none absolute inset-0 grid-bg opacity-40" />
-
         <div className="relative">
           <span className="font-jp text-4xl text-primary/70">日本語</span>
 

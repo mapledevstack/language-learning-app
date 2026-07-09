@@ -9,7 +9,7 @@ const HeroSection = () => {
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0" />
-      <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-6 pb-24 pt-36 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10 lg:pb-32 lg:pt-44">
+      <div className="relative mx-auto grid max-w-4/5 items-center gap-12 px-6 pb-24 pt-36 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10 lg:pb-32 lg:pt-44">
         <div className="max-w-xl">
           <h1
             className="mt-6 text-balance text-[clamp(2.75rem,7vw,5rem)] font-medium leading-[0.95] tracking-tight animate-in-up"
@@ -24,8 +24,8 @@ const HeroSection = () => {
             className="mt-6 max-w-md text-pretty text-lg leading-relaxed text-muted-foreground animate-in-up"
             style={{ animationDelay: "160ms" }}
           >
-            Dictionary, spaced-repetition flashcards, anime vocabulary mining,
-            grammar lookup and progress tracking—all in one place.
+            Dictionary, spaced-repetition flashcards, vocabulary mining, grammar
+            lookup and progress tracking—all in one place.
           </p>
 
           <div
@@ -36,7 +36,7 @@ const HeroSection = () => {
               <Button
                 asChild
                 size="lg"
-                className="group rounded-full px-6 shadow-lg shadow-primary/20"
+                className="group h-14 rounded-full px-6 shadow-lg shadow-primary/20 text-lg"
               >
                 <Link to="/auth" search={{ mode: "signup" }}>
                   Start Learning
@@ -48,7 +48,7 @@ const HeroSection = () => {
                 asChild
                 size="lg"
                 variant="outline"
-                className="rounded-full px-6"
+                className="rounded-full px-6 h-14 text-lg"
               >
                 <Link to="/auth" search={{ mode: "login" }}>
                   Log In
@@ -59,7 +59,7 @@ const HeroSection = () => {
             <Button
               size="lg"
               variant="secondary"
-              className="w-full rounded-full"
+              className="w-full rounded-full h-14 text-lg"
               onClick={() => loginDemo()}
               disabled={isPending}
             >
@@ -72,9 +72,9 @@ const HeroSection = () => {
           className="relative flex h-125 items-center justify-center animate-in-up"
           style={{ animationDelay: "200ms" }}
         >
-          <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-linear-to-tr from-primary/20 via-transparent to-chart-1/20 blur-2xl" />
+          <div className="absolute -inset-4 -z-10 rounded-[2rem] blur-2xl" />
 
-          <div className="flex h-full w-full items-center justify-center rounded-[2rem] border border-dashed border-border/60 bg-card/40 backdrop-blur-sm">
+          <div className="flex h-full w-full items-center justify-center rounded-[2rem] border border-dashed border-border/60 bg-card/40">
             <span className="text-muted-foreground">Something here</span>
           </div>
         </div>
