@@ -2,10 +2,11 @@ import { Link } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import useDemoUser from "@/features/auth/hooks/useDemoUser"
+import { Player } from "@lottiefiles/react-lottie-player"
+import animation from "@/assets/animations/animation.json"
 
 const HeroSection = () => {
   const { mutate: loginDemo, isPending } = useDemoUser()
-
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0" />
@@ -75,7 +76,7 @@ const HeroSection = () => {
           <div className="absolute -inset-4 -z-10 rounded-[2rem] blur-2xl" />
 
           <div className="flex h-full w-full items-center justify-center rounded-[2rem] border border-dashed border-border/60 bg-card/40">
-            <span className="text-muted-foreground">Something here</span>
+            <Player autoplay loop src={animation} style={{ width: 400 }} />
           </div>
         </div>
       </div>

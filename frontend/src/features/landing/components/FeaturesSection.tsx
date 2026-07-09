@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge"
 import {
   BookOpen,
   Brain,
@@ -51,7 +50,7 @@ const FeaturesSection = () => {
   return (
     <section id="features" className="py-24 lg:py-32">
       <div className="mx-auto max-w-4/5 px-6">
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-4/5 text-center">
           <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl">
             Everything you need to learn Japanese.
           </h2>
@@ -62,7 +61,7 @@ const FeaturesSection = () => {
           </p>
         </div>
 
-        <div className="mx-auto mt-16 grid max-w-5xl gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto mt-16 grid max-w-4/5 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => (
             <article
               key={feature.title}

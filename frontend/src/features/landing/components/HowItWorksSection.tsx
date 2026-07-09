@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge"
 import { Search, BookMarked, ChartColumn } from "lucide-react"
 
 const steps = [
