@@ -60,12 +60,18 @@ const Navigation = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="rounded-full text-sm">
+          <Button
+            asChild
+            variant="ghost"
+            size="sm"
+            className="rounded-full text-sm"
+          >
             <Link to="/auth" search={{ mode: "login" }}>
               Log In
             </Link>
           </Button>
-          <Button size="sm" className="rounded-full text-sm shadow-sm">
+
+          <Button asChild size="sm" className="rounded-full text-sm shadow-sm">
             <Link to="/auth" search={{ mode: "signup" }}>
               Start Learning
             </Link>
