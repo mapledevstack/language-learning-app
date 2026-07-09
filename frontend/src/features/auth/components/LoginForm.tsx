@@ -10,9 +10,10 @@ import { Input } from "@/components/ui/input"
 import { Route } from "@/routes/_public/auth"
 import { useMutation } from "@tanstack/react-query"
 import { useState, type SubmitEvent } from "react"
-import { demoLogin, login } from "../api/authApi"
+import { login } from "../api/authApi"
 import { Spinner } from "@/components/ui/spinner"
 import { Link } from "@tanstack/react-router"
+import useDemoUser from "../hooks/useDemoUser"
 
 const LoginForm = () => {
   const navigate = Route.useNavigate()
@@ -31,12 +32,7 @@ const LoginForm = () => {
     },
   })
 
-  const { mutate: loginDemo, isPending: isDemoPending } = useMutation({
-    mutationFn: demoLogin,
-    onSuccess: () => {
-      navigate({ to: "/dashboard", replace: true })
-    },
-  })
+  const { mutate: loginDemo, isPending: isDemoPending } = useDemoUser()
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()

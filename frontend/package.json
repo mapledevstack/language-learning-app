@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@fontsource-variable/space-grotesk": "^5.2.10",
+    "@lottiefiles/react-lottie-player": "^3.6.0",
     "@tailwindcss/vite": "^4.3.0",
     "@tanstack/react-query": "^5.101.0",
     "@tanstack/react-router": "^1.170.10",
@@ -23,6 +24,7 @@
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-error-boundary": "^6.1.2",
+    "react-icons": "^5.7.0",
     "react-youtube": "^10.1.0",
     "shadcn": "^4.9.0",
     "tailwind-merge": "^3.6.0",
