@@ -1,4 +1,4 @@
 const CtaSection = () => {
-  return <div>CtaSection</div>
+  return <section id="cta"></section>
 }
 export default CtaSection

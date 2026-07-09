@@ -1,4 +1,4 @@
 const HowItWorksSection = () => {
-  return <div>HowItWorksSection</div>
+  return <section id="how-it-works"></section>
 }
 export default HowItWorksSection
