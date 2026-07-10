@@ -4,6 +4,9 @@ import { cn } from "@/utils/cn"
 import seal from "@/assets/logos/seal.png"
 import { SiGithub } from "react-icons/si"
 import { Link } from "@tanstack/react-router"
+import { useTheme } from "next-themes"
+import { Switch } from "@/components/ui/switch"
+import { LucideMoon, LucideSun } from "lucide-react"
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -13,6 +16,7 @@ const navLinks = [
 
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false)
+  const { theme, setTheme } = useTheme()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -57,6 +61,16 @@ const Navigation = () => {
             <SiGithub className="h-4 w-4" />
             GitHub
           </a>
+          <div className="flex items-center gap-2 bg-primary/30 rounded-4xl p-2">
+            <LucideSun size={14} />
+            <Switch
+              checked={theme === "dark"}
+              onCheckedChange={(checked) =>
+                setTheme(checked ? "dark" : "light")
+              }
+            />
+            <LucideMoon size={14} />
+          </div>
         </div>
 
         <div className="flex items-center gap-2">
@@ -73,7 +87,7 @@ const Navigation = () => {
 
           <Button asChild size="sm" className="rounded-full text-sm shadow-sm">
             <Link to="/auth" search={{ mode: "signup" }}>
-              Start Learning
+              Sign Up
             </Link>
           </Button>
         </div>
