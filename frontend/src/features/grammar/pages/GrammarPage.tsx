@@ -9,6 +9,7 @@ import { Suspense, useState } from "react"
 import EmptyCard from "@/components/cards/EmptyCard"
 import GrammarResultsList from "../components/GrammarResultsList"
 import { cn } from "@/utils/cn"
+import GrammarResultsListSkeleton from "../skeletons/GrammarResultsListSkeleton"
 
 const GrammarPage = () => {
   const [query, setQuery] = useState("")
@@ -46,11 +47,9 @@ const GrammarPage = () => {
         </InputGroupAddon>
       </InputGroup>
 
-      <div className="flex-1 flex flex-col gap-4">
+      <div className="min-h-0 flex-1 flex flex-col gap-4">
         {search ? (
-          <Suspense
-            fallback={<EmptyCard text="Loading..." icon={LucideSearch} />}
-          >
+          <Suspense fallback={<GrammarResultsListSkeleton />}>
             <GrammarResultsList
               search={search}
               setResultsCount={setResultsCount}
