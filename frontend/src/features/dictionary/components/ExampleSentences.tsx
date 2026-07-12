@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import type { Sentence } from "../schemas/SentenceSchema"
 import getSearchTokens from "../utils/getSearchTokens"
+import EmptyCard from "@/components/cards/EmptyCard"
 
 type Props = {
   sentences: Sentence[]
@@ -33,19 +34,23 @@ const ExampleSentences = ({ sentences, onTokenSelect }: Props) => {
         Example Sentences
       </h3>
 
-      <ol className="space-y-3">
-        {sentences.map((sentence, index) => (
-          <li key={index} className="space-y-2">
-            <p className="font-bold text-xl leading-relaxed">
-              {index + 1}. {sentence.japanese}
-            </p>
+      {sentences.length > 0 ? (
+        <ol className="space-y-3">
+          {sentences.map((sentence, index) => (
+            <li key={index} className="space-y-2">
+              <p className="font-bold text-xl leading-relaxed">
+                {index + 1}. {sentence.japanese}
+              </p>
 
-            {sentence.english && (
-              <p className="text-xl italic">{sentence.english}</p>
-            )}
-          </li>
-        ))}
-      </ol>
+              {sentence.english && (
+                <p className="text-xl italic">{sentence.english}</p>
+              )}
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <EmptyCard text="Sentences not available" className="bg-accent" />
+      )}
     </div>
   )
 }

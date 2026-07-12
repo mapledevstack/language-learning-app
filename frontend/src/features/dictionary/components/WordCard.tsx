@@ -16,6 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import tags from "@/constants/tags"
+import ExampleSentencesSkeleton from "../skeletons/ExampleSentencesSkeleton"
 
 type Props = {
   word: Word
@@ -34,7 +35,10 @@ const WordCard = ({ word, onTokenSelect }: Props) => {
 
   const selectedWordForm = word.forms[formIndex]
 
-  const { data: sentences = [] } = useSentences(selectedWordForm.text, 3)
+  const { data: sentences = [], isLoading: areSentencesLoading } = useSentences(
+    selectedWordForm.text,
+    3,
+  )
   const { data: kanjisGroup = [] } = useKanji(word)
 
   const selectedKanjis = (kanjisGroup[formIndex] ?? []).filter(
@@ -120,7 +124,9 @@ const WordCard = ({ word, onTokenSelect }: Props) => {
         <KanjiCard key={selectedKanji._id} kanji={selectedKanji} />
       )}
 
-      {sentences.length > 0 && (
+      {areSentencesLoading ? (
+        <ExampleSentencesSkeleton />
+      ) : (
         <ExampleSentences sentences={sentences} onTokenSelect={onTokenSelect} />
       )}
     </Card>

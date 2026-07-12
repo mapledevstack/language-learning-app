@@ -5,6 +5,7 @@ import DictionarySearch from "../components/DictionarySearch"
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import useWordSearch from "../hooks/useWordSearch"
 import { DictionaryContext } from "../hooks/useDictionaryContext"
+import DictionaryResultsSkeleton from "../skeletons/DictionaryResultsSkeleton"
 
 const DictionaryPage = () => {
   const [search, setSearch] = useState("")
@@ -13,7 +14,7 @@ const DictionaryPage = () => {
   const [word, setWord] = useState<Word | null>(null)
   const [tokens, setTokens] = useState<string[]>([])
 
-  const { data: results = [] } = useWordSearch(search, searchMode)
+  const { data: results = [], isLoading } = useWordSearch(search, searchMode)
 
   return (
     <div className="h-full flex flex-col p-10 gap-6">
@@ -34,11 +35,15 @@ const DictionaryPage = () => {
           <DictionaryDetails isWriting={isWriting} word={word} />
         </DictionaryContext.Provider>
 
-        <DictionaryResults
-          setWord={setWord}
-          currentWord={word}
-          results={results}
-        />
+        {isLoading ? (
+          <DictionaryResultsSkeleton />
+        ) : (
+          <DictionaryResults
+            setWord={setWord}
+            currentWord={word}
+            results={results}
+          />
+        )}
       </section>
     </div>
   )
