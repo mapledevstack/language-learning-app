@@ -5,17 +5,29 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group"
 import { LucideSearch, Search } from "lucide-react"
-import { Suspense, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import EmptyCard from "@/components/cards/EmptyCard"
 import GrammarResultsList from "../components/GrammarResultsList"
 import { cn } from "@/utils/cn"
 import GrammarResultsListSkeleton from "../skeletons/GrammarResultsListSkeleton"
+import { useQueryClient } from "@tanstack/react-query"
+import { getGrammarResources } from "../api/grammarApi"
 
 const GrammarPage = () => {
   const [query, setQuery] = useState("")
   const [search, setSearch] = useState("")
 
   const [resultsCount, setResultsCount] = useState(0)
+
+  // Prefetch
+  const queryClient = useQueryClient()
+
+  useEffect(() => {
+    queryClient.prefetchQuery({
+      queryKey: ["grammar", "random"],
+      queryFn: () => getGrammarResources("random"),
+    })
+  }, [queryClient])
 
   return (
     <div className="h-screen min-h-0 overflow-hidden flex flex-col gap-6 p-10">

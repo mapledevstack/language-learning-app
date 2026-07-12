@@ -39,7 +39,7 @@ const WordCard = ({ word, onTokenSelect }: Props) => {
     selectedWordForm.text,
     3,
   )
-  const { data: kanjisGroup = [] } = useKanji(word)
+  const { data: kanjisGroup = [], isLoading: areKanjisLoading } = useKanji(word)
 
   const selectedKanjis = (kanjisGroup[formIndex] ?? []).filter(
     (kanji) => kanji !== undefined,
@@ -113,6 +113,12 @@ const WordCard = ({ word, onTokenSelect }: Props) => {
         </ol>
       </div>
 
+      {areSentencesLoading ? (
+        <ExampleSentencesSkeleton />
+      ) : (
+        <ExampleSentences sentences={sentences} onTokenSelect={onTokenSelect} />
+      )}
+
       {selectedKanjis.length > 0 && (
         <KanjiTabs
           selectedKanjis={selectedKanjis}
@@ -122,12 +128,6 @@ const WordCard = ({ word, onTokenSelect }: Props) => {
       )}
       {selectedKanji && (
         <KanjiCard key={selectedKanji._id} kanji={selectedKanji} />
-      )}
-
-      {areSentencesLoading ? (
-        <ExampleSentencesSkeleton />
-      ) : (
-        <ExampleSentences sentences={sentences} onTokenSelect={onTokenSelect} />
       )}
     </Card>
   )
