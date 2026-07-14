@@ -39,7 +39,7 @@ const WordCard = ({ word, onTokenSelect }: Props) => {
     selectedWordForm.text,
     3,
   )
-  const { data: kanjisGroup = [], isLoading: areKanjisLoading } = useKanji(word)
+  const { data: kanjisGroup = [] } = useKanji(word)
 
   const selectedKanjis = (kanjisGroup[formIndex] ?? []).filter(
     (kanji) => kanji !== undefined,
