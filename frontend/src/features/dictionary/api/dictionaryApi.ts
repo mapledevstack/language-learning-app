@@ -1,4 +1,3 @@
-import { z } from "zod"
 import api from "@/utils/api"
 
 import { KanjiSchema } from "../schemas/KanjiSchema"
