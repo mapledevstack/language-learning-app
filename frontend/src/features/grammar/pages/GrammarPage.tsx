@@ -13,13 +13,21 @@ import GrammarResultsListSkeleton from "../skeletons/GrammarResultsListSkeleton"
 import { useQueryClient } from "@tanstack/react-query"
 import { getGrammarResources } from "../api/grammarApi"
 
+const exampleQueries = [
+  "Difference between は and が",
+  "How do I use のに?",
+  "Types of honorific speech",
+  "Difference between から and ので",
+  "When should I use こと vs の?",
+  "私は学校に行かなければならない",
+  "Casual vs polite speech",
+]
+
 const GrammarPage = () => {
   const [query, setQuery] = useState("")
   const [search, setSearch] = useState("")
-
   const [resultsCount, setResultsCount] = useState(0)
 
-  // Prefetch
   const queryClient = useQueryClient()
 
   useEffect(() => {
@@ -29,6 +37,12 @@ const GrammarPage = () => {
     })
   }, [queryClient])
 
+  const handleSearch = (value: string) => {
+    const trimmed = value.trim()
+    setQuery(trimmed)
+    setSearch(trimmed)
+  }
+
   return (
     <div className="h-screen min-h-0 overflow-hidden flex flex-col gap-6 p-10">
       <InputGroup className="size-14 w-full">
@@ -36,11 +50,13 @@ const GrammarPage = () => {
           placeholder="Search for any grammar point or use a sentence to find related grammar points"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && setSearch(query.trim())}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch(query)}
         />
+
         <InputGroupAddon>
           <Search className="text-primary" />
         </InputGroupAddon>
+
         <InputGroupAddon align="inline-end">
           <p
             className={cn(
@@ -52,12 +68,34 @@ const GrammarPage = () => {
           </p>{" "}
           results
         </InputGroupAddon>
+
         <InputGroupAddon align="inline-end">
-          <Button className="pl-6 pr-6" onClick={() => setSearch(query.trim())}>
-            <LucideSearch className="text-4xl" />
+          <Button className="px-6" onClick={() => handleSearch(query)}>
+            <LucideSearch />
           </Button>
         </InputGroupAddon>
       </InputGroup>
+
+      {!search && (
+        <div className="flex flex-row gap-3 items-center">
+          <p className="text-sm font-medium text-muted-foreground">
+            Try any of these:
+          </p>
+
+          <div className="flex flex-wrap gap-2">
+            {exampleQueries.map((example) => (
+              <Button
+                key={example}
+                variant="outline"
+                className="rounded-full"
+                onClick={() => handleSearch(example)}
+              >
+                {example}
+              </Button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="min-h-0 flex-1 flex flex-col gap-4">
         {search ? (
@@ -74,4 +112,5 @@ const GrammarPage = () => {
     </div>
   )
 }
+
 export default GrammarPage
