@@ -1,9 +1,10 @@
-import { cn } from "@/utils/cn"
-import { Link, Outlet } from "@tanstack/react-router"
-import { LucideMenu } from "lucide-react"
+import { Outlet } from "@tanstack/react-router"
 import { useState } from "react"
 
-const navigationMenu = [
+import AppLayoutDesktop from "./AppLayoutDesktop"
+import AppLayoutMobile from "./AppLayoutMobile"
+
+export const navigationMenu = [
   { label: "Dashboard", to: "/dashboard" },
   { label: "Dictionary", to: "/dictionary" },
   { label: "Flashcards", to: "/decks" },
@@ -13,44 +14,23 @@ const navigationMenu = [
 ]
 
 const AppLayout = () => {
-  const [isNavOpen, setisNavOpen] = useState(false)
+  const [isNavOpen, setIsNavOpen] = useState(false)
 
   return (
     <div className="h-screen min-h-0 font-san bg-primary">
       <div className="bg-primary flex flex-col h-full relative">
-        <div
-          className="fixed top-0 left-0 w-screen z-50 flex flex-col items-center not-hover:-translate-y-26 transition-all duration-400"
-          onMouseEnter={() => setisNavOpen(true)}
-          onMouseLeave={() => setisNavOpen(false)}
-        >
-          <nav className="flex h-(--navbar-height) cursor-pointer bg-primary text-primary-foreground w-full pl-(--navigation-border)">
-            {navigationMenu.map((menu) => {
-              return (
-                <div
-                  className="flex-1 hover:bg-sidebar-primary transition-all h-full"
-                  key={menu.label}
-                >
-                  <Link
-                    to={menu.to}
-                    className="h-full font-bold flex items-center justify-center text-xl"
-                  >
-                    {menu.label}
-                  </Link>
-                </div>
-              )
-            })}
-          </nav>
+        <div className="hidden md:block">
+          <AppLayoutDesktop isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
+        </div>
 
-          <div className="bg-primary rounded-b-4xl cursor-pointer">
-            <LucideMenu className="text-primary-foreground size-8 w-34 scale-x-125 scale-y-60" />
-          </div>
+        <div className="md:hidden">
+          <AppLayoutMobile isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
         </div>
 
         <div
-          className={cn(
-            "flex-1 md:overflow-hidden md:min-h-0 bg-background text-foreground transition-all duration-400",
-            isNavOpen && "scale-[0.97]",
-          )}
+          className={`flex-1 min-h-0 bg-background text-foreground transition-all duration-300 ${
+            isNavOpen ? "md:scale-[0.97]" : ""
+          }`}
         >
           <Outlet />
         </div>
