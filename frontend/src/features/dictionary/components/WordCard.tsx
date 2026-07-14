@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/tooltip"
 import tags from "@/constants/tags"
 import ExampleSentencesSkeleton from "../skeletons/ExampleSentencesSkeleton"
+import PitchAccent from "./PitchAccent"
 
 type Props = {
   word: Word
@@ -71,7 +72,7 @@ const WordCard = ({ word, onTokenSelect }: Props) => {
         )}
 
         {selectedWordForm.pitchAccent && (
-          <div className="">{selectedWordForm.pitchAccent}</div>
+          <PitchAccent pattern={selectedWordForm.pitchAccent} />
         )}
       </div>
 
