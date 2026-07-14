@@ -1,9 +1,9 @@
-import { KanjiSchema } from "../schemas/KanjiSchema"
 import { z } from "zod"
-import { WordsSchema } from "../schemas/WordSchema"
 import api from "@/utils/api"
+
+import { KanjiSchema } from "../schemas/KanjiSchema"
+import { WordsSchema } from "../schemas/WordSchema"
 import { SentencesSchema, type Sentence } from "../schemas/SentenceSchema"
-import { API_BASE_URL } from "@/constants/env"
 
 export const getKanjis = async (kanjisGroup: string[][]) => {
   const flatKanjis = [...new Set(kanjisGroup.flat())]
@@ -16,56 +16,34 @@ export const getKanjis = async (kanjisGroup: string[][]) => {
     params.append("q", kanji)
   })
 
-  const res = await fetch(`${API_BASE_URL}/dictionary/kanjis?${params}`)
-
-  if (!res.ok) {
-    throw new Error("failed to fetch kanjis")
-  }
-
-  const data = z.array(KanjiSchema).parse(await res.json())
-
-  const kanjiMap = kanjisGroup.map((kanjis) =>
-    kanjis.map((kanji) => data.find((d) => d.kanji === kanji)),
+  const data = KanjiSchema.array().parse(
+    await api.get(`/dictionary/kanjis?${params}`),
   )
 
-  return kanjiMap
+  return kanjisGroup.map((kanjis) =>
+    kanjis.map((kanji) => data.find((d) => d.kanji === kanji)),
+  )
 }
 
 export const getResults = async (search: string, limit: number) => {
-  const res = await fetch(
-    `${API_BASE_URL}/dictionary/search?q=${search}&limit=${limit}`,
+  return WordsSchema.parse(
+    await api.get(`/dictionary/search?q=${search}&limit=${limit}`),
   )
-
-  if (!res.ok) {
-    throw new Error("failed to fetch kanjis")
-  }
-
-  const data = await res.json()
-
-  return WordsSchema.parse(data)
 }
 
 export const getResultsFromMeaning = async (search: string, limit: number) => {
-  const res = await fetch(
-    `${API_BASE_URL}/dictionary/search/meaning?q=${search}&limit=${limit}`,
+  return WordsSchema.parse(
+    await api.get(`/dictionary/search/meaning?q=${search}&limit=${limit}`),
   )
-
-  if (!res.ok) {
-    throw new Error("failed to fetch kanjis")
-  }
-
-  const data = await res.json()
-
-  return WordsSchema.parse(data)
 }
 
 export const getSentences = async (
   word: string,
   limit = 3,
 ): Promise<Sentence[]> => {
-  const data = await api.get(
-    `/dictionary/sentences?q=${encodeURIComponent(word)}&limit=${limit}`,
+  return SentencesSchema.parse(
+    await api.get(
+      `/dictionary/sentences?q=${encodeURIComponent(word)}&limit=${limit}`,
+    ),
   )
-
-  return SentencesSchema.parse(data)
 }
