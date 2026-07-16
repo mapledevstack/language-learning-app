@@ -67,14 +67,10 @@ const flashCardSchema = new Schema(
       index: true,
     },
 
-    deckIds: {
-      type: [
-        {
-          type: Types.ObjectId,
-          ref: "Deck",
-        },
-      ],
-      default: [],
+    deckId: {
+      type: Types.ObjectId,
+      ref: "Deck",
+      required: true,
     },
 
     front: {

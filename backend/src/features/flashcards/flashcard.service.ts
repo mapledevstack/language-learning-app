@@ -14,7 +14,7 @@ export const createFlashCard = async (
 
     wordId: data.wordId,
 
-    deckIds: [data.deckId],
+    deckId: data.deckId,
 
     front: {
       text: data.front.text,
