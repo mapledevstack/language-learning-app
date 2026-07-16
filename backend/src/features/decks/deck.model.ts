@@ -18,12 +18,6 @@ const deckSchema = new Schema(
       default: "",
       trim: true,
     },
-    flashCardIds: [
-      {
-        type: Types.ObjectId,
-        ref: "FlashCard",
-      },
-    ],
   },
   {
     timestamps: true,

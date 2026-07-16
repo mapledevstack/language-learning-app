@@ -15,6 +15,7 @@ import userRoutes from "./features/users/user.routes.js"
 import sessionRoutes from "./features/auth/session.routes.js"
 import grammarRoutes from "./features/grammar/grammar.routes.js"
 import deckRoutes from "./features/decks/deck.routes.js"
+import flashCardRoutes from "./features/flashcards/flashcard.routes.js"
 
 const app = express()
 
@@ -34,6 +35,7 @@ app.use("/api/v1/dictionary", dictionaryRoutes)
 app.use("/api/v1/immersion", immersionRoutes)
 app.use("/api/v1/grammar", grammarRoutes)
 app.use("/api/v1/decks", authenticate, deckRoutes)
+app.use("/api/v1/flashcards", authenticate, flashCardRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
