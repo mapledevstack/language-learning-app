@@ -20,4 +20,26 @@ export const createFlashCardSchema = z.object({
   userNotes: z.string().optional(),
 })
 
+export const getFlashCardsParamsSchema = z.object({
+  deckId: z.string(),
+})
+
+export const deleteFlashCardParamsSchema = z.object({
+  flashcardId: z.string(),
+})
+
+export const updateFlashCardParamsSchema = z.object({
+  flashcardId: z.string(),
+})
+
+export const updateFlashCardSchema = createFlashCardSchema
+  .pick({
+    front: true,
+    source: true,
+    userNotes: true,
+  })
+  .partial()
+
 export type CreateFlashCardSchema = z.infer<typeof createFlashCardSchema>
+
+export type UpdateFlashCardSchema = z.infer<typeof updateFlashCardSchema>

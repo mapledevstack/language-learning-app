@@ -1,7 +1,10 @@
 import { Types } from "mongoose"
 import { createEmptyCard } from "ts-fsrs"
 import FlashCard from "./flashcard.model.js"
-import { CreateFlashCardSchema } from "./flashcard.schema.js"
+import {
+  CreateFlashCardSchema,
+  UpdateFlashCardSchema,
+} from "./flashcard.schema.js"
 
 export const createFlashCard = async (
   userId: Types.ObjectId,
@@ -9,7 +12,7 @@ export const createFlashCard = async (
 ) => {
   const fsrs = createEmptyCard()
 
-  const flashCard = await FlashCard.create({
+  return FlashCard.create({
     userId,
 
     wordId: data.wordId,
@@ -31,6 +34,41 @@ export const createFlashCard = async (
 
     fsrs,
   })
+}
 
-  return flashCard
+export const getFlashCards = async (userId: Types.ObjectId, deckId: string) => {
+  return FlashCard.find({
+    userId,
+    deckId,
+  }).sort({
+    createdAt: -1,
+  })
+}
+
+export const deleteFlashCard = async (
+  userId: Types.ObjectId,
+  flashcardId: string,
+) => {
+  await FlashCard.findOneAndDelete({
+    _id: flashcardId,
+    userId,
+  })
+}
+
+export const updateFlashCard = async (
+  userId: Types.ObjectId,
+  flashCardId: string,
+  data: UpdateFlashCardSchema,
+) => {
+  return FlashCard.findOneAndUpdate(
+    {
+      _id: flashCardId,
+      userId,
+    },
+    data,
+    {
+      new: true,
+      runValidators: true,
+    },
+  )
 }
