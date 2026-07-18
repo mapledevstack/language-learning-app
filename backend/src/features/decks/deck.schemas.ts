@@ -5,4 +5,15 @@ export const createDeckSchema = z.object({
   description: z.string().trim().optional().default(""),
 })
 
+export const deckParamsSchema = z.object({
+  deckId: z.string(),
+})
+
+export const updateDeckSchema = z.object({
+  title: z.string().trim().min(1).max(100).optional(),
+  description: z.string().trim().max(500).optional(),
+})
+
 export type CreateDeckSchema = z.infer<typeof createDeckSchema>
+export type DeckParamsSchema = z.infer<typeof deckParamsSchema>
+export type UpdateDeckSchema = z.infer<typeof updateDeckSchema>

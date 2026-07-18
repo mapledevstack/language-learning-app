@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import { MONGO_URI } from "../constants/env.js"
+import { MONGO_URI, MONGO_URI_TEST, NODE_ENV } from "../constants/env.js"
 
 const connectDB = async (retries = 5) => {
   if (retries === 0) {
@@ -7,7 +7,8 @@ const connectDB = async (retries = 5) => {
   }
 
   try {
-    await mongoose.connect(MONGO_URI)
+    const mongoUri = NODE_ENV === "test" ? MONGO_URI_TEST : MONGO_URI
+    await mongoose.connect(mongoUri)
     console.log("MongoDB connected")
   } catch (error) {
     console.log(`Could not connect to DB`, error)
