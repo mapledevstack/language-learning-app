@@ -40,6 +40,10 @@ export const updateFlashCardSchema = createFlashCardSchema
   })
   .partial()
 
+export const getDueFlashCardsSchema = z.object({
+  deckId: z.string(),
+})
+
 export type CreateFlashCardSchema = z.infer<typeof createFlashCardSchema>
 
 export type UpdateFlashCardSchema = z.infer<typeof updateFlashCardSchema>

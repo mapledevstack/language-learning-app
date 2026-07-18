@@ -45,6 +45,19 @@ export const getFlashCards = async (userId: Types.ObjectId, deckId: string) => {
   })
 }
 
+export const getDueFlashCards = async (
+  userId: Types.ObjectId,
+  deckId: string,
+) => {
+  return FlashCard.find({
+    userId,
+    deckId,
+    "fsrs.due": {
+      $lte: new Date(),
+    },
+  }).sort({ "fsrs.due": 1 })
+}
+
 export const deleteFlashCard = async (
   userId: Types.ObjectId,
   flashcardId: string,

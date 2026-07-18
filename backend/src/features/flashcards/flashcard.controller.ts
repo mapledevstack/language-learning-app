@@ -3,6 +3,7 @@ import { CREATED, NO_CONTENT, OK } from "../../constants/http.js"
 import {
   createFlashCard,
   deleteFlashCard,
+  getDueFlashCards,
   getFlashCards,
   updateFlashCard,
 } from "./flashcard.service.js"
@@ -10,6 +11,7 @@ import { getAuthUserId } from "../auth/auth.utils.js"
 import {
   createFlashCardSchema,
   deleteFlashCardParamsSchema,
+  getDueFlashCardsSchema,
   getFlashCardsParamsSchema,
   updateFlashCardParamsSchema,
   updateFlashCardSchema,
@@ -29,6 +31,15 @@ export const getFlashCardsController = catchErrors(async (req, res) => {
   const userId = getAuthUserId(req)
 
   const flashCards = await getFlashCards(userId, deckId)
+
+  res.status(OK).json(flashCards)
+})
+
+export const getDueFlashCardsController = catchErrors(async (req, res) => {
+  const { deckId } = getDueFlashCardsSchema.parse(req.params)
+  const userId = getAuthUserId(req)
+
+  const flashCards = await getDueFlashCards(userId, deckId)
 
   res.status(OK).json(flashCards)
 })
