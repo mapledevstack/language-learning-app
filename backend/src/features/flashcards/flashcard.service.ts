@@ -83,7 +83,7 @@ export const updateFlashCard = async (
     },
     data,
     {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     },
   )
