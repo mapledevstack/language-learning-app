@@ -1,4 +1,4 @@
-import { APP_ORIGIN } from "../../constants/env.js"
+import { APP_ORIGIN, NODE_ENV } from "../../constants/env.js"
 import {
   CONFLICT,
   INTERNAL_SERVER_ERROR,
@@ -57,13 +57,15 @@ export const registerUser = async ({
 
   const url = `${APP_ORIGIN}/auth/email/verify/${verificationCode._id}`
 
-  const { data, error } = await sendMail({
-    to: user.email,
-    ...verifyEmailTemplate(url),
-  })
+  if (NODE_ENV !== "test") {
+    const { data, error } = await sendMail({
+      to: user.email,
+      ...verifyEmailTemplate(url),
+    })
 
-  if (error) {
-    console.log(`Email error: ${error}`)
+    if (error) {
+      console.log(`Email error:`, error)
+    }
   }
 
   const session = await Session.create({

@@ -1,52 +1,64 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest"
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest"
 import request from "supertest"
+import mongoose from "mongoose"
 import app from "../../app.js"
+import connectDB from "../../config/db.js"
 import { User } from "../users/user.model.js"
-import { CREATED } from "../../constants/http.js"
+import { BAD_REQUEST, CONFLICT, CREATED } from "../../constants/http.js"
 
-describe("Authentication", () => {
-  describe("POST /register", () => {
-    it("creates a new user", async () => {
-      const response = await request(app).post("/api/v1/auth/register").send({
-        email: "test@example.com",
-        password: "123456",
-      })
+beforeAll(async () => {
+  await connectDB()
+})
 
-      expect(response.status).toBe(CREATED)
+beforeEach(async () => {
+  await User.deleteMany({})
+})
+
+afterAll(async () => {
+  await mongoose.connection.close()
+})
+
+describe("POST /api/v1/auth/register", () => {
+  it("creates a new user", async () => {
+    const response = await request(app).post("/api/v1/auth/register").send({
+      email: "test@example.com",
+      password: "123456",
+      confirmPassword: "123456",
     })
 
-    it("rejects duplicate email", async () => {})
+    expect(response.status).toBe(CREATED)
 
-    it("rejects invalid email", async () => {})
+    const user = await User.findOne({
+      email: "test@example.com",
+    })
+
+    expect(user).not.toBeNull()
+    expect(user?.email).toBe("test@example.com")
   })
 
-  // describe("POST /login", () => {
-  //   it("logs in with valid credentials", async () => {})
+  it("rejects duplicate email", async () => {
+    await request(app).post("/api/v1/auth/register").send({
+      email: "test@example.com",
+      password: "123456",
+      confirmPassword: "123456",
+    })
 
-  //   it("rejects invalid password", async () => {})
-  // })
+    const response = await request(app).post("/api/v1/auth/register").send({
+      email: "test@example.com",
+      password: "123456",
+      confirmPassword: "123456",
+    })
 
-  // describe("POST /logout", () => {
-  //   it("logs out the user", async () => {})
-  // })
+    expect(response.status).toBe(CONFLICT)
+  })
 
-  // describe("GET /refresh", () => {
-  //   it("refreshes the access token", async () => {})
+  it("rejects invalid email", async () => {
+    const response = await request(app).post("/api/v1/auth/register").send({
+      email: "invalid-email",
+      password: "123456",
+      confirmPassword: "123456",
+    })
 
-  //   it("returns 401 without refresh token", async () => {})
-  // })
-
-  // describe("GET /email/verify/:code", () => {
-  //   it("verifies a valid email verification code", async () => {})
-
-  //   it("rejects an invalid verification code", async () => {})
-  // })
-
-  // describe("POST /password/forgot", () => {
-  //   it("sends a password reset email", async () => {})
-  // })
-
-  // describe("POST /password/reset", () => {
-  //   it("resets the password with a valid code", async () => {})
-  // })
+    expect(response.status).toBe(BAD_REQUEST)
+  })
 })
