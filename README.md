@@ -248,6 +248,10 @@ The project is under active development, and new features are added incrementall
 
 # Architecture
 
+<p align="center">
+  <img src="./assets/architecture.png" alt="Architecture Diagram" width="900">
+</p>
+
 The frontend communicates exclusively with the Express API through typed REST endpoints.
 
 Business logic, authentication, dictionary processing, grammar resources, and immersion services are handled by the backend, while MongoDB stores user data and imported Japanese language datasets.
@@ -260,13 +264,13 @@ The application is containerized using Docker and served behind a Caddy reverse 
 
 Before running the project locally, make sure the following software is installed:
 
-| Software | Recommended Version |
-|----------|---------------------|
-| Node.js | 24+ |
-| npm | 11+ |
-| Docker | Latest |
-| Docker Compose | Latest |
-| Git | Latest |
+| Software       | Recommended Version |
+| -------------- | ------------------- |
+| Node.js        | 24+                 |
+| npm            | 11+                 |
+| Docker         | Latest              |
+| Docker Compose | Latest              |
+| Git            | Latest              |
 
 A MongoDB Atlas cluster and a Resend account are also required if you intend to use authentication and email functionality.
 
@@ -504,6 +508,7 @@ Each module contains:
 Business logic is intentionally isolated inside services while controllers remain responsible only for request handling.
 
 ---
+
 # Authentication
 
 Authentication is built around JWT-based access tokens and persistent refresh sessions.
@@ -592,13 +597,13 @@ The application is designed to be deployable using containerized services.
 
 Current deployment strategy:
 
-| Service | Platform |
-|----------|----------|
-| Frontend | Vercel |
-| Backend | Render |
-| Database | MongoDB Atlas |
-| Reverse Proxy | Caddy |
-| Email | Resend |
+| Service       | Platform      |
+| ------------- | ------------- |
+| Frontend      | Vercel        |
+| Backend       | Render        |
+| Database      | MongoDB Atlas |
+| Reverse Proxy | Caddy         |
+| Email         | Resend        |
 
 Because each service is isolated, deployments can be updated independently without affecting the rest of the application.
 
