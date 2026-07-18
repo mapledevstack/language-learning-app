@@ -104,7 +104,27 @@ export const reviewFlashCard = async (
   }
 
   const grade = rating === "Again" ? Rating.Again : Rating.Good
-  const result = scheduler.next(flashCard.fsrs, new Date(), grade)
+
+  // ts-fsrs expects a plain Card object.
+  // Passing the Mongoose nested document directly causes scheduler.next()
+  // to produce NaN values for the first review.
+
+  const card = {
+    due: flashCard.fsrs.due,
+    stability: flashCard.fsrs.stability,
+    difficulty: flashCard.fsrs.difficulty,
+    elapsed_days: flashCard.fsrs.elapsed_days,
+    scheduled_days: flashCard.fsrs.scheduled_days,
+    reps: flashCard.fsrs.reps,
+    lapses: flashCard.fsrs.lapses,
+    learning_steps: flashCard.fsrs.learning_steps,
+    state: flashCard.fsrs.state,
+    ...(flashCard.fsrs.last_review && {
+      last_review: flashCard.fsrs.last_review,
+    }),
+  }
+
+  const result = scheduler.next(card, new Date(), grade)
 
   flashCard.fsrs = result.card
 
