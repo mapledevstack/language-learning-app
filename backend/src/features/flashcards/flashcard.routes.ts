@@ -4,6 +4,7 @@ import {
   deleteFlashCardController,
   getDueFlashCardsController,
   getFlashCardsController,
+  reviewFlashCardController,
   updateFlashCardController,
 } from "./flashcard.controller.js"
 
@@ -16,7 +17,6 @@ router.get("/deck/:deckId/due", getDueFlashCardsController)
 
 router.delete("/:flashcardId", deleteFlashCardController)
 router.patch("/:flashcardId", updateFlashCardController)
-
-// router.post("/:flashCardId/review", reviewFlashCardController)
+router.post("/:flashCardId/review", reviewFlashCardController)
 
 export default router

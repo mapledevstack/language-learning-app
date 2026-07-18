@@ -1,10 +1,13 @@
 import { Types } from "mongoose"
-import { createEmptyCard } from "ts-fsrs"
+import { createEmptyCard, Rating, RatingType } from "ts-fsrs"
 import FlashCard from "./flashcard.model.js"
 import {
   CreateFlashCardSchema,
   UpdateFlashCardSchema,
 } from "./flashcard.schema.js"
+import AppError from "../../utils/appError.js"
+import { NOT_FOUND } from "../../constants/http.js"
+import { scheduler } from "./flashcard.fsrs.js"
 
 export const createFlashCard = async (
   userId: Types.ObjectId,
@@ -84,4 +87,28 @@ export const updateFlashCard = async (
       runValidators: true,
     },
   )
+}
+
+export const reviewFlashCard = async (
+  userId: Types.ObjectId,
+  flashCardId: string,
+  rating: RatingType,
+) => {
+  const flashCard = await FlashCard.findOne({
+    _id: flashCardId,
+    userId,
+  })
+
+  if (!flashCard) {
+    throw new AppError("Card not found", NOT_FOUND)
+  }
+
+  const grade = rating === "Again" ? Rating.Again : Rating.Good
+  const result = scheduler.next(flashCard.fsrs, new Date(), grade)
+
+  flashCard.fsrs = result.card
+
+  await flashCard.save()
+
+  return flashCard
 }

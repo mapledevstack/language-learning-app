@@ -44,6 +44,17 @@ export const getDueFlashCardsSchema = z.object({
   deckId: z.string(),
 })
 
+export const reviewFlashCardParamsSchema = z.object({
+  flashcardId: z.string(),
+})
+
+export const reviewFlashCardSchema = z.object({
+  rating: z.enum(["Again", "Good"]),
+})
+
 export type CreateFlashCardSchema = z.infer<typeof createFlashCardSchema>
 
 export type UpdateFlashCardSchema = z.infer<typeof updateFlashCardSchema>
+
+export type ReviewFlashCardSchema = z.infer<typeof reviewFlashCardSchema>
+export type ReviewRating = ReviewFlashCardSchema["rating"]

@@ -46,6 +46,11 @@ const fsrsSchema = new Schema(
       type: Date,
       default: null,
     },
+
+    elapsed_days: {
+      type: Number,
+      required: true,
+    },
   },
   {
     _id: false,

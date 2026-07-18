@@ -5,6 +5,7 @@ import {
   deleteFlashCard,
   getDueFlashCards,
   getFlashCards,
+  reviewFlashCard,
   updateFlashCard,
 } from "./flashcard.service.js"
 import { getAuthUserId } from "../auth/auth.utils.js"
@@ -13,6 +14,8 @@ import {
   deleteFlashCardParamsSchema,
   getDueFlashCardsSchema,
   getFlashCardsParamsSchema,
+  reviewFlashCardParamsSchema,
+  reviewFlashCardSchema,
   updateFlashCardParamsSchema,
   updateFlashCardSchema,
 } from "./flashcard.schema.js"
@@ -59,6 +62,16 @@ export const updateFlashCardController = catchErrors(async (req, res) => {
   const userId = getAuthUserId(req)
 
   const flashCard = await updateFlashCard(userId, flashcardId, body)
+
+  res.status(OK).json(flashCard)
+})
+
+export const reviewFlashCardController = catchErrors(async (req, res) => {
+  const { flashcardId } = reviewFlashCardParamsSchema.parse(req.params)
+  const { rating } = reviewFlashCardSchema.parse(req.body)
+  const userId = getAuthUserId(req)
+
+  const flashCard = await reviewFlashCard(userId, flashcardId, rating)
 
   res.status(OK).json(flashCard)
 })
