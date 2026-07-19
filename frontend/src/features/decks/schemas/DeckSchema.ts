@@ -13,5 +13,8 @@ export const createDeckInput = DeckSchema.pick({
   description: true,
 })
 
+export const updateDeckInput = createDeckInput.partial()
+
 export type Deck = z.infer<typeof DeckSchema>
 export type CreateDeckInput = z.infer<typeof createDeckInput>
+export type UpdateDeckInput = z.infer<typeof updateDeckInput>
