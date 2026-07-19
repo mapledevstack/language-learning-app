@@ -1,25 +1,30 @@
 import { cn } from "@/utils/cn"
-import type { ReactNode } from "react"
+import { forwardRef, type ComponentPropsWithoutRef } from "react"
 
-type Props = {
-  children: ReactNode
+type Props = ComponentPropsWithoutRef<"div"> & {
   label?: string
   hover?: boolean
-  className?: string
 }
 
-const CircleBadge = ({ children, label, hover = false, className }: Props) => {
-  return (
-    <div
-      className={cn(
-        "bg-primary p-3 rounded-full",
-        hover && "hover:scale-105 transition-transform cursor-pointer",
-        className,
-      )}
-      aria-label={label}
-    >
-      {children}
-    </div>
-  )
-}
+const CircleBadge = forwardRef<HTMLDivElement, Props>(
+  ({ children, label, hover = false, className, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        aria-label={label}
+        className={cn(
+          "bg-primary p-3 rounded-full",
+          hover && "hover:scale-105 transition-transform cursor-pointer",
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+    )
+  },
+)
+
+CircleBadge.displayName = "CircleBadge"
+
 export default CircleBadge

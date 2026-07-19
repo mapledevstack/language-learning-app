@@ -4,12 +4,26 @@ import { Link } from "@tanstack/react-router"
 import StudyCard from "@/components/cards/StudyCard"
 import ProgressPlay from "./ProgressPlay"
 import CircleBadge from "@/components/ui/circle-badge"
+import useDeleteDeck from "../hooks/useDeleteDeck"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 type Props = {
   deck: Deck
 }
 
 const DeckCard = ({ deck }: Props) => {
+  const { mutate: deleteDeck, isPending } = useDeleteDeck()
+
   return (
     <StudyCard className="group bg-sidebar-primary/20 hover:scale-105 transition-all relative hover:bg-sidebar-primary/40">
       <div className="w-full flex justify-between">
@@ -19,9 +33,36 @@ const DeckCard = ({ deck }: Props) => {
           </CircleBadge>
         </Link>
 
-        <CircleBadge label={`Delete ${deck.title}`} hover={true}>
-          <LucideTrash2 className="size-6" />
-        </CircleBadge>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <CircleBadge label={`Delete ${deck.title}`} hover>
+              <LucideTrash2 className="size-6" />
+            </CircleBadge>
+          </AlertDialogTrigger>
+
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete deck?</AlertDialogTitle>
+
+              <AlertDialogDescription>
+                This will permanently delete <strong>{deck.title}</strong>.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+
+              <AlertDialogAction
+                onClick={() => {
+                  deleteDeck(deck.id)
+                }}
+                disabled={isPending}
+              >
+                {isPending ? "Deleting..." : "Delete"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
 
       <ProgressPlay deck={deck} />

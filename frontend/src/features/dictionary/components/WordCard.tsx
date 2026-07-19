@@ -1,6 +1,5 @@
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import Card from "@/components/cards/Card"
-import { DeckSchema, type Deck } from "@/features/decks/schemas/DeckSchema"
 import { useState } from "react"
 import KanjiKanaWord from "./KanjiKanaWord"
 import useKanji from "../hooks/useKanji"
