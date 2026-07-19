@@ -8,16 +8,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { decks } from "@/features/decks/hooks/useDecks"
 import { LucidePlus } from "lucide-react"
 import { useNavigate } from "@tanstack/react-router"
+import useDecks from "@/features/decks/hooks/useDecks"
 
 type Props = {
-  handleAddToDeck: (deckId: number) => void
+  handleAddToDeck: (deckId: string) => void
 }
 
 const AddToDeckButton = ({ handleAddToDeck }: Props) => {
   const navigate = useNavigate()
+
+  const { data: decks = [] } = useDecks()
 
   return (
     <DropdownMenu>

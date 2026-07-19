@@ -18,6 +18,7 @@ import {
 import tags from "@/constants/tags"
 import ExampleSentencesSkeleton from "../skeletons/ExampleSentencesSkeleton"
 import PitchAccent from "./PitchAccent"
+import useDecks from "@/features/decks/hooks/useDecks"
 
 type Props = {
   word: Word
@@ -28,7 +29,9 @@ const WordCard = ({ word, onTokenSelect }: Props) => {
   const [formIndex, setFormIndex] = useState(0)
   const [kanjiIndex, setKanjiIndex] = useState(0)
 
-  const handleAddToDeck = (deckId: number) => {
+  const { data: decks = [] } = useDecks()
+
+  const handleAddToDeck = (deckId: string) => {
     console.log(
       `Added ${word.forms[formIndex].text} to ${decks.find((deck) => deck.id === deckId)?.title}`,
     )
@@ -134,23 +137,3 @@ const WordCard = ({ word, onTokenSelect }: Props) => {
   )
 }
 export default WordCard
-
-const decks: Deck[] = [
-  DeckSchema.parse({
-    id: 1,
-    title: "Hiragana",
-    description: "Basic Japanese syllabary",
-    cardCount: 46,
-    learnedCount: 23,
-    dueCount: 26,
-  }),
-
-  DeckSchema.parse({
-    id: 2,
-    title: "Katakana",
-    description: "Foreign-word syllabary",
-    cardCount: 46,
-    learnedCount: 2,
-    dueCount: 46,
-  }),
-]
