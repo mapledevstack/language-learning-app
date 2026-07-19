@@ -8,6 +8,4 @@ export const getDecks = async () => {
   return DecksSchema.parse(response)
 }
 
-export const deleteDeck = (deckId: string) => {
-  api.delete(`/decks/${deckId}`)
-}
+export const deleteDeck = (deckId: string) => api.delete(`/decks/${deckId}`)
