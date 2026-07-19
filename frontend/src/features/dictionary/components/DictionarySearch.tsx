@@ -1,4 +1,9 @@
-import { LucideLineSquiggle, LucideSearch, Search } from "lucide-react"
+import {
+  ArrowLeftRight,
+  LucideLineSquiggle,
+  LucideSearch,
+  Search,
+} from "lucide-react"
 import { cn } from "@/utils/cn"
 import { useState, type KeyboardEvent } from "react"
 import {
@@ -14,6 +19,7 @@ type Props = {
   isWriting: boolean
   setIsWriting: (isWriting: boolean) => void
   setSearch: (search: string) => void
+  searchMode: "word" | "meaning"
   setSearchMode: (mode: "word" | "meaning") => void
   tokens: string[]
   setTokens: (tokens: string[]) => void
@@ -26,22 +32,26 @@ const DictionarySearch = ({
   setSearch,
   tokens,
   setTokens,
+  searchMode,
   setSearchMode,
 }: Props) => {
   const [query, setQuery] = useState("")
 
-  const searchByMeaning = () => {
+  const toggleSearchMode = () => {
+    setSearchMode(searchMode === "word" ? "meaning" : "word")
+  }
+
+  const performSearch = () => {
     const value = query.trim()
     if (!value) return
 
-    setSearchMode("meaning")
     setSearch(value)
   }
 
   const handleSearch = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter") return
 
-    searchByMeaning()
+    performSearch()
   }
 
   const handleQueryChange = (value: string) => {
@@ -66,7 +76,11 @@ const DictionarySearch = ({
 
         <InputGroup className="size-14 w-full">
           <InputGroupInput
-            placeholder="Search for a Word, Kanji, or Sentence..."
+            placeholder={
+              searchMode === "word"
+                ? "Search Words or Sentences in Japanese or Romaji"
+                : "Search Meaning in English..."
+            }
             value={query}
             onChange={(e) => handleQueryChange(e.target.value)}
             onKeyDown={(e) => handleSearch(e)}
@@ -74,11 +88,20 @@ const DictionarySearch = ({
           <InputGroupAddon>
             <Search className="text-primary" />
           </InputGroupAddon>
+          <InputGroupAddon>
+            <button
+              type="button"
+              onClick={toggleSearchMode}
+              className="text-primary hover:text-primary/70 pl-2 pr-2"
+            >
+              <ArrowLeftRight size={18} />
+            </button>
+          </InputGroupAddon>
           <InputGroupAddon align="inline-end">
             <p className="text-primary">{resultsCount}</p> results
           </InputGroupAddon>
           <InputGroupAddon align="inline-end">
-            <Button className="pl-6 pr-6" onClick={searchByMeaning}>
+            <Button className="pl-6 pr-6" onClick={performSearch}>
               <LucideSearch className="text-4xl" />
             </Button>
           </InputGroupAddon>

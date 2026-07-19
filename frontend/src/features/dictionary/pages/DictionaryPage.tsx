@@ -21,6 +21,7 @@ const DictionaryPage = () => {
       <section>
         <DictionarySearch
           resultsCount={results.length}
+          searchMode={searchMode}
           setSearchMode={setSearchMode}
           isWriting={isWriting}
           setIsWriting={setIsWriting}
