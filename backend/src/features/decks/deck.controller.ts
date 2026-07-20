@@ -19,7 +19,13 @@ export const getDecksController = catchErrors(async (req, res) => {
 
   const decks = await getDecks(userId)
 
-  res.status(OK).json(decks)
+  res.status(OK).json(
+    decks.map((deck) => ({
+      id: deck._id.toString(),
+      title: deck.title,
+      description: deck.description,
+    })),
+  )
 })
 
 export const createDeckController = catchErrors(async (req, res) => {
@@ -37,7 +43,11 @@ export const getDeckController = catchErrors(async (req, res) => {
 
   const deck = await getDeck(userId, deckId)
 
-  res.status(OK).json(deck)
+  res.status(OK).json({
+    id: deck._id.toString(),
+    title: deck.title,
+    description: deck.description,
+  })
 })
 
 export const updateDeckController = catchErrors(async (req, res) => {

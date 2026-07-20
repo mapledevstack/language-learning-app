@@ -8,7 +8,8 @@ type Props = {
 }
 
 const ProgressPlay = ({ deck }: Props) => {
-  const progress = deck.learnedCount / deck.cardCount || 0
+  const progress = 0
+  const dueCount = 0
 
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-20">
@@ -28,13 +29,10 @@ const ProgressPlay = ({ deck }: Props) => {
         <div className="inset-2 absolute">
           <div
             className={cn(
-              "inset-2 flex text-primary items-center justify-center absolute group-hover:opacity-0 transition-opacity",
-              deck.dueCount < 100 && "text-4xl",
-              deck.dueCount >= 100 && "text-3xl",
-              deck.dueCount >= 1000 && "text-2xl!",
+              "inset-2 flex text-primary items-center justify-center absolute group-hover:opacity-0 transition-opacity text-3xl",
             )}
           >
-            {deck.dueCount}
+            {dueCount}
           </div>
           <div className="inset-2 flex items-center justify-center absolute hover:scale-105 opacity-0 group-hover:opacity-100 transition-all">
             <LucidePlay className="size-12 text-primary-foreground hover:text-primary transition-all" />

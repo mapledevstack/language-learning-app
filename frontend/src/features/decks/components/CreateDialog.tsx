@@ -12,45 +12,82 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { LucidePlus } from "lucide-react"
+import { useCreateDeck } from "../hooks/useCreateDeck"
+import { useState, type SubmitEvent } from "react"
 
 const CreateDialog = () => {
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+
+  const [open, setOpen] = useState(false)
+
+  const { mutate: createDeck, isPending, isError } = useCreateDeck()
+
+  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    createDeck({ title, description }, { onSuccess: () => setOpen(false) })
+
+    setTitle("")
+    setDescription("")
+  }
+
   return (
-    <Dialog>
-      <form>
-        <DialogTrigger asChild>
-          <Button variant="outline">
-            <div className="absolute inset-2 flex items-center justify-center hover:scale-115 hover:text-primary transition-all">
-              <LucidePlus className="size-18" />
-            </div>
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-sm">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">
+          <div className="absolute inset-2 flex items-center justify-center hover:scale-115 hover:text-primary transition-all">
+            <LucidePlus className="size-18" />
+          </div>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-sm">
+        <form onSubmit={(e) => handleSubmit(e)}>
           <DialogHeader>
             <DialogTitle>Add new Deck</DialogTitle>
             <DialogDescription>
               Make an empty deck here or{" "}
               <a href="">generate a deck from sources</a>
             </DialogDescription>
+            <DialogDescription>
+              {isError && (
+                <div className="text-sm text-destructive">
+                  Failed to create deck.
+                </div>
+              )}
+            </DialogDescription>
           </DialogHeader>
           <FieldGroup>
             <Field>
-              <Label htmlFor="name-1">Deck name</Label>
-              <Input id="name-1" name="name" />
+              <Label htmlFor="title">Deck name</Label>
+              <Input
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
             </Field>
             <Field>
-              <Label htmlFor="username-1">Deck description</Label>
-              <Input id="username-1" name="username" />
+              <Label htmlFor="description">Deck description</Label>
+              <Textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
             </Field>
           </FieldGroup>
-          <DialogFooter>
+          <DialogFooter className="mt-4">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button type="button" variant="outline">
+                Cancel
+              </Button>
             </DialogClose>
-            <Button type="submit">Create</Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Creating..." : "Create"}
+            </Button>
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   )
 }

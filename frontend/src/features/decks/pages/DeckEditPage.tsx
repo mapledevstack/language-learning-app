@@ -1,10 +1,11 @@
-import EmptyCard from "@/components/cards/EmptyCard"
-import { LucideHammer } from "lucide-react"
+import DeckEditor from "../components/DeckEditor"
+import DeckFlashCards from "../components/DeckFlashCards"
 
 const DeckEditPage = () => {
   return (
-    <div className="h-full">
-      <EmptyCard text="Work in Progress" icon={LucideHammer} />
+    <div className="grid md:grid-cols-[30%_70%] gap-4 h-full md:overflow-y-hidden p-6 overflow-x-hidden">
+      <DeckEditor />
+      <DeckFlashCards />
     </div>
   )
 }

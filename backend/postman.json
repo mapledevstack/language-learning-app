@@ -399,6 +399,335 @@
       ]
     },
     {
+      "name": "Decks",
+      "item": [
+        {
+          "name": "Create Deck",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Core 3\",\r\n  \"description\": \"Common Japanese words\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/decks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "decks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User Decks",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/decks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "decks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User Deck",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/decks/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "decks",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "6a589f745eb57745fc642151"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Deck",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Core Vocabulary 1\",\r\n  \"description\": \"Common Japanese words\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/decks/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "decks",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "6a589f745eb57745fc642151"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Deck",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Core Vocabulary 20000\",\r\n  \"description\": \"Common Japanese words\"\r\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/decks/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "decks",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "6a5899b95f09ca02b600fcd8"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Flashcards",
+      "item": [
+        {
+          "name": "Create Empty Card",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"wordId\": \"123456\",\r\n  \"deckId\": \"6a495923459fa49e10b52fc5\",\r\n  \"front\": {\r\n    \"text\": \"食べ\",\r\n    \"media\": {\r\n      \"audio\": \"https://example.com/taberu.mp3\"\r\n    }\r\n  },\r\n  \"source\": \"dictionary\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/flashcards",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "flashcards"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get FlashCards",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/flashcards/deck/:deckId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "flashcards",
+                "deck",
+                ":deckId"
+              ],
+              "variable": [
+                {
+                  "key": "deckId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Flashcard",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/flashcards/:flashcardId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "flashcards",
+                ":flashcardId"
+              ],
+              "variable": [
+                {
+                  "key": "flashcardId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update FlashCard",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/flashcards/:flashcardId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "flashcards",
+                ":flashcardId"
+              ],
+              "variable": [
+                {
+                  "key": "flashcardId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Due Flashcards",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/flashcards/deck/:deckId/due",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "flashcards",
+                "deck",
+                ":deckId",
+                "due"
+              ],
+              "variable": [
+                {
+                  "key": "deckId",
+                  "value": "6a495923459fa49e10b52fc5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Review",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"rating\": \"Again\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/flashcards/:flashcardId/review",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "flashcards",
+                ":flashcardId",
+                "review"
+              ],
+              "variable": [
+                {
+                  "key": "flashcardId",
+                  "value": "6a5b797cf232cf83ca4e528a"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Health",
       "request": {
         "method": "GET",

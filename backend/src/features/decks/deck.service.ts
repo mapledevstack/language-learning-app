@@ -5,7 +5,7 @@ import AppError from "../../utils/appError.js"
 import { NOT_FOUND } from "../../constants/http.js"
 
 export const getDecks = async (userId: Types.ObjectId) => {
-  return Deck.find({ userId })
+  return Deck.find({ userId }).select("_id title description")
 }
 
 export const createDeck = async (
@@ -18,7 +18,6 @@ export const createDeck = async (
     userId,
     title: data.title,
     description: data.description,
-    flashCardIds: [],
   })
   console.log("Created deck...")
 

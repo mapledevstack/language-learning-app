@@ -1,6 +1,5 @@
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import Card from "@/components/cards/Card"
-import { DeckSchema, type Deck } from "@/features/decks/schemas/DeckSchema"
 import { useState } from "react"
 import KanjiKanaWord from "./KanjiKanaWord"
 import useKanji from "../hooks/useKanji"
@@ -27,12 +26,6 @@ type Props = {
 const WordCard = ({ word, onTokenSelect }: Props) => {
   const [formIndex, setFormIndex] = useState(0)
   const [kanjiIndex, setKanjiIndex] = useState(0)
-
-  const handleAddToDeck = (deckId: number) => {
-    console.log(
-      `Added ${word.forms[formIndex].text} to ${decks.find((deck) => deck.id === deckId)?.title}`,
-    )
-  }
 
   const selectedWordForm = word.forms[formIndex]
 
@@ -76,7 +69,10 @@ const WordCard = ({ word, onTokenSelect }: Props) => {
         )}
       </div>
 
-      <AddToDeckButton handleAddToDeck={handleAddToDeck} />
+      <AddToDeckButton
+        wordId={word.wordId}
+        cardFront={word.forms[formIndex].text}
+      />
 
       <div className="bg-accent w-full p-4 rounded-md">
         <ol className="space-y-4">
@@ -134,23 +130,3 @@ const WordCard = ({ word, onTokenSelect }: Props) => {
   )
 }
 export default WordCard
-
-const decks: Deck[] = [
-  DeckSchema.parse({
-    id: 1,
-    title: "Hiragana",
-    description: "Basic Japanese syllabary",
-    cardCount: 46,
-    learnedCount: 23,
-    dueCount: 26,
-  }),
-
-  DeckSchema.parse({
-    id: 2,
-    title: "Katakana",
-    description: "Foreign-word syllabary",
-    cardCount: 46,
-    learnedCount: 2,
-    dueCount: 46,
-  }),
-]
