@@ -79,7 +79,11 @@ const flashCardSchema = new Schema(
     },
 
     front: {
-      text: String,
+      text: {
+        type: String,
+        required: true,
+        trim: true,
+      },
 
       media: {
         image: String,

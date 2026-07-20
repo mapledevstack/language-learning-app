@@ -6,6 +6,7 @@ import { Route } from "@/routes/_app/decks/$deckId/edit"
 import useDeck from "../hooks/useDeck"
 import { useEffect, useState } from "react"
 import useUpdateDeck from "../hooks/useUpdateDeck"
+import { useNavigate } from "@tanstack/react-router"
 
 const DeckContentsFields = () => {
   const { deckId } = Route.useParams()
@@ -13,6 +14,8 @@ const DeckContentsFields = () => {
 
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (deck) {
@@ -87,7 +90,9 @@ const DeckContentsFields = () => {
       )}
 
       <div className="mt-auto flex justify-end gap-2">
-        <Button variant="outline">Cancel</Button>
+        <Button variant="outline" onClick={() => navigate({ to: "/decks" })}>
+          Cancel
+        </Button>
 
         <Button type="button" disabled={isPending} onClick={handleSave}>
           {isPending ? "Saving..." : "Save"}

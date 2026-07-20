@@ -11,15 +11,15 @@ import {
 import { LucidePlus } from "lucide-react"
 import { useNavigate } from "@tanstack/react-router"
 import useDecks from "@/features/decks/hooks/useDecks"
-import type { Word } from "../schemas/WordSchema"
 import { useState } from "react"
-import FlashCardDialog from "./FlashCardDialog"
+import FlashCardDialog from "../../decks/components/FlashCardDialog"
 
 type Props = {
-  word: Word
+  wordId: string
+  cardFront: string
 }
 
-const AddToDeckButton = ({ word }: Props) => {
+const AddToDeckButton = ({ wordId, cardFront }: Props) => {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const [selectedDeckId, setSelectedDeckId] = useState("")
@@ -70,8 +70,10 @@ const AddToDeckButton = ({ word }: Props) => {
       <FlashCardDialog
         open={open}
         onOpenChange={setOpen}
-        word={word}
+        wordId={wordId}
+        cardFront={cardFront}
         deckId={selectedDeckId}
+        mode="create"
       />
     </>
   )
