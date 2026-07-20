@@ -17,7 +17,6 @@ import {
 import tags from "@/constants/tags"
 import ExampleSentencesSkeleton from "../skeletons/ExampleSentencesSkeleton"
 import PitchAccent from "./PitchAccent"
-import useDecks from "@/features/decks/hooks/useDecks"
 
 type Props = {
   word: Word
@@ -27,14 +26,6 @@ type Props = {
 const WordCard = ({ word, onTokenSelect }: Props) => {
   const [formIndex, setFormIndex] = useState(0)
   const [kanjiIndex, setKanjiIndex] = useState(0)
-
-  const { data: decks = [] } = useDecks()
-
-  const handleAddToDeck = (deckId: string) => {
-    console.log(
-      `Added ${word.forms[formIndex].text} to ${decks.find((deck) => deck.id === deckId)?.title}`,
-    )
-  }
 
   const selectedWordForm = word.forms[formIndex]
 
@@ -78,7 +69,7 @@ const WordCard = ({ word, onTokenSelect }: Props) => {
         )}
       </div>
 
-      <AddToDeckButton handleAddToDeck={handleAddToDeck} />
+      <AddToDeckButton word={word} />
 
       <div className="bg-accent w-full p-4 rounded-md">
         <ol className="space-y-4">
