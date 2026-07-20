@@ -17,6 +17,7 @@ import {
 import tags from "@/constants/tags"
 import ExampleSentencesSkeleton from "../skeletons/ExampleSentencesSkeleton"
 import PitchAccent from "./PitchAccent"
+import { FormIndexContext } from "../context/FormIndexContext"
 
 type Props = {
   word: Word
@@ -69,7 +70,9 @@ const WordCard = ({ word, onTokenSelect }: Props) => {
         )}
       </div>
 
-      <AddToDeckButton word={word} />
+      <FormIndexContext.Provider value={formIndex}>
+        <AddToDeckButton word={word} />
+      </FormIndexContext.Provider>
 
       <div className="bg-accent w-full p-4 rounded-md">
         <ol className="space-y-4">

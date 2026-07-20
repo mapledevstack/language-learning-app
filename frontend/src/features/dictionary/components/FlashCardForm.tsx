@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input"
 import useCreateFlashCard from "@/features/decks/hooks/useCreateFlashCard"
 import type { Word } from "@/features/dictionary/schemas/WordSchema"
 import { useState, type SubmitEvent } from "react"
+import { useFormIndex } from "../context/FormIndexContext"
 
 type Props = {
   word: Word
@@ -11,9 +12,10 @@ type Props = {
 }
 
 const FlashCardForm = ({ word, deckId, onSuccess }: Props) => {
-  const { mutate: createFlashCard, isPending } = useCreateFlashCard()
+  const formIndex = useFormIndex()
 
-  const [front, setFront] = useState(word.forms[0].text)
+  const { mutate: createFlashCard, isPending } = useCreateFlashCard()
+  const [front, setFront] = useState(word.forms[formIndex].text)
   const [source, setSource] = useState("dictionary")
   const [userNotes, setUserNotes] = useState("")
 
