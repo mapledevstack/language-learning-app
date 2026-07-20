@@ -18,7 +18,8 @@ const nodeEnvSchema = z
 export const PORT = getEnv("PORT", "3000")
 export const NODE_ENV = nodeEnvSchema.parse(getEnv("NODE_ENV", "development"))
 export const MONGO_URI = getEnv("MONGO_URI")
-export const MONGO_URI_TEST = getEnv("MONGO_URI_TEST")
+export const MONGO_URI_TEST =
+  NODE_ENV === "test" ? getEnv("MONGO_URI_TEST") : ""
 export const YOUTUBE_API_KEY = getEnv("YOUTUBE_API_KEY")
 export const APP_ORIGIN = getEnv("APP_ORIGIN")
 export const JWT_SECRET = getEnv("JWT_SECRET")
