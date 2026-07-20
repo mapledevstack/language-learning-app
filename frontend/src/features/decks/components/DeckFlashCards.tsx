@@ -7,7 +7,7 @@ import { Route } from "@/routes/_app/decks/$deckId/edit"
 const DeckFlashCards = () => {
   const { deckId } = Route.useParams()
 
-  const { data: flashCards = [], isPending } = useFlashCards(deckId)
+  const { data: flashCards = [] } = useFlashCards(deckId)
 
   return (
     <Card className="h-full min-h-0 overflow-auto">
