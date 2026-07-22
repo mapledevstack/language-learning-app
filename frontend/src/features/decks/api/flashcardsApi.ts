@@ -20,3 +20,8 @@ export const updateFlashCard = (
 
 export const deleteFlashCard = (flashCardId: string) =>
   api.delete(`/flashcards/${flashCardId}`)
+
+export const getDueFlashCards = async (deckId: string) => {
+  const response = await api.get(`/flashcards/deck/${deckId}/due`)
+  return FlashCardsSchema.parse(response)
+}

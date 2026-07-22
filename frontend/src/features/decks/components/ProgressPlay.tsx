@@ -2,14 +2,27 @@ import { LucidePlay } from "lucide-react"
 import type { Deck } from "../schemas/DeckSchema"
 import { Link } from "@tanstack/react-router"
 import { cn } from "@/utils/cn"
+import useDueFlashCards from "../hooks/useDueFlashCards"
+import useFlashCards from "../hooks/useFlashCards"
+import { State } from "ts-fsrs"
 
 type Props = {
   deck: Deck
 }
 
 const ProgressPlay = ({ deck }: Props) => {
-  const progress = 0
-  const dueCount = 0
+  const { data: dueFlashCards = [], isLoading } = useDueFlashCards(deck.id)
+  const { data: flashCards = [] } = useFlashCards(deck.id)
+
+  const newCount = flashCards.filter(
+    (card) => card.fsrs.state === State.New,
+  ).length
+
+  const progress =
+    flashCards.length === 0 ? 0 : 1 - newCount / flashCards.length
+  const dueCount = isLoading ? "-" : dueFlashCards.length
+
+  // Switch to deck/:deckId/stats route later for progress and due count
 
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-20">

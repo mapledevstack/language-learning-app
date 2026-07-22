@@ -4,7 +4,6 @@ import { Trash2, Pencil } from "lucide-react"
 import FlashCardDialog from "./FlashCardDialog"
 import { useState } from "react"
 import { Route } from "@/routes/_app/decks/$deckId/edit"
-import useDeleteFlashCard from "../hooks/useDeleteFlashCard"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,6 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import useDeleteFlashCard from "../hooks/useDeleteFlashCard.js"
 
 type Props = {
   flashCards: FlashCards

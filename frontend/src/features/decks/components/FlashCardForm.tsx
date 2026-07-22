@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import useCreateFlashCard from "@/features/decks/hooks/useCreateFlashCard"
 import { useState, type SubmitEvent } from "react"
-import useUpdateFlashCard from "../hooks/useUpdateFlashCard"
 import type { FlashCard } from "../schemas/FlashCardSchema"
+import useUpdateFlashCard from "../hooks/useUpdateFlashCard.js"
 
 type Props = {
   wordId: string
