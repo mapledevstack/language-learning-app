@@ -89,12 +89,21 @@ const DeckContentsFields = () => {
         <p className="text-sm text-green-500">Saved!</p>
       )}
 
-      <div className="mt-auto flex justify-end gap-2">
-        <Button variant="outline" onClick={() => navigate({ to: "/decks" })}>
+      <div className="mt-auto flex justify-end gap-2 w-full">
+        <Button
+          variant="outline"
+          onClick={() => navigate({ to: "/decks" })}
+          className="flex-1"
+        >
           Cancel
         </Button>
 
-        <Button type="button" disabled={isPending} onClick={handleSave}>
+        <Button
+          type="button"
+          disabled={isPending}
+          onClick={handleSave}
+          className="flex-1"
+        >
           {isPending ? "Saving..." : "Save"}
         </Button>
       </div>

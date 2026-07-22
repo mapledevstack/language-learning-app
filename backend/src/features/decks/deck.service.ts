@@ -3,6 +3,8 @@ import Deck from "./deck.model.js"
 import { CreateDeckSchema, UpdateDeckSchema } from "./deck.schemas.js"
 import AppError from "../../utils/appError.js"
 import { NOT_FOUND } from "../../constants/http.js"
+import FlashCard from "../flashcards/flashcard.model.js"
+import { State } from "ts-fsrs"
 
 export const getDecks = async (userId: Types.ObjectId) => {
   return Deck.find({ userId }).select("_id title description")
@@ -37,6 +39,54 @@ export const getDeck = async (userId: Types.ObjectId, deckId: string) => {
   return deck
 }
 
+export const getDeckStats = async (userId: Types.ObjectId, deckId: string) => {
+  await getDeck(userId, deckId)
+
+  const filter = {
+    deckId,
+    userId,
+  }
+
+  const [
+    totalCards,
+    newCards,
+    learningCards,
+    reviewCards,
+    relearningCards,
+    dueCards,
+  ] = await Promise.all([
+    FlashCard.countDocuments(filter),
+    FlashCard.countDocuments({
+      ...filter,
+      "fsrs.state": State.New,
+    }),
+    FlashCard.countDocuments({
+      ...filter,
+      "fsrs.state": State.Learning,
+    }),
+    FlashCard.countDocuments({
+      ...filter,
+      "fsrs.state": State.Review,
+    }),
+    FlashCard.countDocuments({
+      ...filter,
+      "fsrs.state": State.Relearning,
+    }),
+    FlashCard.countDocuments({
+      ...filter,
+      "fsrs.due": { $lte: new Date() },
+    }),
+  ])
+
+  return {
+    totalCards,
+    newCards,
+    learningCards,
+    reviewCards,
+    relearningCards,
+    dueCards,
+  }
+}
 export const updateDeck = async (
   userId: Types.ObjectId,
   deckId: string,

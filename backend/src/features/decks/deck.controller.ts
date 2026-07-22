@@ -10,6 +10,7 @@ import {
   deleteDeck,
   getDeck,
   getDecks,
+  getDeckStats,
   updateDeck,
 } from "./deck.service.js"
 import { getAuthUserId } from "../auth/auth.utils.js"
@@ -48,6 +49,15 @@ export const getDeckController = catchErrors(async (req, res) => {
     title: deck.title,
     description: deck.description,
   })
+})
+
+export const getDeckStatsController = catchErrors(async (req, res) => {
+  const { deckId } = deckParamsSchema.parse(req.params)
+  const userId = getAuthUserId(req)
+
+  const stats = await getDeckStats(userId, deckId)
+
+  res.status(OK).json(stats)
 })
 
 export const updateDeckController = catchErrors(async (req, res) => {

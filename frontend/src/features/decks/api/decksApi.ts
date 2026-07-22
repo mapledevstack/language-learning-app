@@ -2,6 +2,7 @@ import api from "@/utils/api"
 import {
   DeckSchema,
   DecksSchema,
+  DeckStatsSchema,
   type CreateDeckInput,
   type UpdateDeckInput,
 } from "../schemas/DeckSchema"
@@ -22,3 +23,8 @@ export const deleteDeck = (deckId: string) => api.delete(`/decks/${deckId}`)
 
 export const updateDeck = (deckId: string, input: UpdateDeckInput) =>
   api.patch(`/decks/${deckId}`, input)
+
+export const getDeckStats = async (deckId: string) => {
+  const response = await api.get(`/decks/${deckId}/stats`)
+  return DeckStatsSchema.parse(response)
+}

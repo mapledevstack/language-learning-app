@@ -14,6 +14,16 @@ export const updateDeckSchema = z.object({
   description: z.string().trim().max(500).optional(),
 })
 
+export const deckStatsSchema = z.object({
+  totalCards: z.number(),
+  newCards: z.number(),
+  learningCards: z.number(),
+  reviewCards: z.number(),
+  relearningCards: z.number(),
+  dueCards: z.number(),
+})
+
 export type CreateDeckSchema = z.infer<typeof createDeckSchema>
 export type DeckParamsSchema = z.infer<typeof deckParamsSchema>
 export type UpdateDeckSchema = z.infer<typeof updateDeckSchema>
+export type DeckStatsSchema = z.infer<typeof deckStatsSchema>
