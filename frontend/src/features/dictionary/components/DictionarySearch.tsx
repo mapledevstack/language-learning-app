@@ -1,9 +1,4 @@
-import {
-  ArrowLeftRight,
-  LucideLineSquiggle,
-  LucideSearch,
-  Search,
-} from "lucide-react"
+import { LucideLineSquiggle, LucideSearch, Search } from "lucide-react"
 import { cn } from "@/utils/cn"
 import { useState, type KeyboardEvent } from "react"
 import {
@@ -13,6 +8,11 @@ import {
 } from "@/components/ui/input-group"
 import getSearchTokens from "../utils/getSearchTokens"
 import { Button } from "@/components/ui/button"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 type Props = {
   resultsCount: number
@@ -89,13 +89,22 @@ const DictionarySearch = ({
             <Search className="text-primary" />
           </InputGroupAddon>
           <InputGroupAddon>
-            <button
-              type="button"
-              onClick={toggleSearchMode}
-              className="text-primary hover:text-primary/70 pl-2 pr-2"
-            >
-              <ArrowLeftRight size={18} />
-            </button>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button
+                  type="button"
+                  onClick={toggleSearchMode}
+                  className="text-primary-foreground hover:text-primary-foreground/70 pl-4 pr-4"
+                >
+                  {searchMode === "meaning" ? "A → あ" : "あ → あ"}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {searchMode === "meaning"
+                  ? "Search by word"
+                  : "Search by meaning"}
+              </TooltipContent>
+            </Tooltip>
           </InputGroupAddon>
           <InputGroupAddon align="inline-end">
             <p className="text-primary">{resultsCount}</p> results
