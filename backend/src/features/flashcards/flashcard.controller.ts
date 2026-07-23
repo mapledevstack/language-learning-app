@@ -19,6 +19,7 @@ import {
   updateFlashCardParamsSchema,
   updateFlashCardSchema,
 } from "./flashcard.schema.js"
+import { Grade } from "ts-fsrs"
 
 export const createFlashCardController = catchErrors(async (req, res) => {
   const body = createFlashCardSchema.parse(req.body)
@@ -71,7 +72,7 @@ export const reviewFlashCardController = catchErrors(async (req, res) => {
   const { rating } = reviewFlashCardSchema.parse(req.body)
   const userId = getAuthUserId(req)
 
-  const flashCard = await reviewFlashCard(userId, flashcardId, rating)
+  const flashCard = await reviewFlashCard(userId, flashcardId, rating as Grade)
 
   res.status(OK).json(flashCard)
 })

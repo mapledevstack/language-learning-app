@@ -4,6 +4,7 @@ import {
   type CreateFlashCardSchema,
   type UpdateFlashCardSchema,
 } from "../schemas/FlashCardSchema"
+import type { Rating } from "ts-fsrs"
 
 export const createFlashCard = (input: CreateFlashCardSchema) =>
   api.post("/flashcards", input)
@@ -25,3 +26,6 @@ export const getDueFlashCards = async (deckId: string) => {
   const response = await api.get(`/flashcards/deck/${deckId}/due`)
   return FlashCardsSchema.parse(response)
 }
+
+export const reviewFlashCard = (flashCardId: string, rating: Rating) =>
+  api.post(`/flashcards/${flashCardId}/review`, { rating })

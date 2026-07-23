@@ -7,8 +7,7 @@ type Props = {
 const StudyFlashCardBack = ({ card }: Props) => {
   return (
     <div className="text-2xl size-full grid place-items-center">
-      {card.back.reading}
-      {card.back.meaning}
+      {card.front.text}
     </div>
   )
 }

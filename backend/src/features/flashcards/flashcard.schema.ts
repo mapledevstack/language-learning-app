@@ -1,3 +1,4 @@
+import { Rating } from "ts-fsrs"
 import { z } from "zod"
 
 export const createFlashCardSchema = z.object({
@@ -49,7 +50,7 @@ export const reviewFlashCardParamsSchema = z.object({
 })
 
 export const reviewFlashCardSchema = z.object({
-  rating: z.enum(["Again", "Good"]),
+  rating: z.enum(Rating),
 })
 
 export type CreateFlashCardSchema = z.infer<typeof createFlashCardSchema>

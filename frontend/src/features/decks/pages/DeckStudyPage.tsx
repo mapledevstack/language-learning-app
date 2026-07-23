@@ -1,96 +1,57 @@
-// import { useEffect, useState } from "react"
-// import { handleAgain, handleGood } from "../utils/srs"
-// import { motion } from "motion/react"
-// import { Route } from "@/routes/_app/decks/$deckId"
-// import useFlashCards from "../hooks/useFlashCards"
-// import FlashCardStats from "../components/FlashCardStats"
-// import FlipCard from "@/components/cards/FlipCard"
-// import StudyFlashCardFront from "../components/StudyFlashCardFront"
-// import StudyFlashCardBack from "../components/StudyFlashCardBack"
+import { Route } from "@/routes/_app/decks/$deckId"
+import useDueFlashCards from "../hooks/useDueFlashCards"
 import EmptyCard from "@/components/cards/EmptyCard"
+import FlipCard from "@/components/cards/FlipCard"
+import StudyFlashCardFront from "../components/StudyFlashCardFront"
+import StudyFlashCardBack from "../components/StudyFlashCardBack"
+import useStudySession from "../hooks/useStudySession"
+import { LucidePartyPopper } from "lucide-react"
+import StudyControls from "../components/StudyControls"
+import CardProgress from "../components/CardProgress"
 
 const DeckStudyPage = () => {
-  // const { deckId: deckIdParam } = Route.useParams()
-  // const deckId = Number(deckIdParam)
+  const { deckId } = Route.useParams()
 
-  // // Find actual deck
-  // // const deck = decks.find(deck => deck.id === deckId)
-  // const { data: flashcards = [] } = useFlashCards()
-  // // Use actual Filtered Flashcards
-  // const allStudyCards = flashcards.filter((card) =>
-  //   card.deckId.includes(deckId),
-  // )
+  const { data: cards = [] } = useDueFlashCards(deckId)
 
-  // const [studyCards, setStudyCards] = useState(allStudyCards)
-  // const [index, setIndex] = useState(0)
-  // const [isFlipped, setIsFlipped] = useState<boolean>(false)
+  const {
+    currentCard,
+    finished,
+    reveal,
+    rate,
+    totalCards,
+    currentIndex,
+    isFlipped,
+  } = useStudySession(cards)
 
-  // // Move to Profile Settings
-  // const [flipAnimationEnabled] = useState(true)
+  if (!cards.length) {
+    return <EmptyCard text="No cards to study for now" />
+  }
 
-  // const currentCard = studyCards[index]
-  // const remainingCards = studyCards.slice(index)
-  // const remainingCount = {
-  //   new: remainingCards.filter((card) => card.status === "new").length,
-  //   learning: remainingCards.filter((card) => card.status === "learning")
-  //     .length,
-  //   review: remainingCards.filter((card) => card.status === "review").length,
-  // }
+  if (finished) {
+    return (
+      <EmptyCard
+        text="Yohoo! Completed today's study session!"
+        icon={LucidePartyPopper}
+      />
+    )
+  }
 
-  // useEffect(() => {
-  //   const handleKey = ({ key }: KeyboardEvent) => {
-  //     if (!isFlipped && key === "ArrowUp") {
-  //       setIsFlipped(true)
-  //       return
-  //     }
+  return (
+    <>
+      <div className="mx-auto flex w-fit flex-col gap-4 h-full items-center justify-center">
+        <FlipCard
+          front={<StudyFlashCardFront card={currentCard} />}
+          back={<StudyFlashCardBack card={currentCard} />}
+          isFlipped={isFlipped}
+        />
 
-  //     if (isFlipped && key === "ArrowLeft") {
-  //       setStudyCards((prev) => {
-  //         const updatedCard = handleAgain(currentCard)
-  //         return prev.map((card) => (card === currentCard ? updatedCard : card))
-  //       })
-  //       setIsFlipped(false)
-  //       setIndex((prev) => prev + 1)
-  //     } else if (isFlipped && key === "ArrowRight") {
-  //       setStudyCards((prev) => {
-  //         const updatedCard = handleGood(currentCard)
-  //         return prev.map((card) => (card === currentCard ? updatedCard : card))
-  //       })
-  //       setIsFlipped(false)
-  //       setIndex((prev) => prev + 1)
-  //     }
-  //   }
+        <StudyControls isFlipped={isFlipped} onReveal={reveal} onRate={rate} />
 
-  //   window.addEventListener("keydown", handleKey)
-  //   return () => window.removeEventListener("keydown", handleKey)
-  // }, [isFlipped, currentCard])
-
-  // if (!currentCard) {
-  return <EmptyCard text="No cards found / WIP" />
-  // }
-
-  // return (
-  //   <div className="h-full flex flex-col items-center justify-center p-10 relative gap-10">
-  //     <motion.div
-  //       initial={{ opacity: 0, y: 50, x: 0 }}
-  //       animate={{ opacity: 1, y: 0 }}
-  //       transition={{ ease: "easeInOut" }}
-  //     >
-  //       <FlipCard
-  //         isFlipped={isFlipped}
-  //         flipAnimationEnabled={flipAnimationEnabled}
-  //         front={<StudyFlashCardFront card={currentCard} />}
-  //         back={<StudyFlashCardBack card={currentCard} />}
-  //         symmetricFlip={false}
-  //       />
-  //     </motion.div>
-
-  //     <FlashCardStats
-  //       currentCard={currentCard}
-  //       remainingCount={remainingCount}
-  //     />
-  //   </div>
-  // )
+        <CardProgress current={currentIndex + 1} total={totalCards} />
+      </div>
+    </>
+  )
 }
 
 export default DeckStudyPage

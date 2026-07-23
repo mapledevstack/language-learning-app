@@ -1,5 +1,5 @@
 import { Types } from "mongoose"
-import { createEmptyCard, Rating, RatingType } from "ts-fsrs"
+import { createEmptyCard, Rating, Grade } from "ts-fsrs"
 import FlashCard from "./flashcard.model.js"
 import {
   CreateFlashCardSchema,
@@ -92,7 +92,7 @@ export const updateFlashCard = async (
 export const reviewFlashCard = async (
   userId: Types.ObjectId,
   flashCardId: string,
-  rating: RatingType,
+  grade: Grade,
 ) => {
   const flashCard = await FlashCard.findOne({
     _id: flashCardId,
@@ -102,8 +102,6 @@ export const reviewFlashCard = async (
   if (!flashCard) {
     throw new AppError("Card not found", NOT_FOUND)
   }
-
-  const grade = rating === "Again" ? Rating.Again : Rating.Good
 
   // ts-fsrs expects a plain Card object.
   // Passing the Mongoose nested document directly causes scheduler.next()
