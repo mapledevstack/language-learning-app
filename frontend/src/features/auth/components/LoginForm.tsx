@@ -125,11 +125,12 @@ const LoginForm = () => {
         <Field>
           <Button
             type="button"
-            variant={"link"}
+            variant={"secondary"}
+            className="w-full rounded-full h-14 text-lg"
             onClick={() => loginDemo()}
             disabled={isDemoPending || isPending}
           >
-            Try Demo Account?
+            {isDemoPending ? "Loading Demo..." : "Try Demo Account"}
           </Button>
         </Field>
       </FieldGroup>
