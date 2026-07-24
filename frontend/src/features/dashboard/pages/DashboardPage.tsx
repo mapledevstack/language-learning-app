@@ -1,17 +1,41 @@
-import EmptyCard from "@/components/cards/EmptyCard"
-import useCurrentUser from "@/features/auth/hooks/useCurrentUser"
-import { LucideHammer } from "lucide-react"
+import DashboardHeader from "../components/DashboardHeader"
+import StudyNowCard from "../components/StudyNowCard"
+import TodayProgressCard from "../components/TodayProgressCard"
+import DueCardsCard from "../components/DueCardsCard"
+import HeatmapCard from "../components/HeatmapCard"
+import DeckOverviewCard from "../components/DeckOverviewCard"
+import WeeklyGoalCard from "../components/WeeklyGoalCard"
+import AccuracyTrendCard from "../components/AccuracyTrendCard"
+import RecentActivityCard from "../components/RecentActivityCard"
+import QuickActionsCard from "../components/QuickActionsCard"
 
 const DashboardPage = () => {
-  const { data: user } = useCurrentUser()
-
   return (
-    <div className="h-full">
-      <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl font-bold">
-        Welcome to your dashboard {user?.email}
+    <div className="flex max-full flex-col gap-6 p-6">
+      <DashboardHeader />
+
+      <StudyNowCard />
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <TodayProgressCard />
+        <DueCardsCard />
       </div>
-      <EmptyCard text={`Work in progress...`} icon={LucideHammer} />
+
+      <HeatmapCard />
+
+      <DeckOverviewCard />
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <WeeklyGoalCard />
+        <AccuracyTrendCard />
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <RecentActivityCard />
+        <QuickActionsCard />
+      </div>
     </div>
   )
 }
+
 export default DashboardPage
