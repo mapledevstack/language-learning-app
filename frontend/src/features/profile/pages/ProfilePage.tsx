@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button"
 import ThemePreview from "./components/ThemePreview"
 import useUpdateUser from "@/features/auth/hooks/useUpdateUser"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import useCurrentUser from "@/features/auth/hooks/useCurrentUser"
 import { Toaster } from "@/components/ui/sonner"
-import { toast } from "sonner"
+import { LucideLogOut } from "lucide-react"
+import useLogout from "@/features/auth/hooks/useLogout"
 
 const themes = [
   { id: "rose", name: "Rose", color: "oklch(0.525 0.223 4)" },
@@ -19,16 +20,26 @@ const ProfilePage = () => {
   const { data: user } = useCurrentUser()
 
   const [theme, setTheme] = useState(user?.preferences?.colorTheme)
-  const { mutate: updateUser, isSuccess } = useUpdateUser()
+  const [displayName, setDisplayName] = useState(user?.displayName)
+  const [animationsEnabled, setAnimationsEnabled] = useState(
+    user?.preferences?.animationsEnabled,
+  )
 
-  useEffect(() => {
-    if (isSuccess) {
-      toast.message(`Theme changed to ${theme?.toUpperCase()}`)
-    }
-  }, [isSuccess])
+  const { mutate: updateUser } = useUpdateUser()
+  const { mutate: logout } = useLogout()
 
   return (
     <div className="relative h-full space-y-8 overflow-y-auto p-4">
+      <div className="space-y-6">
+        <h1 className="text-2xl font-bold">Display Name</h1>
+        <input
+          type="text"
+          value={displayName}
+          onChange={(e) => setDisplayName(e.target.value)}
+          className="p-2 rounded-xl text-2xl border-2 border-primary"
+        />
+      </div>
+
       <div className="space-y-6">
         <h1 className="text-2xl font-bold">Color Theme</h1>
 
@@ -39,12 +50,34 @@ const ProfilePage = () => {
         />
       </div>
 
+      <div className="flex gap-4 items-center">
+        <h1 className="text-2xl font-bold">Enable Animations for Flashcards</h1>
+        <input
+          type="checkbox"
+          checked={animationsEnabled}
+          onChange={(e) => setAnimationsEnabled(e.target.checked)}
+          className="size-6"
+        />
+      </div>
+
       <div className="absolute bottom-6 right-6">
         <Button
           className="w-52"
-          onClick={() => updateUser({ preferences: { colorTheme: theme } })}
+          onClick={() =>
+            updateUser({
+              displayName,
+              preferences: { colorTheme: theme, animationsEnabled },
+            })
+          }
         >
           Save
+        </Button>
+      </div>
+
+      <div className="absolute top-6 right-6">
+        <Button className="w-40" type="button" onClick={() => logout()}>
+          <LucideLogOut />
+          Logout
         </Button>
       </div>
 

@@ -1,21 +1,22 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { updateUser } from "../api/authApi"
-import { toast } from "sonner"
+import { logout } from "../api/authApi"
+import { useNavigate } from "@tanstack/react-router"
 
-const useUpdateUser = () => {
+const useLogout = () => {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   return useMutation({
-    mutationFn: updateUser,
+    mutationFn: logout,
 
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["auth", "me"],
       })
 
-      toast.message("Preferences updated!")
+      navigate({ to: "/" })
     },
   })
 }
 
-export default useUpdateUser
+export default useLogout
