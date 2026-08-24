@@ -1,6 +1,10 @@
 import { API_BASE_URL } from "@/constants/env"
 
-const request = async <T>(path: string, options?: RequestInit): Promise<T> => {
+const request = async <T>(
+  path: string,
+  options?: RequestInit,
+  isRetry = false,
+): Promise<T> => {
   const res = await fetch(`${API_BASE_URL}${path}`, {
     credentials: "include",
     headers: {
@@ -9,6 +13,16 @@ const request = async <T>(path: string, options?: RequestInit): Promise<T> => {
     },
     ...options,
   })
+
+  if (res.status === 401 && !isRetry && path !== "/auth/refresh") {
+    const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh`, {
+      credentials: "include",
+    })
+
+    if (refreshRes.ok) {
+      return request<T>(path, options, true)
+    }
+  }
 
   if (res.status === 204) {
     return undefined as T
