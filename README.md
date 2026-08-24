@@ -37,6 +37,8 @@
 
 # Overview
 
+![Landing Page Demo](assets/landing-demo.gif)
+
 Learning Japanese often requires switching between multiple websites.
 
 A learner may use one application for dictionary lookups, another for grammar explanations, another for flashcards, and yet another for immersion through native content. Constantly moving between different tools interrupts the learning process and creates unnecessary friction.
@@ -46,6 +48,8 @@ This project aims to bring those workflows together into a single application.
 The Language Learning Platform is a full-stack web application built with modern TypeScript technologies that provides dictionary search, grammar resources, YouTube subtitle analysis, and a growing collection of personalized study tools through one consistent interface.
 
 Rather than recreating existing services, the goal is to build a personal learning hub that makes studying Japanese more efficient while serving as a production-quality software engineering project.
+
+![Dashboard Page Demo](assets/dashboard-demo.gif)
 
 ---
 
@@ -89,6 +93,8 @@ Features include:
 
 ## Dictionary
 
+![Dictionary Page Demo](assets/dictionary-demo.gif)
+
 The dictionary is one of the core components of the platform.
 
 Users can search Japanese vocabulary and quickly explore detailed information about each entry without leaving the application.
@@ -108,7 +114,29 @@ The backend uses Japanese language processing tools and locally imported dataset
 
 ---
 
+## Flashcards
+
+![Flashcards Page Demo](assets/flashcards-demo.gif)
+
+The flashcard system uses **spaced repetition** to help users retain vocabulary over time.
+
+Users can create and review flashcards using content from across the platform, with support for different media types and customizable card layouts.
+
+Current capabilities include:
+
+- Spaced repetition reviews
+- Front/back card layouts
+- Image and audio support
+- Vocabulary from the dictionary
+- Example sentences from Tatoeba
+- Review scheduling based on card performance
+- Progress tracking
+
+---
+
 ## Grammar
+
+![Grammar Page Demo](assets/grammar-demo.gif)
 
 Grammar resources are fully integrated into the application.
 
@@ -125,6 +153,8 @@ Current functionality includes:
 
 ## Immersion
 
+![Immersion Page Demo](assets/immersion-demo.gif)
+
 The immersion system focuses on learning vocabulary through native YouTube content.
 
 Users can analyze subtitles, explore unfamiliar vocabulary, and navigate directly through videos using transcript timestamps.
@@ -138,6 +168,20 @@ Current features include:
 - Topic discovery
 
 This creates a smoother workflow for studying vocabulary directly from real Japanese content.
+
+---
+
+## Theme Customization
+
+![Theme Customization Demo](assets/profile-demo.gif)
+
+The application supports customizable themes, allowing users to personalize the interface to their preferences.
+
+Current capabilities include:
+
+- Multiple color themes
+- Light and dark mode
+- Persistent theme preferences
 
 ---
 
@@ -158,38 +202,6 @@ Infrastructure features include:
 ---
 
 # Feature Status
-
-## Completed
-
-- Authentication
-- Email verification
-- Password reset
-- Demo account
-- Dictionary search
-- Kanji search
-- Example sentences
-- Grammar search
-- YouTube immersion
-- Docker support
-- Production containerization
-
-## In Progress
-
-- Dashboard statistics
-- Flashcard persistence
-- Deck management
-- Profile page
-
-## Planned
-
-The long-term vision for the platform includes:
-
-- Spaced repetition scheduling
-- Personalized study analytics
-- Anime vocabulary mining
-- Progress tracking
-- Reading practice
-- Additional learning tools
 
 The project is under active development, and new features are added incrementally with a focus on maintainability and long-term scalability.
 
