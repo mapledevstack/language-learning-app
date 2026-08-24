@@ -10,8 +10,20 @@ const useLogout = () => {
     mutationFn: logout,
 
     onSuccess: () => {
-      queryClient.invalidateQueries({
+      queryClient.removeQueries({
         queryKey: ["auth", "me"],
+      })
+
+      queryClient.removeQueries({
+        queryKey: ["user-activity"],
+      })
+
+      queryClient.removeQueries({
+        queryKey: ["decks"],
+      })
+
+      queryClient.removeQueries({
+        queryKey: ["deckStats"],
       })
 
       navigate({ to: "/" })

@@ -71,13 +71,17 @@ const WeeklyGoalCard = () => {
 
   return (
     <Card className="w-full">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">Weekly Goal</p>
+      <div>
+        <p className="text-sm text-muted-foreground">Weekly Goal</p>
 
+        <div className="flex justify-between">
           <h2 className="mt-1 text-2xl font-semibold">
-            <span className="text-primary">{currentStreak}</span> day streak
+            <span className="text-primary">{daysStudied}</span> / 7 days
           </h2>
+          <p className="mt-1 text-xl text-muted-foreground">
+            <span className="text-primary text-3xl pr-2">{currentStreak}</span>{" "}
+            day streak!
+          </p>
         </div>
       </div>
 
