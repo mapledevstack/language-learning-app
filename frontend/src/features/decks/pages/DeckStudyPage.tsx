@@ -8,10 +8,13 @@ import useStudySession from "../hooks/useStudySession"
 import { LucidePartyPopper } from "lucide-react"
 import StudyControls from "../components/StudyControls"
 import CardProgress from "../components/CardProgress"
+import BackToDeck from "@/layouts/BackToDeck"
+import useCurrentUser from "@/features/auth/hooks/useCurrentUser"
 
 const DeckStudyPage = () => {
   const { deckId } = Route.useParams()
 
+  const { data: user } = useCurrentUser()
   const { data: cards = [] } = useDueFlashCards(deckId)
 
   const {
@@ -25,7 +28,14 @@ const DeckStudyPage = () => {
   } = useStudySession(cards)
 
   if (!cards.length) {
-    return <EmptyCard text="No cards to study for now" />
+    return (
+      <div className="relative h-screen">
+        <div className="absolute top-4 left-4">
+          <BackToDeck />
+        </div>
+        <EmptyCard text="No cards to study for now" />
+      </div>
+    )
   }
 
   if (finished) {
@@ -41,11 +51,16 @@ const DeckStudyPage = () => {
 
   return (
     <>
+      <div className="absolute top-4 left-4">
+        <BackToDeck />
+      </div>
+
       <div className="mx-auto flex w-fit flex-col gap-4 h-screen items-center justify-center">
         <FlipCard
           front={<StudyFlashCardFront card={currentCard} />}
           back={<StudyFlashCardBack card={currentCard} />}
           isFlipped={isFlipped}
+          flipAnimationEnabled={user?.preferences?.animationsEnabled ?? true}
         />
 
         <StudyControls isFlipped={isFlipped} onReveal={reveal} onRate={rate} />
