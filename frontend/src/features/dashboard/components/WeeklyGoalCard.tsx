@@ -1,9 +1,10 @@
 import { useMemo } from "react"
 
 import { useUserActivity } from "../hooks/useUserActivity"
+import { toDateKey } from "../utils/date"
 
 import Card from "@/components/cards/Card"
-import { toDateKey } from "../utils/date"
+
 import WeeklyGoalCardSkeleton from "../skeletons/WeeklyGoalCardSkeleton"
 
 const WeeklyGoalCard = () => {
@@ -19,7 +20,6 @@ const WeeklyGoalCard = () => {
 
     let daysStudied = 0
 
-    // Current week's Monday -> today
     const dayOfWeek = today.getDay()
     const daysFromMonday = (dayOfWeek + 6) % 7
 
@@ -38,15 +38,16 @@ const WeeklyGoalCard = () => {
     }
 
     let currentStreak = 0
+
     const date = new Date(today)
 
-    while (true) {
-      const key = toDateKey(date)
+    const studiedToday = (activityMap.get(toDateKey(date)) ?? 0) > 0
 
-      if ((activityMap.get(key) ?? 0) <= 0) {
-        break
-      }
+    if (!studiedToday) {
+      date.setDate(date.getDate() - 1)
+    }
 
+    while ((activityMap.get(toDateKey(date)) ?? 0) > 0) {
       currentStreak++
 
       date.setDate(date.getDate() - 1)
@@ -78,8 +79,9 @@ const WeeklyGoalCard = () => {
           <h2 className="mt-1 text-2xl font-semibold">
             <span className="text-primary">{daysStudied}</span> / 7 days
           </h2>
+
           <p className="mt-1 text-xl text-muted-foreground">
-            <span className="text-primary text-3xl pr-2">{currentStreak}</span>{" "}
+            <span className="pr-2 text-3xl text-primary">{currentStreak}</span>
             day streak!
           </p>
         </div>
