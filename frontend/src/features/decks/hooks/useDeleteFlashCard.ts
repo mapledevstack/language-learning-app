@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { deleteFlashCard } from "../api/flashcardsApi"
+import { toast } from "sonner"
 
 const useDeleteFlashCard = () => {
   const queryClient = useQueryClient()
@@ -12,6 +13,10 @@ const useDeleteFlashCard = () => {
       queryClient.invalidateQueries({
         queryKey: ["flashcards", variables.deckId],
       })
+    },
+
+    onError: () => {
+      toast.info("Cannot delete flashcards in Demo mode")
     },
   })
 }

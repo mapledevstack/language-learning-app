@@ -3,6 +3,7 @@ import { useState } from "react"
 
 import AppLayoutDesktop from "./AppLayoutDesktop"
 import AppLayoutMobile from "./AppLayoutMobile"
+import { Toaster } from "@/components/ui/sonner"
 
 export const navigationMenu = [
   { label: "Dashboard", to: "/dashboard" },
@@ -32,6 +33,7 @@ const AppLayout = () => {
             isNavOpen ? "md:scale-[0.97]" : ""
           }`}
         >
+          <Toaster />
           <Outlet />
         </div>
       </div>
