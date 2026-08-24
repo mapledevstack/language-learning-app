@@ -3,6 +3,7 @@ import type {
   LoginInput,
   ResetInput,
   SigninInput,
+  updateUserInput,
 } from "../schemas/inputSchema"
 import { UserSchema, type User } from "../schemas/userSchemas"
 
@@ -27,3 +28,5 @@ export const getCurrentUser = async (): Promise<User> => {
 }
 
 export const demoLogin = () => api.post("/auth/login/demo")
+
+export const updateUser = (input: updateUserInput) => api.patch("/me", input)
