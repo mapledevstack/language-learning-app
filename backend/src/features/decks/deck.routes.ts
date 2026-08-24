@@ -7,16 +7,17 @@ import {
   getDeckStatsController,
   updateDeckController,
 } from "./deck.controller.js"
+import requireRealUser from "../../middleware/requireRealUser.js"
 
 const router = Router()
 
 router.get("/", getDecksController)
-router.post("/", createDeckController)
+router.post("/", requireRealUser, createDeckController)
 
 router.get("/:deckId", getDeckController)
 router.get("/:deckId/stats", getDeckStatsController)
 
-router.patch("/:deckId", updateDeckController)
-router.delete("/:deckId", deleteDeckController)
+router.patch("/:deckId", requireRealUser, updateDeckController)
+router.delete("/:deckId", requireRealUser, deleteDeckController)
 
 export default router

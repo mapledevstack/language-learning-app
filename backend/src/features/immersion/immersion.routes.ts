@@ -6,12 +6,13 @@ import {
   getSubtitlesController,
   getTopicVideosController,
 } from "./immersion.controller.js"
+import requireRealUser from "../../middleware/requireRealUser.js"
 
 const router = Router()
 
 router.get("/topics", getAllTopicsController)
-router.post("/topics", createTopicController)
-router.delete("/topics/:topicId", deleteTopicController)
+router.post("/topics", requireRealUser, createTopicController)
+router.delete("/topics/:topicId", requireRealUser, deleteTopicController)
 
 router.get("/topics/:topicId/videos", getTopicVideosController)
 
