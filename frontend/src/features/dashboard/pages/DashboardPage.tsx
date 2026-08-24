@@ -3,10 +3,8 @@ import StudyNowCard from "../components/StudyNowCard"
 import TodayProgressCard from "../components/TodayProgressCard"
 import DueCardsCard from "../components/DueCardsCard"
 import HeatmapCard from "../components/HeatmapCard"
-import DeckOverviewCard from "../components/DeckOverviewCard"
 import WeeklyGoalCard from "../components/WeeklyGoalCard"
-import AccuracyTrendCard from "../components/AccuracyTrendCard"
-import RecentActivityCard from "../components/RecentActivityCard"
+import LogoutAndDemo from "../components/LogoutAndDemo"
 import QuickActionsCard from "../components/QuickActionsCard"
 
 const DashboardPage = () => {
@@ -21,17 +19,16 @@ const DashboardPage = () => {
         <DueCardsCard />
       </div>
 
-      <HeatmapCard />
+      <div className="w-full">
+        <HeatmapCard />
+      </div>
 
-      <DeckOverviewCard />
-
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 ">
         <WeeklyGoalCard />
-        <AccuracyTrendCard />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <RecentActivityCard />
+        <LogoutAndDemo />
         <QuickActionsCard />
       </div>
     </div>

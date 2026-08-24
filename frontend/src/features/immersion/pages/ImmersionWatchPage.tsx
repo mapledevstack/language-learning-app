@@ -69,7 +69,7 @@ const ImmersionWatchPage = () => {
   // To-do: change this so that Arrows Component can reset Index by just rerendering a new component using 'key'
 
   return (
-    <div className="h-full w-full grid md:grid-cols-[6.5fr_3.5fr] p-10 gap-4">
+    <div className="h-screen w-full grid md:grid-cols-[6.5fr_3.5fr] p-10 gap-4">
       <section className="flex-1 md:overflow-hidden flex flex-col gap-4">
         <VideoCard vidId={vidId} setPlayer={setPlayer} />
 

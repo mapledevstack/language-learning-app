@@ -12,7 +12,7 @@ const TopicPage = () => {
   })
 
   return (
-    <div className="h-full flex-1 overflow-y-auto overflow-x-hidden p-10">
+    <div className="h-screen flex-1 overflow-y-auto overflow-x-hidden p-10">
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4">
         {videos.map((video) => (
           <TopicVideoCard key={video.vidId} video={video} />

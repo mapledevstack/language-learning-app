@@ -17,7 +17,7 @@ const DictionaryPage = () => {
   const { data: results = [], isLoading } = useWordSearch(search, searchMode)
 
   return (
-    <div className="h-full flex flex-col p-10 gap-6">
+    <div className="h-screen flex flex-col p-10 gap-6">
       <section>
         <DictionarySearch
           resultsCount={results.length}

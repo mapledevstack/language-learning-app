@@ -30,16 +30,18 @@ const DeckStudyPage = () => {
 
   if (finished) {
     return (
-      <EmptyCard
-        text="Yohoo! Completed today's study session!"
-        icon={LucidePartyPopper}
-      />
+      <div className="h-screen">
+        <EmptyCard
+          text="Yohoo! Completed today's study session!"
+          icon={LucidePartyPopper}
+        />
+      </div>
     )
   }
 
   return (
     <>
-      <div className="mx-auto flex w-fit flex-col gap-4 h-full items-center justify-center">
+      <div className="mx-auto flex w-fit flex-col gap-4 h-screen items-center justify-center">
         <FlipCard
           front={<StudyFlashCardFront card={currentCard} />}
           back={<StudyFlashCardBack card={currentCard} />}

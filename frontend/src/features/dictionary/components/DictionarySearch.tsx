@@ -90,7 +90,7 @@ const DictionarySearch = ({
           </InputGroupAddon>
           <InputGroupAddon>
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger asChild>
                 <Button
                   type="button"
                   onClick={toggleSearchMode}

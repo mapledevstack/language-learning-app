@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import ThemePreview from "./components/ThemePreview"
+import ThemePreview from "../components/ThemePreview"
 import useUpdateUser from "@/features/auth/hooks/useUpdateUser"
 import { useState } from "react"
 import useCurrentUser from "@/features/auth/hooks/useCurrentUser"
@@ -32,7 +32,7 @@ const ProfilePage = () => {
   const { theme, setTheme } = useTheme()
 
   return (
-    <div className="relative h-full space-y-8 overflow-y-auto p-4">
+    <div className="relative h-screen space-y-8 overflow-y-auto p-4">
       <div className="space-y-6">
         <h1 className="text-2xl font-bold">Display Name</h1>
         <input

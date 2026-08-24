@@ -18,7 +18,6 @@ export const navigationMenu = [
 
 const AppLayout = () => {
   const [isNavOpen, setIsNavOpen] = useState(false)
-
   const { data: user } = useCurrentUser()
 
   useEffect(() => {
@@ -28,8 +27,8 @@ const AppLayout = () => {
   }, [user?.preferences?.colorTheme])
 
   return (
-    <div className="h-screen min-h-0 font-san bg-primary">
-      <div className="bg-primary flex flex-col h-full relative">
+    <div className="h-screen min-h-0 bg-primary font-san">
+      <div className="relative flex h-full flex-col bg-primary">
         <div className="hidden md:block">
           <AppLayoutDesktop isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
         </div>
@@ -38,13 +37,15 @@ const AppLayout = () => {
           <AppLayoutMobile isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
         </div>
 
-        <div
-          className={`flex-1 min-h-0 bg-background text-foreground transition-all duration-300 ${
-            isNavOpen ? "md:scale-[0.97]" : ""
-          }`}
-        >
-          <Toaster />
-          <Outlet />
+        <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+          <div
+            className={`min-h-full bg-background text-foreground transition-transform duration-300 ${
+              isNavOpen ? "md:scale-[0.97]" : ""
+            }`}
+          >
+            <Toaster />
+            <Outlet />
+          </div>
         </div>
       </div>
     </div>

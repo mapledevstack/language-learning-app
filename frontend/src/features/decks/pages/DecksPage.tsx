@@ -6,7 +6,7 @@ const DecksPage = () => {
   const { data: decks = [] } = useDecks()
 
   return (
-    <div className="h-full w-full flex flex-wrap p-10 gap-8 items-center justify-evenly overflow-y-auto">
+    <div className="h-screen w-full flex flex-wrap p-10 gap-8 items-center justify-evenly overflow-y-auto">
       {decks.map((deck) => (
         <DeckCard key={deck.id} deck={deck} />
       ))}

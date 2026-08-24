@@ -8,6 +8,8 @@ import {
 import AppError from "../../utils/appError.js"
 import { NOT_FOUND } from "../../constants/http.js"
 import { scheduler } from "./flashcard.fsrs.js"
+import { incrementReviewCount } from "../users/user.service.js"
+import { getStartOfDay } from "../../utils/date.js"
 
 export const createFlashCard = async (
   userId: Types.ObjectId,
@@ -127,6 +129,8 @@ export const reviewFlashCard = async (
   flashCard.fsrs = result.card
 
   await flashCard.save()
+
+  await incrementReviewCount(userId, getStartOfDay())
 
   return flashCard
 }
