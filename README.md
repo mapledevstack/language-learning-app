@@ -201,12 +201,6 @@ Infrastructure features include:
 
 ---
 
-# Feature Status
-
-The project is under active development, and new features are added incrementally with a focus on maintainability and long-term scalability.
-
----
-
 # Technology Stack
 
 ## Frontend
@@ -618,53 +612,6 @@ Current deployment strategy:
 | Email         | Resend        |
 
 Because each service is isolated, deployments can be updated independently without affecting the rest of the application.
-
----
-
-# Roadmap
-
-The project is actively being developed.
-
-## Currently In Progress
-
-- Dashboard statistics
-- Flashcard persistence
-- Deck management
-- Profile page
-
-## Planned Features
-
-### Learning
-
-- Spaced repetition scheduling
-- Personalized study statistics
-- Review history
-- Learning streaks
-- Progress visualization
-
-### Dictionary
-
-- Pitch accent support
-- Related vocabulary
-- Kanji decomposition
-- Improved search ranking
-
-### Immersion
-
-- Anime vocabulary mining
-- Frequency analysis
-- Vocabulary coverage
-- Automatic deck generation
-
-### Platform
-
-- User settings
-- Improved accessibility
-- Search improvements
-- Performance optimizations
-- Expanded testing
-
-Future development will continue to prioritize maintainability over rapidly adding features.
 
 ---
 
