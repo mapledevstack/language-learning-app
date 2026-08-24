@@ -1,9 +1,9 @@
 import { Route } from "@/routes/_public/auth_.password.reset"
 import { LucideCircleAlert, LucideCircleCheck } from "lucide-react"
 import ResetForm from "@/features/auth/components/ResetForm"
-import { Link } from "@tanstack/react-router"
 import { resetPassword } from "../api/authApi"
 import { useMutation } from "@tanstack/react-query"
+import BackToHome from "@/layouts/BackToHome"
 
 const ResetPasswordPage = () => {
   const { code, exp }: { code: string; exp: string } = Route.useSearch()
@@ -39,13 +39,10 @@ const ResetPasswordPage = () => {
           />
         </div>
       )}
-      <Link
-        to="/auth"
-        search={{ mode: "login" }}
-        className="mt-4 text-sm text-muted-foreground underline"
-      >
-        Go back to Login
-      </Link>
+
+      <div className="absolute top-4 left-4">
+        <BackToHome />
+      </div>
     </div>
   )
 }

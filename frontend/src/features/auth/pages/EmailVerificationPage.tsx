@@ -4,6 +4,7 @@ import { LucideTriangleAlert } from "lucide-react"
 import { Link } from "@tanstack/react-router"
 import { verifyEmail } from "../api/authApi"
 import { useQuery } from "@tanstack/react-query"
+import BackToHome from "@/layouts/BackToHome"
 
 const EmailVerificationPage = () => {
   const { code } = Route.useParams()
@@ -36,13 +37,17 @@ const EmailVerificationPage = () => {
   )
 
   return (
-    <div className="min-h-screen grid place-items-center">
+    <div className="relative min-h-screen grid place-items-center">
       <div className="flex flex-col items-center gap-4 rounded-lg border p-8">
         {content}
 
         <Link to="/" className="mt-4 text-sm text-muted-foreground underline">
           Go back to home
         </Link>
+      </div>
+
+      <div className="absolute top-4 left-4">
+        <BackToHome />
       </div>
     </div>
   )

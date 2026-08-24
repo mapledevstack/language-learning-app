@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router"
 import { sendPasswordResetEmail } from "../api/authApi"
 import { LucideCircleCheck } from "lucide-react"
 import ForgotForm from "../components/ForgotForm"
+import BackToHome from "@/layouts/BackToHome"
 
 const ForgotPasswordPage = () => {
   const { mutate, isError, isPending, isSuccess } = useMutation({
@@ -26,6 +27,10 @@ const ForgotPasswordPage = () => {
       <Link to="/" className="mt-4 text-sm text-muted-foreground underline">
         Go back to home
       </Link>
+
+      <div className="absolute top-4 left-4">
+        <BackToHome />
+      </div>
     </div>
   )
 }

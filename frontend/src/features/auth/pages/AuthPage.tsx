@@ -4,6 +4,7 @@ import SignupForm from "../components/SignupForm"
 import { motion } from "motion/react"
 import { Route } from "@/routes/_public/auth"
 import { AUTH_MODE } from "../schemas/authModes"
+import BackToHome from "@/layouts/BackToHome"
 
 const AuthPage = () => {
   const { mode } = Route.useSearch()
@@ -28,6 +29,10 @@ const AuthPage = () => {
           className="bg-background border-none"
         />
       </motion.div>
+
+      <div className="absolute top-4 left-4">
+        <BackToHome />
+      </div>
     </div>
   )
 }
