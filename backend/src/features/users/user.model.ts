@@ -1,10 +1,13 @@
 import { Document, model, Schema, Types } from "mongoose"
 import { compareValue, hashValue } from "../../utils/bcrypt.js"
+import { COLOR_THEMES } from "../../constants/colorThemes.js"
 
 export interface UserDocument extends Document {
   email: string
   password: string
+  displayName: string
   verified: boolean
+  preferences: Object
 
   comparePassword(val: string): Promise<boolean>
   omitPassword(): Omit<UserDocument, "password">
@@ -15,7 +18,19 @@ const userSchema = new Schema<UserDocument>(
   {
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
+    displayName: { type: String, required: false },
     verified: { type: Boolean, default: false },
+    preferences: {
+      colorTheme: {
+        type: String,
+        enum: COLOR_THEMES,
+        default: COLOR_THEMES[0],
+      },
+      animationsEnabled: {
+        type: Boolean,
+        default: true,
+      },
+    },
   },
   { timestamps: true },
 )

@@ -28,7 +28,11 @@ const DashboardHeader = () => {
         ) : (
           <h1 className="text-4xl font-semibold tracking-tight text-primary ita">
             {getGreeting()}
-            {user ? `, ${getDisplayName(user.email)}` : ""}
+            {user
+              ? user.displayName
+                ? `, ${user.displayName}`
+                : `, ${getDisplayName(user.email)}`
+              : ""}
           </h1>
         )}
         <p className="mt-1 text-muted-foreground">

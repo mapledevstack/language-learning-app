@@ -1,9 +1,11 @@
 import { Outlet } from "@tanstack/react-router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import AppLayoutDesktop from "./AppLayoutDesktop"
 import AppLayoutMobile from "./AppLayoutMobile"
 import { Toaster } from "@/components/ui/sonner"
+import useCurrentUser from "@/features/auth/hooks/useCurrentUser"
+import { setColorTheme } from "@/utils/theme"
 
 export const navigationMenu = [
   { label: "Dashboard", to: "/dashboard" },
@@ -16,6 +18,14 @@ export const navigationMenu = [
 
 const AppLayout = () => {
   const [isNavOpen, setIsNavOpen] = useState(false)
+
+  const { data: user } = useCurrentUser()
+
+  useEffect(() => {
+    if (user?.preferences?.colorTheme) {
+      setColorTheme(user.preferences.colorTheme)
+    }
+  }, [user?.preferences?.colorTheme])
 
   return (
     <div className="h-screen min-h-0 font-san bg-primary">
