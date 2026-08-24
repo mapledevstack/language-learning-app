@@ -4,8 +4,10 @@ import useUpdateUser from "@/features/auth/hooks/useUpdateUser"
 import { useState } from "react"
 import useCurrentUser from "@/features/auth/hooks/useCurrentUser"
 import { Toaster } from "@/components/ui/sonner"
-import { LucideLogOut } from "lucide-react"
+import { LucideLogOut, LucideMoon, LucideSun } from "lucide-react"
 import useLogout from "@/features/auth/hooks/useLogout"
+import { Switch } from "@/components/ui/switch"
+import { useTheme } from "next-themes"
 
 const themes = [
   { id: "rose", name: "Rose", color: "oklch(0.525 0.223 4)" },
@@ -19,7 +21,7 @@ const themes = [
 const ProfilePage = () => {
   const { data: user } = useCurrentUser()
 
-  const [theme, setTheme] = useState(user?.preferences?.colorTheme)
+  const [colorTheme, setColorTheme] = useState(user?.preferences?.colorTheme)
   const [displayName, setDisplayName] = useState(user?.displayName)
   const [animationsEnabled, setAnimationsEnabled] = useState(
     user?.preferences?.animationsEnabled,
@@ -27,6 +29,7 @@ const ProfilePage = () => {
 
   const { mutate: updateUser } = useUpdateUser()
   const { mutate: logout } = useLogout()
+  const { theme, setTheme } = useTheme()
 
   return (
     <div className="relative h-full space-y-8 overflow-y-auto p-4">
@@ -40,13 +43,26 @@ const ProfilePage = () => {
         />
       </div>
 
+      <div className="flex gap-4">
+        <h1 className="text-2xl font-bold">Light/Dark Mode</h1>
+
+        <div className="flex items-center gap-2 bg-primary/30 rounded-4xl p-2">
+          <LucideSun size={14} />
+          <Switch
+            checked={theme === "dark"}
+            onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+          />
+          <LucideMoon size={14} />
+        </div>
+      </div>
+
       <div className="space-y-6">
         <h1 className="text-2xl font-bold">Color Theme</h1>
 
         <ThemePreview
           themes={themes}
-          selectedTheme={theme}
-          onSelect={setTheme}
+          selectedTheme={colorTheme}
+          onSelect={setColorTheme}
         />
       </div>
 
@@ -66,7 +82,7 @@ const ProfilePage = () => {
           onClick={() =>
             updateUser({
               displayName,
-              preferences: { colorTheme: theme, animationsEnabled },
+              preferences: { colorTheme, animationsEnabled },
             })
           }
         >
