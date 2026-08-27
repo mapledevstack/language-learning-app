@@ -4,11 +4,13 @@ import {
   getKanjisController,
   getSearchResultsController,
   getSentencesController,
+  getWordByIdController,
   searchFromMeaningController,
 } from "./dictionary.controller.js"
 
 const router = Router()
 
+router.get("/words/:wordId", getWordByIdController)
 router.get("/search", getSearchResultsController)
 router.get("/search/meaning", searchFromMeaningController)
 router.get("/sentences", getSentencesController)

@@ -4,11 +4,20 @@ import {
   getSearchFromMeaning,
   getSearchResults,
   getSentences,
+  getWordById,
 } from "./dictionary.service.js"
-import { searchQuerySchema } from "./dictionary.schema.js"
+import { searchByIdParams, searchQuerySchema } from "./dictionary.schema.js"
 import catchErrors from "../../utils/catchErrors.js"
 import { BAD_REQUEST, OK } from "../../constants/http.js"
 import AppError from "../../utils/appError.js"
+
+export const getWordByIdController = catchErrors(async (req, res) => {
+  const { wordId } = searchByIdParams.parse(req.params)
+
+  const word = await getWordById(wordId)
+
+  return res.status(OK).json(word)
+})
 
 export const getKanjiController = catchErrors(async (req, res) => {
   const query = req.query.q

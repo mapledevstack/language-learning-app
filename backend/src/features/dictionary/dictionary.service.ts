@@ -5,6 +5,16 @@ import AppError from "../../utils/appError.js"
 import { BAD_GATEWAY, NOT_FOUND } from "../../constants/http.js"
 import { TATOEBA_API_URL } from "../../constants/env.js"
 
+export const getWordById = async (wordId: string) => {
+  const word = await Word.findOne({ wordId }).lean()
+
+  if (!word) {
+    throw new AppError("Word not found", NOT_FOUND)
+  }
+
+  return word
+}
+
 export const getKanji = async (kanji: string) => {
   const result = await Kanji.findOne({ kanji }).lean()
 

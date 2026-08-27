@@ -1,8 +1,14 @@
 import api from "@/utils/api"
 
 import { KanjiSchema } from "../schemas/KanjiSchema"
-import { WordsSchema } from "../schemas/WordSchema"
+import { WordSchema, WordsSchema } from "../schemas/WordSchema"
 import { SentencesSchema, type Sentence } from "../schemas/SentenceSchema"
+
+export const getWordById = async (wordId: string) => {
+  const word = await api.get(`/dictionary/words/${wordId}`)
+
+  return WordSchema.parse(word)
+}
 
 export const getKanjis = async (kanjisGroup: string[][]) => {
   const flatKanjis = [...new Set(kanjisGroup.flat())]
