@@ -7,6 +7,7 @@ import useDeck from "../hooks/useDeck"
 import { useEffect, useState } from "react"
 import useUpdateDeck from "../hooks/useUpdateDeck"
 import { useNavigate } from "@tanstack/react-router"
+import SubtitleImport from "./SubtitleImport"
 
 const DeckContentsFields = () => {
   const { deckId } = Route.useParams()
@@ -79,6 +80,10 @@ const DeckContentsFields = () => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
+      </div>
+
+      <div className="mt-auto">
+        <SubtitleImport />
       </div>
 
       {updateStatus === "error" && (
