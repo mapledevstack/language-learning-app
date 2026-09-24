@@ -30,5 +30,5 @@ export const getUserActivityController = catchErrors(async (req, res) => {
 
   const activity = await getUserActivity(userId, startDate)
 
-  return res.status(200).json(activity)
+  return res.status(OK).json(activity)
 })
