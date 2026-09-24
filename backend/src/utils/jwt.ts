@@ -8,6 +8,7 @@ import { UNAUTHORIZED } from "../constants/http.js"
 export type AccessTokenPayload = {
   sessionId: Types.ObjectId
   userId: Types.ObjectId
+  isDemo?: boolean
 }
 
 export type RefreshTokenPayload = {

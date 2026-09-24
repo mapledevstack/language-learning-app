@@ -23,6 +23,8 @@ import {
 } from "../../constants/http.js"
 import { Session } from "./session.model.js"
 import { VerificationCode } from "./auth.model.js"
+import { verifyAccessToken } from "../../utils/jwt.js"
+import { DEMO_USER_EMAIL } from "../../constants/env.js"
 
 beforeAll(async () => {
   await connectDB()
@@ -308,6 +310,56 @@ describe("Authentication", () => {
         .set("Cookie", refreshCookie!)
 
       expect(response.status).toBe(UNAUTHORIZED)
+    })
+
+    it("preserves demo status when refreshing the access token", async () => {
+      await User.create({
+        email: DEMO_USER_EMAIL,
+        password: "123456",
+      })
+
+      const loginResponse = await request(app).post("/api/v1/auth/login/demo")
+
+      expect(loginResponse.status).toBe(OK)
+
+      const cookies = loginResponse.headers["set-cookie"]
+      const cookiesArray = Array.isArray(cookies)
+        ? cookies
+        : cookies
+          ? [cookies]
+          : []
+
+      const refreshCookie = cookiesArray.find((cookie) =>
+        cookie.startsWith("refreshToken="),
+      )
+
+      expect(refreshCookie).toBeDefined()
+
+      const response = await request(app)
+        .get("/api/v1/auth/refresh")
+        .set("Cookie", refreshCookie!)
+
+      expect(response.status).toBe(OK)
+
+      const responseCookies = response.headers["set-cookie"]
+      const responseCookiesArray = Array.isArray(responseCookies)
+        ? responseCookies
+        : responseCookies
+          ? [responseCookies]
+          : []
+
+      const accessCookie = responseCookiesArray.find((cookie) =>
+        cookie.startsWith("accessToken="),
+      )
+
+      expect(accessCookie).toBeDefined()
+
+      const accessToken = accessCookie!.split(";")[0].split("=")[1]
+
+      const { verifyAccessToken } = await import("../../utils/jwt.js")
+      const payload = verifyAccessToken(accessToken)
+
+      expect(payload.isDemo).toBe(true)
     })
   })
 

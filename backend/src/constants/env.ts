@@ -30,4 +30,4 @@ export const EMAIL_SENDER = getEnv("EMAIL_SENDER")
 export const TATOEBA_API_URL = "https://tatoeba.org/en/api_v0/search"
 export const GOOGLE_API_KEY = getEnv("GOOGLE_API_KEY")
 
-export const DEMO_USER_ID = getEnv("DEMO_USER_ID")
+export const DEMO_USER_EMAIL = getEnv("DEMO_USER_EMAIL", "demo@example.com")
