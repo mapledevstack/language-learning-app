@@ -1,4 +1,12 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest"
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest"
 import request from "supertest"
 import mongoose from "mongoose"
 import app from "../../app.js"
@@ -8,9 +16,13 @@ import {
   BAD_REQUEST,
   CONFLICT,
   CREATED,
+  NOT_FOUND,
   OK,
+  TOO_MANY_REQUESTS,
   UNAUTHORIZED,
 } from "../../constants/http.js"
+import { Session } from "./session.model.js"
+import { VerificationCode } from "./auth.model.js"
 
 beforeAll(async () => {
   await connectDB()
@@ -23,6 +35,13 @@ beforeEach(async () => {
 afterAll(async () => {
   await mongoose.connection.close()
 })
+
+vi.mock("../../utils/sendMail.js", () => ({
+  sendMail: vi.fn().mockResolvedValue({
+    data: { id: "test-email-id" },
+    error: null,
+  }),
+}))
 
 describe("Authentication", () => {
   describe("POST /api/v1/auth/register", () => {
@@ -204,6 +223,259 @@ describe("Authentication", () => {
       expect(refreshCookie).toBeDefined()
       expect(refreshCookie).toContain("Path=/api/v1/auth")
       expect(refreshCookie).toContain("Expires=")
+    })
+  })
+
+  describe("GET /api/v1/auth/refresh", () => {
+    it("rejects when no refresh token is provided", async () => {
+      const response = await request(app).get("/api/v1/auth/refresh")
+
+      expect(response.status).toBe(UNAUTHORIZED)
+    })
+
+    it("refreshes the access token with a valid refresh token", async () => {
+      const loginResponse = await request(app)
+        .post("/api/v1/auth/register")
+        .send({
+          email: "test@example.com",
+          password: "123456",
+          confirmPassword: "123456",
+        })
+
+      const cookies = loginResponse.headers["set-cookie"]
+      const cookiesArray = Array.isArray(cookies) ? cookies : [cookies]
+
+      const refreshCookie = cookiesArray.find((cookie) =>
+        cookie.startsWith("refreshToken="),
+      )
+
+      expect(refreshCookie).toBeDefined()
+
+      const response = await request(app)
+        .get("/api/v1/auth/refresh")
+        .set("Cookie", refreshCookie!)
+
+      expect(response.status).toBe(OK)
+
+      const responseCookies = response.headers["set-cookie"]
+      const responseCookiesArray = Array.isArray(responseCookies)
+        ? responseCookies
+        : [responseCookies]
+
+      expect(
+        responseCookiesArray.some((cookie) =>
+          cookie.startsWith("accessToken="),
+        ),
+      ).toBe(true)
+    })
+
+    it("rejects an invalid refresh token", async () => {
+      const response = await request(app)
+        .get("/api/v1/auth/refresh")
+        .set("Cookie", "refreshToken=invalid-token")
+
+      expect(response.status).toBe(UNAUTHORIZED)
+    })
+
+    it("rejects when the session has expired", async () => {
+      const registerResponse = await request(app)
+        .post("/api/v1/auth/register")
+        .send({
+          email: "test@example.com",
+          password: "123456",
+          confirmPassword: "123456",
+        })
+
+      const cookies = registerResponse.headers["set-cookie"]
+      const cookiesArray = Array.isArray(cookies) ? cookies : [cookies]
+
+      const refreshCookie = cookiesArray.find((cookie) =>
+        cookie.startsWith("refreshToken="),
+      )
+
+      expect(refreshCookie).toBeDefined()
+
+      const user = await User.findOne({ email: "test@example.com" })
+      expect(user).not.toBeNull()
+
+      await Session.updateMany(
+        { userId: user!._id },
+        { expiresAt: new Date(Date.now() - 1000) },
+      )
+
+      const response = await request(app)
+        .get("/api/v1/auth/refresh")
+        .set("Cookie", refreshCookie!)
+
+      expect(response.status).toBe(UNAUTHORIZED)
+    })
+  })
+
+  describe("GET /api/v1/auth/email/verify/:code", () => {
+    it("verifies a user's email with a valid verification code", async () => {
+      await request(app).post("/api/v1/auth/register").send({
+        email: "test@example.com",
+        password: "123456",
+        confirmPassword: "123456",
+      })
+
+      const user = await User.findOne({ email: "test@example.com" })
+      expect(user).not.toBeNull()
+      expect(user?.verified).toBe(false)
+
+      const verification = await VerificationCode.findOne({
+        userId: user!._id,
+      })
+
+      expect(verification).not.toBeNull()
+
+      const response = await request(app).get(
+        `/api/v1/auth/email/verify/${verification!._id}`,
+      )
+
+      expect(response.status).toBe(OK)
+      expect(response.body.message).toBe("Email successfully verified")
+
+      const updatedUser = await User.findById(user!._id)
+
+      expect(updatedUser?.verified).toBe(true)
+
+      const deletedVerification = await VerificationCode.findById(
+        verification!._id,
+      )
+
+      expect(deletedVerification).toBeNull()
+    })
+
+    it("rejects an invalid verification code", async () => {
+      const response = await request(app).get(
+        "/api/v1/auth/email/verify/507f1f77bcf86cd799439011",
+      )
+
+      expect(response.status).toBe(NOT_FOUND)
+    })
+  })
+
+  describe("POST /api/v1/auth/password/forgot", () => {
+    it("sends a password reset email for an existing user", async () => {
+      await request(app).post("/api/v1/auth/register").send({
+        email: "test@example.com",
+        password: "123456",
+        confirmPassword: "123456",
+      })
+
+      const response = await request(app)
+        .post("/api/v1/auth/password/forgot")
+        .send({
+          email: "test@example.com",
+        })
+
+      expect(response.status).toBe(OK)
+      expect(response.body.message).toBe("Password reset email sent")
+
+      const verification = await VerificationCode.findOne({
+        type: "password_reset",
+      })
+
+      expect(verification).not.toBeNull()
+    })
+
+    it("rejects password reset for a non-existent user", async () => {
+      const response = await request(app)
+        .post("/api/v1/auth/password/forgot")
+        .send({
+          email: "nouser@example.com",
+        })
+
+      expect(response.status).toBe(NOT_FOUND)
+    })
+
+    it("rate limits password reset requests", async () => {
+      await request(app).post("/api/v1/auth/register").send({
+        email: "test@example.com",
+        password: "123456",
+        confirmPassword: "123456",
+      })
+
+      for (let i = 0; i < 6; i++) {
+        const response = await request(app)
+          .post("/api/v1/auth/password/forgot")
+          .send({
+            email: "test@example.com",
+          })
+
+        expect(response.status).toBe(OK)
+      }
+
+      const response = await request(app)
+        .post("/api/v1/auth/password/forgot")
+        .send({
+          email: "test@example.com",
+        })
+
+      expect(response.status).toBe(TOO_MANY_REQUESTS)
+    })
+  })
+
+  describe("POST /api/v1/auth/password/reset", () => {
+    it("resets the user's password with a valid verification code", async () => {
+      await request(app).post("/api/v1/auth/register").send({
+        email: "test@example.com",
+        password: "oldpassword",
+        confirmPassword: "oldpassword",
+      })
+
+      const user = await User.findOne({ email: "test@example.com" })
+      expect(user).not.toBeNull()
+
+      const verification = await VerificationCode.create({
+        userId: user!._id,
+        type: "password_reset",
+        expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+      })
+
+      const response = await request(app)
+        .post("/api/v1/auth/password/reset")
+        .send({
+          verificationCode: verification._id,
+          password: "newpassword",
+        })
+
+      expect(response.status).toBe(OK)
+      expect(response.body.message).toBe("Password reset successfully")
+
+      const loginResponse = await request(app).post("/api/v1/auth/login").send({
+        email: "test@example.com",
+        password: "newpassword",
+      })
+
+      expect(loginResponse.status).toBe(OK)
+
+      const oldPasswordResponse = await request(app)
+        .post("/api/v1/auth/login")
+        .send({
+          email: "test@example.com",
+          password: "oldpassword",
+        })
+
+      expect(oldPasswordResponse.status).toBe(UNAUTHORIZED)
+
+      const deletedVerification = await VerificationCode.findById(
+        verification._id,
+      )
+
+      expect(deletedVerification).toBeNull()
+    })
+
+    it("rejects an invalid reset code", async () => {
+      const response = await request(app)
+        .post("/api/v1/auth/password/reset")
+        .send({
+          verificationCode: "507f1f77bcf86cd799439011",
+          password: "newpassword",
+        })
+
+      expect(response.status).toBe(NOT_FOUND)
     })
   })
 })
