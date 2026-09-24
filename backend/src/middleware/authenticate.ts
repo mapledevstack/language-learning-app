@@ -3,7 +3,7 @@ import AppError from "../utils/appError.js"
 import { UNAUTHORIZED } from "../constants/http.js"
 import { verifyAccessToken } from "../utils/jwt.js"
 
-const authenticate: RequestHandler = (req, res, next) => {
+const authenticate: RequestHandler = (req, _res, next) => {
   const accessToken = req.cookies.accessToken as string | undefined
 
   if (!accessToken) {
