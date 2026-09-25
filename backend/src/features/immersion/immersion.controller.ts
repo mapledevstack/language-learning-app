@@ -11,19 +11,24 @@ import {
   topicParamsSchema,
   videoParamsSchema,
 } from "./immersion.schemas.js"
+import { CREATED, NO_CONTENT } from "../../constants/http.js"
+import { getAuthUserId } from "../auth/auth.utils.js"
 
 export const getAllTopicsController = async (req: Request, res: Response) => {
-  const topics = await getAllTopics()
+  const userId = getAuthUserId(req)
+
+  const topics = await getAllTopics(userId)
 
   res.json(topics)
 }
 
 export const createTopicController = async (req: Request, res: Response) => {
-  const { name, coverImg, type } = createTopicSchema.parse(req.body)
+  const userId = getAuthUserId(req)
+  const { name, coverImg } = createTopicSchema.parse(req.body)
 
-  const topic = await createTopic(name, coverImg, type)
+  const topic = await createTopic(userId, name, coverImg)
 
-  res.status(201).json(topic)
+  res.status(CREATED).json(topic)
 }
 
 export const deleteTopicController = async (
@@ -31,10 +36,11 @@ export const deleteTopicController = async (
   res: Response,
 ) => {
   const { topicId } = topicParamsSchema.parse(req.params)
+  const userId = getAuthUserId(req)
 
-  await deleteTopic(topicId)
+  await deleteTopic(topicId, userId)
 
-  res.sendStatus(204)
+  res.sendStatus(NO_CONTENT)
 }
 
 export const getTopicVideosController = async (
@@ -42,8 +48,9 @@ export const getTopicVideosController = async (
   res: Response,
 ) => {
   const { topicId } = topicParamsSchema.parse(req.params)
+  const userId = getAuthUserId(req)
 
-  const videos = await getTopicVideos(topicId)
+  const videos = await getTopicVideos(topicId, userId)
 
   res.json(videos)
 }

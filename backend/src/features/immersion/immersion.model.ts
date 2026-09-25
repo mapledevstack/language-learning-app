@@ -25,13 +25,6 @@ const topicSchema = new Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true,
-  },
-
-  type: {
-    type: String,
-    enum: ["default", "custom", "watch_later", "history"],
-    required: true,
   },
 
   coverImg: {
