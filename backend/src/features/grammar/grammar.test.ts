@@ -48,6 +48,39 @@ beforeEach(async () => {
   ])
 
   vi.spyOn(grammarUtils, "getEmbedding").mockResolvedValue([1, 0, 0])
+
+  vi.spyOn(grammarUtils, "vectorSearch").mockImplementation(
+    async (_queryVector, limit) => {
+      const results = [
+        {
+          _id: new mongoose.Types.ObjectId(),
+          title: "Using ている",
+          section: "Enduring states",
+          source: "Test source",
+          sourceUrl: "https://example.com/teiru",
+          score: 1,
+        },
+        {
+          _id: new mongoose.Types.ObjectId(),
+          title: "Using てある",
+          section: "Resultant states",
+          source: "Test source",
+          sourceUrl: "https://example.com/tearu",
+          score: 0.5,
+        },
+        {
+          _id: new mongoose.Types.ObjectId(),
+          title: "Using ておく",
+          section: "Preparatory actions",
+          source: "Test source",
+          sourceUrl: "https://example.com/teoku",
+          score: 0.2,
+        },
+      ]
+
+      return results.slice(0, limit)
+    },
+  )
 })
 
 afterAll(async () => {
