@@ -14,14 +14,11 @@ export const createDeck = async (
   userId: Types.ObjectId,
   data: CreateDeckSchema,
 ) => {
-  console.log("Creating deck...")
-
   const deck = await Deck.create({
     userId,
     title: data.title,
     description: data.description,
   })
-  console.log("Created deck...")
 
   return deck
 }
@@ -99,7 +96,7 @@ export const updateDeck = async (
     },
     data,
     {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     },
   )

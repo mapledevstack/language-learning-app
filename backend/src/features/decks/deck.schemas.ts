@@ -1,3 +1,4 @@
+import { Types } from "mongoose"
 import { z } from "zod"
 
 export const createDeckSchema = z.object({
@@ -6,7 +7,9 @@ export const createDeckSchema = z.object({
 })
 
 export const deckParamsSchema = z.object({
-  deckId: z.string(),
+  deckId: z.string().refine((value) => Types.ObjectId.isValid(value), {
+    message: "Invalid deck ID",
+  }),
 })
 
 export const updateDeckSchema = z.object({
