@@ -31,4 +31,20 @@ export type VideoResult = {
   title: string
 }
 
+export const updateUserVideoSchema = z
+  .object({
+    isFavorited: z.boolean().optional(),
+    isWatchLater: z.boolean().optional(),
+  })
+  .refine(
+    (data) => data.isFavorited !== undefined || data.isWatchLater !== undefined,
+    { message: "At least one field is required" },
+  )
+
+export const userVideoListSchema = z.object({
+  list: z.enum(["favorites", "watch-later"]),
+})
+
 export type YoutubeSearchResponse = z.infer<typeof youtubeSearchResponseSchema>
+export type UpdateUserVideo = z.infer<typeof updateUserVideoSchema>
+export type UserVideoList = z.infer<typeof userVideoListSchema>

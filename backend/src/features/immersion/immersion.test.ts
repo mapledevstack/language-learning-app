@@ -11,7 +11,7 @@ import {
 import request from "supertest"
 
 import app from "../../app.js"
-import { Subtitle, Topic, Video } from "./immersion.model.js"
+import { Subtitle, Topic, UserVideo, Video } from "./immersion.model.js"
 import connectDB from "../../config/db.js"
 import { FORBIDDEN, NO_CONTENT, NOT_FOUND, OK } from "../../constants/http.js"
 import { fetchTranscript } from "youtube-transcript"
@@ -396,6 +396,151 @@ describe("Immersion", () => {
     })
   })
 
+  describe("GET /api/v1/immersion/videos/:list", () => {
+    it("returns the user's favorited videos", async () => {
+      await Video.create([
+        { vidId: "favorite-1", title: "Favorite one" },
+        { vidId: "favorite-2", title: "Favorite two" },
+        { vidId: "other-1", title: "Other video" },
+      ])
+
+      const testUser = await User.findOne({
+        email: "test@example.com",
+      })
+
+      expect(testUser).not.toBeNull()
+
+      await UserVideo.create([
+        {
+          userId: testUser!._id,
+          vidId: "favorite-1",
+          isFavorited: true,
+          isWatchLater: false,
+        },
+        {
+          userId: testUser!._id,
+          vidId: "favorite-2",
+          isFavorited: true,
+          isWatchLater: false,
+        },
+        {
+          userId: testUser!._id,
+          vidId: "other-1",
+          isFavorited: false,
+          isWatchLater: true,
+        },
+      ])
+
+      const response = await request(app)
+        .get("/api/v1/immersion/videos/favorites")
+        .set("Cookie", accessCookie)
+
+      expect(response.status).toBe(OK)
+      expect(response.body).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            vidId: "favorite-1",
+            title: "Favorite one",
+          }),
+          expect.objectContaining({
+            vidId: "favorite-2",
+            title: "Favorite two",
+          }),
+        ]),
+      )
+      expect(response.body).toHaveLength(2)
+    })
+
+    it("returns the user's watch-later videos", async () => {
+      await Video.create([
+        { vidId: "later-1", title: "Watch later one" },
+        { vidId: "later-2", title: "Watch later two" },
+        { vidId: "other-2", title: "Other video" },
+      ])
+
+      const testUser = await User.findOne({
+        email: "test@example.com",
+      })
+
+      expect(testUser).not.toBeNull()
+
+      await UserVideo.create([
+        {
+          userId: testUser!._id,
+          vidId: "later-1",
+          isFavorited: false,
+          isWatchLater: true,
+        },
+        {
+          userId: testUser!._id,
+          vidId: "later-2",
+          isFavorited: true,
+          isWatchLater: true,
+        },
+        {
+          userId: testUser!._id,
+          vidId: "other-2",
+          isFavorited: true,
+          isWatchLater: false,
+        },
+      ])
+
+      const response = await request(app)
+        .get("/api/v1/immersion/videos/watch-later")
+        .set("Cookie", accessCookie)
+
+      expect(response.status).toBe(OK)
+      expect(response.body).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            vidId: "later-1",
+            title: "Watch later one",
+          }),
+          expect.objectContaining({
+            vidId: "later-2",
+            title: "Watch later two",
+          }),
+        ]),
+      )
+      expect(response.body).toHaveLength(2)
+    })
+
+    it("does not return another user's videos", async () => {
+      const otherUser = await User.create({
+        email: "other@example.com",
+        password: "123456",
+      })
+
+      await Video.create({
+        vidId: "private-video",
+        title: "Private video",
+      })
+
+      await UserVideo.create({
+        userId: otherUser._id,
+        vidId: "private-video",
+        isFavorited: true,
+        isWatchLater: true,
+      })
+
+      const response = await request(app)
+        .get("/api/v1/immersion/videos/favorites")
+        .set("Cookie", accessCookie)
+
+      expect(response.status).toBe(OK)
+      expect(response.body).toEqual([])
+    })
+
+    it("returns an empty array when the user has no matching videos", async () => {
+      const response = await request(app)
+        .get("/api/v1/immersion/videos/favorites")
+        .set("Cookie", accessCookie)
+
+      expect(response.status).toBe(OK)
+      expect(response.body).toEqual([])
+    })
+  })
+
   describe("GET /api/v1/immersion/videos/:vidId/subtitles", () => {
     it("returns cached subtitles", async () => {
       const vidId = "test-video-123"
@@ -452,6 +597,93 @@ describe("Immersion", () => {
 
       expect(cachedSubtitle).not.toBeNull()
       expect(cachedSubtitle?.subtitles).toEqual(response.body)
+    })
+  })
+
+  describe("PATCH /api/v1/immersion/videos/:vidId", () => {
+    it("creates user video state when favoriting a video", async () => {
+      const vidId = "test-video-123"
+
+      const user = await User.findOne({
+        email: "test@example.com",
+      })
+
+      expect(user).not.toBeNull()
+
+      const response = await request(app)
+        .patch(`/api/v1/immersion/videos/${vidId}`)
+        .set("Cookie", accessCookie)
+        .send({ isFavorited: true })
+
+      expect(response.status).toBe(OK)
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          vidId,
+          isFavorited: true,
+          isWatchLater: false,
+        }),
+      )
+
+      const userVideo = await UserVideo.findOne({
+        userId: user!._id,
+        vidId,
+      }).lean()
+
+      expect(userVideo).not.toBeNull()
+      expect(userVideo?.isFavorited).toBe(true)
+      expect(userVideo?.isWatchLater).toBe(false)
+    })
+
+    it("updates existing user video state without resetting other fields", async () => {
+      const vidId = "test-video-456"
+
+      const user = await User.findOne({
+        email: "test@example.com",
+      })
+
+      expect(user).not.toBeNull()
+
+      await UserVideo.create({
+        userId: user!._id,
+        vidId,
+        isFavorited: true,
+        isWatchLater: false,
+      })
+
+      const response = await request(app)
+        .patch(`/api/v1/immersion/videos/${vidId}`)
+        .set("Cookie", accessCookie)
+        .send({ isWatchLater: true })
+
+      expect(response.status).toBe(OK)
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          vidId,
+          isFavorited: true,
+          isWatchLater: true,
+        }),
+      )
+    })
+
+    it("can update both states at once", async () => {
+      const vidId = "test-video-789"
+
+      const response = await request(app)
+        .patch(`/api/v1/immersion/videos/${vidId}`)
+        .set("Cookie", accessCookie)
+        .send({
+          isFavorited: true,
+          isWatchLater: true,
+        })
+
+      expect(response.status).toBe(OK)
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          vidId,
+          isFavorited: true,
+          isWatchLater: true,
+        }),
+      )
     })
   })
 })

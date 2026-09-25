@@ -1,10 +1,11 @@
 import { fetchTranscript } from "youtube-transcript"
-import { Subtitle, Topic, Video } from "./immersion.model.js"
+import { Subtitle, Topic, UserVideo, Video } from "./immersion.model.js"
 import AppError from "../../utils/appError.js"
 import { NOT_FOUND } from "../../constants/http.js"
 import { getTokenizer } from "../../config/tokenizer.js"
 import { Types } from "mongoose"
 import { cacheVideos, fetchYoutubeVideos } from "./immersion.utils.js"
+import { UpdateUserVideo } from "./immersion.schemas.js"
 
 export const getAllTopics = async (userId: Types.ObjectId) => {
   return Topic.aggregate([
@@ -96,4 +97,37 @@ export const getSubtitles = async (vidId: string) => {
   await Subtitle.create({ vidId, subtitles })
 
   return subtitles
+}
+
+export const updateUserVideo = async (
+  userId: Types.ObjectId,
+  vidId: string,
+  updates: UpdateUserVideo,
+) => {
+  return UserVideo.findOneAndUpdate(
+    { userId, vidId },
+    { $set: updates },
+    {
+      upsert: true,
+      returnDocument: "after",
+      setDefaultsOnInsert: true,
+    },
+  ).lean()
+}
+
+export const getUserVideos = async (
+  userId: Types.ObjectId,
+  list: "favorites" | "watch-later",
+) => {
+  const filter =
+    list === "favorites" ? { isFavorited: true } : { isWatchLater: true }
+
+  const userVideos = await UserVideo.find({
+    userId,
+    ...filter,
+  }).lean()
+
+  return Video.find({
+    vidId: { $in: userVideos.map((userVideo) => userVideo.vidId) },
+  }).lean()
 }

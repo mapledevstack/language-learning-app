@@ -5,10 +5,14 @@ import {
   getAllTopics,
   getSubtitles,
   getTopicVideos,
+  getUserVideos,
+  updateUserVideo,
 } from "./immersion.service.js"
 import {
   createTopicSchema,
   topicParamsSchema,
+  updateUserVideoSchema,
+  userVideoListSchema,
   videoParamsSchema,
 } from "./immersion.schemas.js"
 import { CREATED, NO_CONTENT } from "../../constants/http.js"
@@ -64,4 +68,29 @@ export const getSubtitlesController = async (
   const subtitles = await getSubtitles(vidId)
 
   res.json(subtitles)
+}
+
+export const updateUserVideoController = async (
+  req: Request<{ vidId: string }>,
+  res: Response,
+) => {
+  const userId = getAuthUserId(req)
+  const { vidId } = videoParamsSchema.parse(req.params)
+  const updates = updateUserVideoSchema.parse(req.body)
+
+  const userVideo = await updateUserVideo(userId, vidId, updates)
+
+  res.json(userVideo)
+}
+
+export const getUserVideosController = async (
+  req: Request<{ list: string }>,
+  res: Response,
+) => {
+  const userId = getAuthUserId(req)
+  const { list } = userVideoListSchema.parse(req.params)
+
+  const videos = await getUserVideos(userId, list)
+
+  res.json(videos)
 }
