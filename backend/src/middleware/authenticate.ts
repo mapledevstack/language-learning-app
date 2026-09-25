@@ -2,6 +2,7 @@ import { RequestHandler } from "express"
 import AppError from "../utils/appError.js"
 import { UNAUTHORIZED } from "../constants/http.js"
 import { verifyAccessToken } from "../utils/jwt.js"
+import { Types } from "mongoose"
 
 const authenticate: RequestHandler = (req, _res, next) => {
   const accessToken = req.cookies.accessToken as string | undefined
@@ -12,8 +13,8 @@ const authenticate: RequestHandler = (req, _res, next) => {
 
   const { sessionId, userId } = verifyAccessToken(accessToken)
 
-  req.userId = userId
-  req.sessionId = sessionId
+  req.userId = new Types.ObjectId(userId)
+  req.sessionId = new Types.ObjectId(sessionId)
 
   next()
 }

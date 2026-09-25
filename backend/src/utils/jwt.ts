@@ -1,18 +1,17 @@
 import { SignOptions } from "jsonwebtoken"
 import jwt from "jsonwebtoken"
 import { JWT_REFRESH_SECRET, JWT_SECRET } from "../constants/env.js"
-import { Types } from "mongoose"
 import AppError from "./appError.js"
 import { UNAUTHORIZED } from "../constants/http.js"
 
 export type AccessTokenPayload = {
-  sessionId: Types.ObjectId
-  userId: Types.ObjectId
+  sessionId: string
+  userId: string
   isDemo?: boolean
 }
 
 export type RefreshTokenPayload = {
-  sessionId: Types.ObjectId
+  sessionId: string
 }
 
 const defaults: SignOptions = {
