@@ -15,7 +15,7 @@ import {
 } from "../../constants/http.js"
 import Deck from "../decks/deck.model.js"
 import FlashCard from "./flashcard.model.js"
-import { createEmptyCard } from "ts-fsrs"
+import { createEmptyCard, Rating } from "ts-fsrs"
 
 let testUser: any
 let otherUser: any
@@ -70,7 +70,7 @@ afterAll(async () => {
   await mongoose.connection.close()
 })
 
-describe("Flashcards API", () => {
+describe("Flashcards", () => {
   describe("POST /api/v1/flashcards", () => {
     it("should create a new flashcard for the authenticated user", async () => {
       const flashcardData = {
@@ -129,6 +129,73 @@ describe("Flashcards API", () => {
     it("should return an empty array for another user's deck", async () => {
       const res = await agent
         .get(`/api/v1/flashcards/deck/${otherUserDeck._id}`)
+        .expect(OK)
+
+      expect(res.body).toEqual([])
+    })
+  })
+
+  describe("GET /api/v1/flashcards/deck/:deckId/due", () => {
+    it("should return only due flashcards ordered by due date", async () => {
+      const overdueCard = await FlashCard.create({
+        userId: testUser._id,
+        deckId: testDeck._id,
+        wordId: "overdue",
+        front: { text: "Overdue card" },
+        fsrs: {
+          ...createEmptyCard(),
+          due: new Date(Date.now() - 60_000),
+        },
+      })
+
+      const dueSoonCard = await FlashCard.create({
+        userId: testUser._id,
+        deckId: testDeck._id,
+        wordId: "due-soon",
+        front: { text: "Due soon" },
+        fsrs: {
+          ...createEmptyCard(),
+          due: new Date(Date.now() - 30_000),
+        },
+      })
+
+      await FlashCard.create({
+        userId: testUser._id,
+        deckId: testDeck._id,
+        wordId: "future",
+        front: { text: "Future card" },
+        fsrs: {
+          ...createEmptyCard(),
+          due: new Date(Date.now() + 60_000),
+        },
+      })
+
+      const res = await agent
+        .get(`/api/v1/flashcards/deck/${testDeck._id}/due`)
+        .expect(OK)
+
+      expect(res.body).toHaveLength(2)
+
+      expect(res.body.map((card: any) => card.wordId)).toEqual([
+        "overdue",
+        "due-soon",
+      ])
+    })
+
+    it("should return an empty array when no cards are due", async () => {
+      await FlashCard.create({
+        userId: testUser._id,
+        deckId: testDeck._id,
+        wordId: "future",
+        front: { text: "Future card" },
+        fsrs: {
+          ...createEmptyCard(),
+          due: new Date(Date.now() + 60_000),
+        },
+      })
+
+      const res = await agent
+        .get(`/api/v1/flashcards/deck/${testDeck._id}/due`)
         .expect(OK)
 
       expect(res.body).toEqual([])

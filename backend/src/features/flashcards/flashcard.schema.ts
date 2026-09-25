@@ -1,11 +1,8 @@
-import { Rating } from "ts-fsrs"
 import { z } from "zod"
 
 export const createFlashCardSchema = z.object({
   wordId: z.string(),
-
   deckId: z.string(),
-
   front: z.object({
     text: z.string().min(1),
     media: z
@@ -15,9 +12,7 @@ export const createFlashCardSchema = z.object({
       })
       .optional(),
   }),
-
   source: z.string().optional(),
-
   userNotes: z.string().optional(),
 })
 
@@ -50,12 +45,10 @@ export const reviewFlashCardParamsSchema = z.object({
 })
 
 export const reviewFlashCardSchema = z.object({
-  rating: z.enum(Rating),
+  rating: z.enum(["Again", "Hard", "Good", "Easy"]),
 })
 
 export type CreateFlashCardSchema = z.infer<typeof createFlashCardSchema>
-
 export type UpdateFlashCardSchema = z.infer<typeof updateFlashCardSchema>
-
 export type ReviewFlashCardSchema = z.infer<typeof reviewFlashCardSchema>
 export type ReviewRating = ReviewFlashCardSchema["rating"]
