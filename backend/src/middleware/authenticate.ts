@@ -11,10 +11,13 @@ const authenticate: RequestHandler = (req, _res, next) => {
     throw new AppError("Not authorized", UNAUTHORIZED)
   }
 
-  const { sessionId, userId } = verifyAccessToken(accessToken)
+  const { sessionId, userId, isDemo } = verifyAccessToken(accessToken)
 
   req.userId = new Types.ObjectId(userId)
   req.sessionId = new Types.ObjectId(sessionId)
+  if (isDemo) {
+    req.isDemo = true
+  }
 
   next()
 }
