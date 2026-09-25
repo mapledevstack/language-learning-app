@@ -1,5 +1,5 @@
 import catchErrors from "../../utils/catchErrors.js"
-import { CREATED, NO_CONTENT, OK } from "../../constants/http.js"
+import { CREATED, NO_CONTENT, NOT_FOUND, OK } from "../../constants/http.js"
 import {
   createFlashCard,
   deleteFlashCard,
@@ -63,6 +63,10 @@ export const updateFlashCardController = catchErrors(async (req, res) => {
   const userId = getAuthUserId(req)
 
   const flashCard = await updateFlashCard(userId, flashcardId, body)
+
+  if (!flashCard) {
+    return res.sendStatus(NOT_FOUND)
+  }
 
   res.status(OK).json(flashCard)
 })

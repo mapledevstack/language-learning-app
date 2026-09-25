@@ -8,6 +8,7 @@ import {
   BAD_REQUEST,
   CREATED,
   NO_CONTENT,
+  NOT_FOUND,
   OK,
   UNAUTHORIZED,
 } from "../../constants/http.js"
@@ -228,7 +229,7 @@ describe("Flashcards", () => {
       expect(res.body.userNotes).toBe(updatedData.userNotes)
     })
 
-    it("should return 200 if trying to update another user's flashcard", async () => {
+    it("should return 404 if trying to update another user's flashcard", async () => {
       const otherUsersFlashcard = await FlashCard.create({
         userId: otherUser._id,
         deckId: otherUserDeck._id,
@@ -240,7 +241,7 @@ describe("Flashcards", () => {
       await agent
         .patch(`/api/v1/flashcards/${otherUsersFlashcard._id}`)
         .send({ userNotes: "Trying to update" })
-        .expect(OK)
+        .expect(NOT_FOUND)
     })
   })
 
