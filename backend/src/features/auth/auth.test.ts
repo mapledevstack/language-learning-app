@@ -23,7 +23,6 @@ import {
 } from "../../constants/http.js"
 import { Session } from "./session.model.js"
 import { VerificationCode } from "./auth.model.js"
-import { verifyAccessToken } from "../../utils/jwt.js"
 import { DEMO_USER_EMAIL } from "../../constants/env.js"
 
 beforeAll(async () => {
