@@ -7,15 +7,13 @@ import { User } from "../users/user.model.js"
 import {
   BAD_REQUEST,
   CREATED,
-  FORBIDDEN,
   NO_CONTENT,
-  NOT_FOUND,
   OK,
   UNAUTHORIZED,
 } from "../../constants/http.js"
 import Deck from "../decks/deck.model.js"
 import FlashCard from "./flashcard.model.js"
-import { createEmptyCard, Rating } from "ts-fsrs"
+import { createEmptyCard } from "ts-fsrs"
 
 let testUser: any
 let otherUser: any
