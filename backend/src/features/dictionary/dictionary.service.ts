@@ -1,5 +1,4 @@
 import { isRomaji, toKana } from "wanakana"
-import { escapeRegex } from "../../utils/regex.js"
 import { Kanji, Word } from "./dictionary.model.js"
 import AppError from "../../utils/appError.js"
 import { BAD_GATEWAY, NOT_FOUND } from "../../constants/http.js"
@@ -31,61 +30,114 @@ export const getKanjis = async (kanjis: string[]) => {
 
 export const getSearchResults = async (q: string, limit: number) => {
   const query = isRomaji(q) ? toKana(q) : q
-  const regex = new RegExp(escapeRegex(query), "i")
 
-  const results = await Word.find({
-    $or: [{ "forms.text": regex }, { "forms.reading": regex }],
-  })
-    .lean()
-    .limit(Math.max(limit * 5, 50))
-
-  return results
-    .sort((a, b) => {
-      const aExact = a.forms.some(
-        (f) => f.text === query || f.reading === query,
-      )
-      const bExact = b.forms.some(
-        (f) => f.text === query || f.reading === query,
-      )
-
-      if (aExact !== bExact) return Number(bExact) - Number(aExact)
-
-      const aStartsWith = a.forms.some(
-        (f) => f.text.startsWith(query) || f.reading.startsWith(query),
-      )
-      const bStartsWith = b.forms.some(
-        (f) => f.text.startsWith(query) || f.reading.startsWith(query),
-      )
-
-      if (aStartsWith !== bStartsWith) {
-        return Number(bStartsWith) - Number(aStartsWith)
-      }
-
-      const aCommon = a.forms.some((f) => f.common)
-      const bCommon = b.forms.some((f) => f.common)
-
-      return Number(bCommon) - Number(aCommon)
-    })
-    .slice(0, limit)
+  return Word.aggregate([
+    {
+      $search: {
+        index: "dictionary_search",
+        compound: {
+          should: [
+            {
+              autocomplete: {
+                query,
+                path: "forms.text",
+              },
+            },
+            {
+              autocomplete: {
+                query,
+                path: "forms.reading",
+              },
+            },
+            {
+              text: {
+                query,
+                path: "forms.text",
+                score: {
+                  boost: {
+                    value: 10,
+                  },
+                },
+              },
+            },
+            {
+              text: {
+                query,
+                path: "forms.reading",
+                score: {
+                  boost: {
+                    value: 10,
+                  },
+                },
+              },
+            },
+            {
+              equals: {
+                path: "forms.common",
+                value: true,
+                score: {
+                  boost: {
+                    value: 5,
+                  },
+                },
+              },
+            },
+          ],
+          minimumShouldMatch: 1,
+        },
+      },
+    },
+    {
+      $limit: limit,
+    },
+  ])
 }
 
 export const getSearchFromMeaning = async (q: string, limit: number) => {
-  const regex = new RegExp(`\\b${escapeRegex(q)}\\b`, "i")
-
-  const results = await Word.find({
-    "meanings.definitions": regex,
-  })
-    .lean()
-    .limit(Math.max(limit * 5, 50))
-
-  return results
-    .sort((a, b) => {
-      const aCommon = a.forms.some((f) => f.common)
-      const bCommon = b.forms.some((f) => f.common)
-
-      return Number(bCommon) - Number(aCommon)
-    })
-    .slice(0, limit)
+  return Word.aggregate([
+    {
+      $search: {
+        index: "dictionary_search",
+        compound: {
+          must: [
+            {
+              text: {
+                query: q,
+                path: "meanings.definitions",
+              },
+            },
+          ],
+          should: [
+            {
+              text: {
+                query: q,
+                path: "meanings.definitions",
+                score: {
+                  boost: {
+                    value: 10,
+                  },
+                },
+              },
+            },
+            {
+              equals: {
+                path: "forms.common",
+                value: true,
+                score: {
+                  boost: {
+                    value: 5,
+                  },
+                },
+              },
+            },
+          ],
+        },
+      },
+    },
+    {
+      $limit: limit,
+    },
+  ])
 }
 
 type TatoebaSentence = {
