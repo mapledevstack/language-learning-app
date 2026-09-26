@@ -16,6 +16,7 @@ export const getAllTopics = async (userId: Types.ObjectId) => {
     },
     {
       $project: {
+        _id: 1,
         name: 1,
         coverImg: 1,
         vidCount: {
