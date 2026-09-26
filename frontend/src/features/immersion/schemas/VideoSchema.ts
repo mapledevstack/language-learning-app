@@ -6,6 +6,3 @@ export const VideoSchema = z.object({
 })
 
 export const VideosSchema = z.array(VideoSchema)
-
-export type Video = z.infer<typeof VideoSchema>
-export type Videos = z.infer<typeof VideosSchema>
