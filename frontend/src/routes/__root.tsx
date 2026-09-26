@@ -1,5 +1,7 @@
-import * as React from 'react'
-import { Outlet, createRootRoute } from '@tanstack/react-router'
+/* eslint-disable react-refresh/only-export-components */
+
+import * as React from "react"
+import { Outlet, createRootRoute } from "@tanstack/react-router"
 
 export const Route = createRootRoute({
   component: RootComponent,

@@ -26,7 +26,7 @@ const ExampleSentences = ({ sentences, onTokenSelect }: Props) => {
     document.addEventListener("selectionchange", handleSelection)
     return () =>
       document.removeEventListener("selectionchange", handleSelection)
-  }, [])
+  }, [onTokenSelect])
 
   return (
     <div className="bg-accent w-full p-4 rounded-md space-y-4">

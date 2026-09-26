@@ -380,39 +380,48 @@ export function HeatmapCalendar({
     Math.ceil((end.getTime() - firstWeek.getTime()) / 86400000) + 1
   const weeks = Math.ceil(totalDays / 7)
 
-  const cells: HeatmapCell[] = []
-  for (let w = 0; w < weeks; w++) {
-    for (let d = 0; d < 7; d++) {
-      const date = addDays(firstWeek, w * 7 + d)
-      const inRange = date >= start && date <= end
-      const isFuture = date > today
-      const key = toKey(date)
+  const cells = React.useMemo<HeatmapCell[]>(() => {
+    const cells: HeatmapCell[] = []
 
-      const v = inRange ? (valueMap.get(key)?.value ?? 0) : 0
-      const meta = inRange ? valueMap.get(key)?.meta : undefined
-      const lvl = inRange && !isFuture ? getLevel(v) : 0
+    for (let w = 0; w < weeks; w++) {
+      for (let d = 0; d < 7; d++) {
+        const date = addDays(firstWeek, w * 7 + d)
+        const inRange = date >= start && date <= end
+        const isFuture = date > today
+        const key = toKey(date)
+        const v = inRange ? (valueMap.get(key)?.value ?? 0) : 0
+        const meta = inRange ? valueMap.get(key)?.meta : undefined
+        const lvl = inRange && !isFuture ? getLevel(v) : 0
 
-      cells.push({
-        date,
-        key,
-        value: v,
-        level: clampLevel(lvl, levelCount),
-        disabled: !inRange,
-        future: inRange && isFuture,
-        meta,
-        label: date.toLocaleDateString(undefined, {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        }),
-      })
+        cells.push({
+          date,
+          key,
+          value: v,
+          level: clampLevel(lvl, levelCount),
+          disabled: !inRange,
+          future: inRange && isFuture,
+          meta,
+          label: date.toLocaleDateString(undefined, {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }),
+        })
+      }
     }
-  }
 
-  const columns: HeatmapCell[][] = []
-  for (let i = 0; i < weeks; i++) {
-    columns.push(cells.slice(i * 7, i * 7 + 7))
-  }
+    return cells
+  }, [weeks, firstWeek, start, end, today, valueMap, getLevel, levelCount])
+
+  const columns = React.useMemo<HeatmapCell[][]>(() => {
+    const columns: HeatmapCell[][] = []
+
+    for (let i = 0; i < weeks; i++) {
+      columns.push(cells.slice(i * 7, i * 7 + 7))
+    }
+
+    return columns
+  }, [cells, weeks])
 
   const monthLabels = React.useMemo(() => {
     if (!showAxis || !showMonths)

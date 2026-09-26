@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router"
 import { LucideMenu, LucideX } from "lucide-react"
-
-import { navigationMenu } from "./AppLayout"
+import { navigationMenu } from "./navigationMenu"
 
 type Props = {
   isNavOpen: boolean

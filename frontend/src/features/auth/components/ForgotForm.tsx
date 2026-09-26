@@ -13,7 +13,7 @@ import { useState, type SubmitEvent } from "react"
 
 type Props = {
   isPending: boolean
-  mutate: any
+  mutate: (email: string) => void
 }
 
 const ForgotForm = ({ isPending, mutate }: Props) => {

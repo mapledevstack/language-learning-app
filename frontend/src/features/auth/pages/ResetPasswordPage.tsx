@@ -4,10 +4,13 @@ import ResetForm from "@/features/auth/components/ResetForm"
 import { resetPassword } from "../api/authApi"
 import { useMutation } from "@tanstack/react-query"
 import BackToHome from "@/layouts/BackToHome"
+import { useState } from "react"
 
 const ResetPasswordPage = () => {
   const { code, exp }: { code: string; exp: string } = Route.useSearch()
-  const isExpired = Date.now() > Number(exp)
+
+  const [now] = useState(() => Date.now())
+  const isExpired = now > Number(exp)
 
   const { mutate, isError, isPending, isSuccess } = useMutation({
     mutationFn: resetPassword,
