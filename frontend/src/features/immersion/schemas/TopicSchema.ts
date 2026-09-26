@@ -8,3 +8,4 @@ export const TopicSchema = z.object({
 })
 
 export const TopicsSchema = z.array(TopicSchema)
+export type Topic = z.infer<typeof TopicSchema>
