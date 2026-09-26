@@ -8,12 +8,7 @@ import connectDB from "../../config/db.js"
 import { User } from "../users/user.model.js"
 import { Session } from "./session.model.js"
 
-import {
-  NO_CONTENT,
-  NOT_FOUND,
-  OK,
-  UNAUTHORIZED,
-} from "../../constants/http.js"
+import { NOT_FOUND, OK, UNAUTHORIZED } from "../../constants/http.js"
 
 beforeAll(async () => {
   await connectDB()
@@ -22,10 +17,6 @@ beforeAll(async () => {
 beforeEach(async () => {
   await User.deleteMany({})
   await Session.deleteMany({})
-})
-
-afterAll(async () => {
-  await mongoose.connection.close()
 })
 
 describe("Sessions", () => {

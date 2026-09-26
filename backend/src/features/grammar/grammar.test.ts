@@ -83,10 +83,6 @@ beforeEach(async () => {
   )
 })
 
-afterAll(async () => {
-  await mongoose.connection.close()
-})
-
 describe("Grammar", () => {
   describe("GET /api/v1/grammar/search", () => {
     it("returns grammar search results ordered by similarity", async () => {

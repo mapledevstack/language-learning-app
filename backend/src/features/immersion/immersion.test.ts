@@ -59,10 +59,6 @@ beforeEach(async () => {
   accessCookie = accessCookieHeader!.split(";")[0]
 })
 
-afterAll(async () => {
-  await mongoose.connection.close()
-})
-
 vi.mock("youtube-transcript", () => ({
   fetchTranscript: vi.fn(),
 }))

@@ -16,10 +16,6 @@ beforeEach(async () => {
   await User.deleteMany({})
 })
 
-afterAll(async () => {
-  await mongoose.connection.close()
-})
-
 describe("Users", () => {
   describe("GET /api/v1/me", () => {
     it("returns the authenticated user", async () => {

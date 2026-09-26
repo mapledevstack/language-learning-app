@@ -31,10 +31,7 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await User.deleteMany({})
-})
-
-afterAll(async () => {
-  await mongoose.connection.close()
+  await VerificationCode.deleteMany({})
 })
 
 vi.mock("../../utils/sendMail.js", () => ({

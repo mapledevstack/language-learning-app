@@ -65,10 +65,6 @@ beforeEach(async () => {
   })
 })
 
-afterAll(async () => {
-  await mongoose.connection.close()
-})
-
 describe("Flashcards", () => {
   describe("POST /api/v1/flashcards", () => {
     it("should create a new flashcard for the authenticated user", async () => {

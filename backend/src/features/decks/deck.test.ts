@@ -75,10 +75,6 @@ beforeEach(async () => {
   })
 })
 
-afterAll(async () => {
-  await mongoose.connection.close()
-})
-
 describe("Decks", () => {
   describe("GET /api/v1/decks", () => {
     it("should get all decks for the authenticated user", async () => {

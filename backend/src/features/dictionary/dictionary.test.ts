@@ -36,10 +36,6 @@ beforeEach(async () => {
   vi.restoreAllMocks()
 })
 
-afterAll(async () => {
-  await mongoose.connection.close()
-})
-
 describe("Dictionary", () => {
   describe("GET /api/v1/dictionary/words/:wordId", () => {
     it("returns a word by ID", async () => {
