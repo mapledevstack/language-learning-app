@@ -1,5 +1,5 @@
 import catchErrors from "../../utils/catchErrors.js"
-import { CREATED, NO_CONTENT, OK } from "../../constants/http.js"
+import { CREATED, NO_CONTENT, NOT_FOUND, OK } from "../../constants/http.js"
 import {
   createFlashCard,
   deleteFlashCard,
@@ -19,7 +19,7 @@ import {
   updateFlashCardParamsSchema,
   updateFlashCardSchema,
 } from "./flashcard.schema.js"
-import { Grade } from "ts-fsrs"
+import { Grade, Rating } from "ts-fsrs"
 
 export const createFlashCardController = catchErrors(async (req, res) => {
   const body = createFlashCardSchema.parse(req.body)
@@ -64,6 +64,10 @@ export const updateFlashCardController = catchErrors(async (req, res) => {
 
   const flashCard = await updateFlashCard(userId, flashcardId, body)
 
+  if (!flashCard) {
+    return res.sendStatus(NOT_FOUND)
+  }
+
   res.status(OK).json(flashCard)
 })
 
@@ -72,7 +76,9 @@ export const reviewFlashCardController = catchErrors(async (req, res) => {
   const { rating } = reviewFlashCardSchema.parse(req.body)
   const userId = getAuthUserId(req)
 
-  const flashCard = await reviewFlashCard(userId, flashcardId, rating as Grade)
+  const grade = Rating[rating]
+
+  const flashCard = await reviewFlashCard(userId, flashcardId, grade)
 
   res.status(OK).json(flashCard)
 })

@@ -1,21 +1,23 @@
 import { fetchTranscript } from "youtube-transcript"
-import { Subtitle, Topic, Video } from "./immersion.model.js"
-import { TopicType, VideoResult } from "./immersion.schemas.js"
+import { Subtitle, Topic, UserVideo, Video } from "./immersion.model.js"
 import AppError from "../../utils/appError.js"
-import { BAD_GATEWAY, NOT_FOUND } from "../../constants/http.js"
-import {
-  cacheVideos,
-  fetchYoutubeVideos,
-  hasJpSubtitles,
-} from "./immersion.utils.js"
+import { NOT_FOUND } from "../../constants/http.js"
 import { getTokenizer } from "../../config/tokenizer.js"
+import { Types } from "mongoose"
+import { cacheVideos, fetchYoutubeVideos } from "./immersion.utils.js"
+import { UpdateUserVideo } from "./immersion.schemas.js"
 
-export const getAllTopics = async () => {
-  const topics = await Topic.aggregate([
+export const getAllTopics = async (userId: Types.ObjectId) => {
+  return Topic.aggregate([
+    {
+      $match: {
+        $or: [{ userId: null }, { userId }],
+      },
+    },
     {
       $project: {
+        _id: 1,
         name: 1,
-        type: 1,
         coverImg: 1,
         vidCount: {
           $size: "$vidIds",
@@ -23,66 +25,51 @@ export const getAllTopics = async () => {
       },
     },
   ])
-
-  return topics
 }
 
 export const createTopic = async (
+  userId: Types.ObjectId,
   name: string,
   coverImg: string | null,
-  type: TopicType,
 ) => {
-  const topic = await Topic.findOneAndUpdate(
-    { name },
-    {
-      name,
-      coverImg,
-      type,
-    },
-    {
-      upsert: true,
-      returnDocument: "after",
-    },
-  )
-
-  if (!topic) {
-    throw new AppError("Could not create topic", BAD_GATEWAY)
-  }
-
-  const videos = await fetchYoutubeVideos(name)
-  const filteredVideos: VideoResult[] = []
-
-  for (const video of videos) {
-    if (await hasJpSubtitles(video.vidId)) {
-      filteredVideos.push(video)
-    }
-  }
-
-  await cacheVideos(topic._id, filteredVideos)
-
-  return Topic.findById(topic._id)
+  return Topic.create({
+    userId,
+    name,
+    coverImg,
+  })
 }
 
-export const deleteTopic = async (topicId: string) => {
-  const topic = await Topic.findByIdAndDelete(topicId)
+export const deleteTopic = async (topicId: string, userId: Types.ObjectId) => {
+  const topic = await Topic.findOneAndDelete({ _id: topicId, userId })
 
   if (!topic) {
     throw new AppError("Topic not found", NOT_FOUND)
   }
 }
 
-export const getTopicVideos = async (topicId: string) => {
-  const topic = await Topic.findById(topicId).lean()
-
-  if (!topic) {
-    throw new AppError("Topic not found", NOT_FOUND)
-  }
-
-  const videos = await Video.find({
-    vidId: { $in: topic.vidIds },
+export const getTopicVideos = async (
+  topicId: string,
+  userId: Types.ObjectId,
+) => {
+  const topic = await Topic.findOne({
+    _id: topicId,
+    $or: [{ userId: null }, { userId }],
   }).lean()
 
-  return videos
+  if (!topic) {
+    throw new AppError("Topic not found", NOT_FOUND)
+  }
+
+  if (topic.vidIds.length === 0) {
+    const videos = await fetchYoutubeVideos(topic.name)
+    await cacheVideos(topic._id, videos)
+
+    return videos
+  }
+
+  return Video.find({
+    vidId: { $in: topic.vidIds },
+  }).lean()
 }
 
 export const getSubtitles = async (vidId: string) => {
@@ -111,4 +98,37 @@ export const getSubtitles = async (vidId: string) => {
   await Subtitle.create({ vidId, subtitles })
 
   return subtitles
+}
+
+export const updateUserVideo = async (
+  userId: Types.ObjectId,
+  vidId: string,
+  updates: UpdateUserVideo,
+) => {
+  return UserVideo.findOneAndUpdate(
+    { userId, vidId },
+    { $set: updates },
+    {
+      upsert: true,
+      returnDocument: "after",
+      setDefaultsOnInsert: true,
+    },
+  ).lean()
+}
+
+export const getUserVideos = async (
+  userId: Types.ObjectId,
+  list: "favorites" | "watch-later",
+) => {
+  const filter =
+    list === "favorites" ? { isFavorited: true } : { isWatchLater: true }
+
+  const userVideos = await UserVideo.find({
+    userId,
+    ...filter,
+  }).lean()
+
+  return Video.find({
+    vidId: { $in: userVideos.map((userVideo) => userVideo.vidId) },
+  }).lean()
 }

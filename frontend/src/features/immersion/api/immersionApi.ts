@@ -1,41 +1,55 @@
-import type { Subtitles } from "@/features/immersion/schemas/SubtitlesSchema"
-import { TopicsSchema } from "../schemas/TopicSchema"
-import { VideosSchema } from "../schemas/VideoSchema"
+import api from "@/utils/api"
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+import { SubtitlesSchema } from "../schemas/SubtitlesSchema"
+import { TopicSchema, TopicsSchema } from "../schemas/TopicSchema"
+import { VideosSchema } from "../schemas/VideoSchema"
+import { UserVideoSchema } from "../schemas/UserVideoSchema"
 
 export const getTopics = async () => {
-  const res = await fetch(`${API_BASE_URL}/immersion/topics`)
-
-  if (!res.ok) {
-    throw new Error("failed to fetch topics")
-  }
-
-  const data = await res.json()
+  const data = await api.get("/immersion/topics")
 
   return TopicsSchema.parse(data)
 }
 
+export const createTopic = async (body: {
+  name: string
+  coverImg: string | null
+}) => {
+  const data = await api.post("/immersion/topics", body)
+
+  return TopicSchema.parse(data)
+}
+
+export const deleteTopic = async (topicId: string) => {
+  await api.delete(`/immersion/topics/${topicId}`)
+}
+
 export const getTopicVideos = async (topicId: string) => {
-  const res = await fetch(`${API_BASE_URL}/immersion/topics/${topicId}/videos`)
-
-  if (!res.ok) {
-    throw new Error("failed to fetch videos")
-  }
-
-  const data = await res.json()
+  const data = await api.get(`/immersion/topics/${topicId}/videos`)
 
   return VideosSchema.parse(data)
 }
 
 export const getSubtitles = async (vidId: string) => {
-  const res = await fetch(`${API_BASE_URL}/immersion/videos/${vidId}/subtitles`)
+  const data = await api.get(`/immersion/videos/${vidId}/subtitles`)
 
-  if (!res.ok) {
-    throw new Error("failed to fetch subtitles")
-  }
+  return SubtitlesSchema.parse(data)
+}
 
-  const data: Subtitles = await res.json()
+export const getUserVideos = async (list: "favorites" | "watch-later") => {
+  const data = await api.get(`/immersion/videos/${list}`)
 
-  return data
+  return VideosSchema.parse(data)
+}
+
+export const updateUserVideo = async (
+  vidId: string,
+  body: {
+    isFavorited?: boolean
+    isWatchLater?: boolean
+  },
+) => {
+  const data = await api.patch(`/immersion/videos/${vidId}`, body)
+
+  return UserVideoSchema.parse(data)
 }

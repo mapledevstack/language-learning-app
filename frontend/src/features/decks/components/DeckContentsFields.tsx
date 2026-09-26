@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Route } from "@/routes/_app/decks/$deckId/edit"
 import useDeck from "../hooks/useDeck"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import useUpdateDeck from "../hooks/useUpdateDeck"
 import { useNavigate } from "@tanstack/react-router"
 
@@ -12,51 +12,49 @@ const DeckContentsFields = () => {
   const { deckId } = Route.useParams()
   const { data: deck } = useDeck(deckId)
 
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
+  if (!deck) return null
 
-  const navigate = useNavigate()
+  return <DeckForm deck={deck} deckId={deckId} />
+}
 
-  useEffect(() => {
-    if (deck) {
-      setTitle(deck.title)
-      setDescription(deck.description)
-    }
-  }, [deck])
+type DeckFormProps = {
+  deck: {
+    title: string
+    description: string
+  }
+  deckId: string
+}
 
+const DeckForm = ({ deck, deckId }: DeckFormProps) => {
+  const [title, setTitle] = useState(deck.title)
+  const [description, setDescription] = useState(deck.description)
   const [updateStatus, setUpdateStatus] = useState<"success" | "error" | null>(
     null,
   )
 
-  const { mutate: updateDeck, isPending, isError, isSuccess } = useUpdateDeck()
+  const navigate = useNavigate()
+
+  const { mutate: updateDeck, isPending } = useUpdateDeck()
 
   const handleSave = () => {
-    updateDeck({
-      deckId,
-      input: {
-        title,
-        description,
+    updateDeck(
+      {
+        deckId,
+        input: {
+          title,
+          description,
+        },
       },
-    })
+      {
+        onSuccess: () => {
+          setUpdateStatus("success")
+        },
+        onError: () => {
+          setUpdateStatus("error")
+        },
+      },
+    )
   }
-
-  useEffect(() => {
-    if (isSuccess) {
-      setUpdateStatus("success")
-    } else if (isError) {
-      setUpdateStatus("error")
-    }
-  }, [isSuccess, isError])
-
-  useEffect(() => {
-    if (!updateStatus) return
-
-    const timer = setTimeout(() => {
-      setUpdateStatus(null)
-    }, 3000)
-
-    return () => clearTimeout(timer)
-  }, [updateStatus])
 
   return (
     <div className="flex flex-1 flex-col gap-4">

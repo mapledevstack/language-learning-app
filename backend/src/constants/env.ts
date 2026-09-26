@@ -17,7 +17,7 @@ const nodeEnvSchema = z
 
 export const PORT = getEnv("PORT", "3000")
 export const NODE_ENV = nodeEnvSchema.parse(getEnv("NODE_ENV", "development"))
-export const MONGO_URI = getEnv("MONGO_URI")
+export const MONGO_URI = NODE_ENV === "test" ? "" : getEnv("MONGO_URI")
 export const MONGO_URI_TEST =
   NODE_ENV === "test" ? getEnv("MONGO_URI_TEST") : ""
 export const YOUTUBE_API_KEY = getEnv("YOUTUBE_API_KEY")
@@ -30,4 +30,4 @@ export const EMAIL_SENDER = getEnv("EMAIL_SENDER")
 export const TATOEBA_API_URL = "https://tatoeba.org/en/api_v0/search"
 export const GOOGLE_API_KEY = getEnv("GOOGLE_API_KEY")
 
-export const DEMO_USER_ID = getEnv("DEMO_USER_ID")
+export const DEMO_USER_EMAIL = getEnv("DEMO_USER_EMAIL", "demo@example.com")

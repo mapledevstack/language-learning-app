@@ -1,4 +1,4 @@
-import { APP_ORIGIN, NODE_ENV } from "../../constants/env.js"
+import { APP_ORIGIN, DEMO_USER_EMAIL, NODE_ENV } from "../../constants/env.js"
 import {
   CONFLICT,
   INTERNAL_SERVER_ERROR,
@@ -119,8 +119,6 @@ export const loginUser = async ({
   return { user: user.omitPassword(), accessToken, refreshToken }
 }
 
-const DEMO_USER_EMAIL = "demo@example.com"
-
 export const demoLogin = async ({
   userAgent,
 }: {
@@ -140,7 +138,7 @@ export const demoLogin = async ({
   })
   const sessionId = session._id
 
-  const accessToken = signAccessToken({ userId, sessionId })
+  const accessToken = signAccessToken({ userId, sessionId, isDemo: true })
 
   const refreshToken = signRefreshToken({ sessionId })
 
@@ -176,7 +174,19 @@ export const refreshAccessToken = async (refreshToken: string) => {
     ? signRefreshToken({ sessionId })
     : refreshToken
 
-  const newAccessToken = signAccessToken({ userId: session.userId, sessionId })
+  const user = await User.findById(session.userId)
+
+  if (!user) {
+    throw new AppError("User not found", UNAUTHORIZED)
+  }
+
+  const isDemo = user.email === DEMO_USER_EMAIL
+
+  const newAccessToken = signAccessToken({
+    userId: session.userId,
+    sessionId,
+    ...(isDemo && { isDemo: true }),
+  })
 
   return { newAccessToken, newRefreshToken }
 }

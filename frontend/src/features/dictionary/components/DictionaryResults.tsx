@@ -14,7 +14,7 @@ const DictionaryResults = ({ currentWord, results, setWord }: Props) => {
   // auto select first result
   useEffect(() => {
     setWord(results[0] ?? null)
-  }, [results])
+  }, [results, setWord])
 
   if (results.length === 0) return <EmptyCard text="No results found" />
 

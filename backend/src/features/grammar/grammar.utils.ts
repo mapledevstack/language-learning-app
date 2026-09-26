@@ -3,7 +3,6 @@ import AppError from "../../utils/appError.js"
 import { BAD_GATEWAY } from "../../constants/http.js"
 import { GOOGLE_API_KEY } from "../../constants/env.js"
 import { GrammarResource } from "./grammar.model.js"
-import { GrammarResourceWithEmbedding } from "./grammar.types.js"
 
 const ai = new GoogleGenAI({
   apiKey: GOOGLE_API_KEY,
@@ -24,29 +23,26 @@ export const getEmbedding = async (text: string): Promise<number[]> => {
   return embedding
 }
 
-export const cosineSimilarity = (a: number[], b: number[]) => {
-  let dot = 0
-  let aMagnitude = 0
-  let bMagnitude = 0
+export const vectorSearch = async (queryVector: number[], limit: number) => {
+  const results = await GrammarResource.aggregate([
+    {
+      $vectorSearch: {
+        index: "grammar_vector_index",
+        path: "embedding",
+        queryVector,
+        numCandidates: 50,
+        limit,
+      },
+    },
+    {
+      $project: {
+        embedding: 0,
+        score: {
+          $meta: "vectorSearchScore",
+        },
+      },
+    },
+  ])
 
-  for (let i = 0; i < a.length; i++) {
-    dot += a[i]! * b[i]!
-    aMagnitude += a[i]! * a[i]!
-    bMagnitude += b[i]! * b[i]!
-  }
-
-  if (aMagnitude === 0 || bMagnitude === 0) return 0
-
-  return dot / (Math.sqrt(aMagnitude) * Math.sqrt(bMagnitude))
-}
-
-let grammarCache: GrammarResourceWithEmbedding[] | null = null
-
-export const getGrammarResources = async () => {
-  if (grammarCache) return grammarCache
-
-  grammarCache =
-    await GrammarResource.find().lean<GrammarResourceWithEmbedding[]>()
-
-  return grammarCache
+  return results
 }

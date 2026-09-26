@@ -32,7 +32,7 @@ app.use("/api/v1/me", authenticate, userRoutes)
 app.use("/api/v1/sessions", authenticate, sessionRoutes)
 
 app.use("/api/v1/dictionary", dictionaryRoutes)
-app.use("/api/v1/immersion", immersionRoutes)
+app.use("/api/v1/immersion", authenticate, immersionRoutes)
 app.use("/api/v1/grammar", grammarRoutes)
 app.use("/api/v1/decks", authenticate, deckRoutes)
 app.use("/api/v1/flashcards", authenticate, flashCardRoutes)

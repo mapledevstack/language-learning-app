@@ -25,13 +25,6 @@ const topicSchema = new Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true,
-  },
-
-  type: {
-    type: String,
-    enum: ["default", "custom", "watch_later", "history"],
-    required: true,
   },
 
   coverImg: {
@@ -73,6 +66,32 @@ const subtitleSchema = new Schema({
   ],
 })
 
+const userVideoSchema = new Schema(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    vidId: {
+      type: String,
+      required: true,
+    },
+    isFavorited: {
+      type: Boolean,
+      default: false,
+    },
+    isWatchLater: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { timestamps: true },
+)
+
+userVideoSchema.index({ userId: 1, vidId: 1 }, { unique: true })
+
 export const Video = model("Video", videoSchema)
 export const Topic = model("Topic", topicSchema)
 export const Subtitle = model("Subtitle", subtitleSchema)
+export const UserVideo = model("UserVideo", userVideoSchema)

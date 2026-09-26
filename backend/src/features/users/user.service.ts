@@ -4,7 +4,6 @@ import AppError from "../../utils/appError.js"
 import { NOT_FOUND } from "../../constants/http.js"
 import { UpdateUser } from "./user.schema.js"
 import { UserActivity } from "./userActivity.model.js"
-import { after } from "node:test"
 
 export const getUser = async (userId: Types.ObjectId) => {
   const user = await User.findById(userId)

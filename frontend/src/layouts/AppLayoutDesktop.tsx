@@ -1,8 +1,7 @@
 import { cn } from "@/utils/cn"
 import { Link } from "@tanstack/react-router"
 import { LucideMenu } from "lucide-react"
-
-import { navigationMenu } from "./AppLayout"
+import { navigationMenu } from "./navigationMenu"
 
 type Props = {
   isNavOpen: boolean

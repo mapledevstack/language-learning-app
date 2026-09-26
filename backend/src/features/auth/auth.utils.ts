@@ -17,3 +17,7 @@ export const getAuthSessionId = (req: Request) => {
 
   return req.sessionId
 }
+
+export const getIsDemo = (req: Request) => {
+  return req.isDemo === true
+}

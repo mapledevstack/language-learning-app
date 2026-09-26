@@ -15,16 +15,11 @@ import { useState, type SubmitEvent } from "react"
 type Props = {
   isPending: boolean
   isError: boolean
-  mutate: any
+  mutate: (variables: { verificationCode: string; password: string }) => void
   verificationCode: string
 }
 
-const ForgotForm = ({
-  isPending,
-  isError,
-  mutate,
-  verificationCode,
-}: Props) => {
+const ResetForm = ({ isPending, isError, mutate, verificationCode }: Props) => {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
 
@@ -98,4 +93,4 @@ const ForgotForm = ({
   )
 }
 
-export default ForgotForm
+export default ResetForm

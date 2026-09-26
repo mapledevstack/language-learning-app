@@ -3,10 +3,8 @@ import { YOUTUBE_API_KEY } from "../../constants/env.js"
 import { BAD_GATEWAY } from "../../constants/http.js"
 import AppError from "../../utils/appError.js"
 import { Topic, Video } from "./immersion.model.js"
-import { getSubtitles } from "./immersion.service.js"
 import {
   VideoResult,
-  YoutubeSearchResponse,
   youtubeSearchResponseSchema,
 } from "./immersion.schemas.js"
 
@@ -66,13 +64,4 @@ export const cacheVideos = async (
       },
     },
   })
-}
-
-export const hasJpSubtitles = async (vidId: string) => {
-  try {
-    await getSubtitles(vidId)
-    return true
-  } catch {
-    return false
-  }
 }

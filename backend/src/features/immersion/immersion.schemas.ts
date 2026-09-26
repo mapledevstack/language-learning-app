@@ -1,11 +1,8 @@
 import z from "zod"
 
-const TopicTypes = ["default", "custom", "watch_later", "history"] as const
-
 export const createTopicSchema = z.object({
   name: z.string().trim().min(1, "Topic name is required"),
   coverImg: z.string().nullable(),
-  type: z.enum(TopicTypes).optional(),
 })
 
 export const topicParamsSchema = z.object({
@@ -34,5 +31,20 @@ export type VideoResult = {
   title: string
 }
 
-export type TopicType = z.infer<typeof createTopicSchema>["type"]
+export const updateUserVideoSchema = z
+  .object({
+    isFavorited: z.boolean().optional(),
+    isWatchLater: z.boolean().optional(),
+  })
+  .refine(
+    (data) => data.isFavorited !== undefined || data.isWatchLater !== undefined,
+    { message: "At least one field is required" },
+  )
+
+export const userVideoListSchema = z.object({
+  list: z.enum(["favorites", "watch-later"]),
+})
+
 export type YoutubeSearchResponse = z.infer<typeof youtubeSearchResponseSchema>
+export type UpdateUserVideo = z.infer<typeof updateUserVideoSchema>
+export type UserVideoList = z.infer<typeof userVideoListSchema>
